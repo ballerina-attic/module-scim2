@@ -3,21 +3,14 @@ package samples.scimclient;
 
 import ballerina.io;
 import src.scimclient;
-
-string baseUrl = "https://localhost:9443";
-string accessToken = "35eef98c-dad5-3d4c-8257-5f17f65de336";
-string clientId = "90jOtflC8pbJiNDxp7x0cYflCLYa";
-string clientSecret = "jii9D5itThoDEpXCPNROv5H4QJUa";
-string refreshToken = "8c3a31cf-2a65-3823-ac12-7d503f3f1b90";
-string refreshTokenEndpoint = "https://localhost:9443";
-string refreshTokenPath = "/oauth2/token";
+import ballerina.config;
 
 public function main (string[] args) {
     endpoint<scimclient:ScimConnector> userAdminConnector {
-        create scimclient:ScimConnector(baseUrl, accessToken, clientId, clientSecret, refreshToken,
-                                               refreshTokenEndpoint, refreshTokenPath);
+        create scimclient:ScimConnector(getBaseUrl(), getAccessToken(), getClientId(), getClientSecret(),
+                                        getRefreshToken(),
+                                        getRefreshTokenEndpoint(), getRefreshTokenPath());
     }
-
 
     userAdminConnector.init();
     //create user=======================================================================================================
@@ -182,17 +175,17 @@ public function main (string[] args) {
 
     //add user to group using struct bound function=====================================================================
     userName = "tnm";
-    user , Error = userAdminConnector.getUserByUsername(userName);
+    user, Error = userAdminConnector.getUserByUsername(userName);
     groupName = "BOSS";
     Error = user.addToGroup(groupName);
     io:println("");
     io:println("adding user " + userName + " to " + groupName + " using struct bind functions");
     io:print("error: ");
-    io:println( Error);
+    io:println(Error);
     ////================================================================================================================
 
     //remove an user from a group using strut bound function============================================================
-    user , Error = userAdminConnector.getUserByUsername(userName);
+    user, Error = userAdminConnector.getUserByUsername(userName);
     Error = user.removeFromGroup(groupName);
     io:println("");
     io:println("remove a user by struct bound functions");
@@ -201,11 +194,44 @@ public function main (string[] args) {
     //==================================================================================================================
 
     //get the user that is currently authenticated======================================================================
-    user,Error = userAdminConnector.getMe();
+    user, Error = userAdminConnector.getMe();
     io:println("");
     io:println("get the currently authenticated user");
     io:println(user);
     //==================================================================================================================
 }
 
+function getBaseUrl () (string) {
+    string baseUrl = config:getGlobalValue("BaseUrl");
+    return baseUrl;
+}
 
+function getAccessToken () (string) {
+    string accessToken = config:getGlobalValue("AccessToken");
+    return accessToken;
+}
+
+function getClientId () (string) {
+    string clientId = config:getGlobalValue("ClientId");
+    return clientId;
+}
+
+function getClientSecret () (string) {
+    string clientSecret = config:getGlobalValue("ClientSecret");
+    return clientSecret;
+}
+
+function getRefreshToken () (string) {
+    string refreshToken = config:getGlobalValue("RefreshToken");
+    return refreshToken;
+}
+
+function getRefreshTokenEndpoint () (string) {
+    string refreshTokenEndpoint = config:getGlobalValue("RefreshTokenEndpoint");
+    return refreshTokenEndpoint;
+}
+
+function getRefreshTokenPath () (string) {
+    string refreshTokenPath = config:getGlobalValue("RefreshTokenPath");
+    return refreshTokenPath;
+}

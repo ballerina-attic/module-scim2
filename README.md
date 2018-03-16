@@ -81,6 +81,21 @@ https://localhost:9443/oauth2/token
 
 ## Running Samples
 
+To run the samples you have to modify the server-config-file-name.conf to the following format.
+
+| Credential       | Description | 
+| ------------- |:----------------:|
+| truststoreLocation    |Your truststore.p12 file location|
+| trustStorePassword  |password of the truststore   |
+| BaseUrl |Base URL of the Identity Server (`https://localhost:9443/`) |
+| AccessToken |Access token|
+| ClientId |Client ID|
+| ClientSecret |Client secret|
+| RefreshToken |Refresh token|
+| RefreshTokenEndpoint |Refresh token end point|
+| RefreshTokenPath |Refresh token path|
+
+
 You can easily test the SCIM2 connector actions by running the `sample.bal` file.
  - Run `ballerina run /samples/scimclient Bballerina.conf=path/to/conf/file/server-config-file-name.conf`
 
