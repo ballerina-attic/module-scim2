@@ -56,6 +56,12 @@ public function main (string[] args) {
     Error = userAdminConnector.createUser(user);
     io:println("creating user " + user.userName);
     io:println(Error);
+    //create user iniesta
+    user.userName = "iniesta";
+    Error = userAdminConnector.createUser(user);
+    //create user tnm
+    user.userName = "tnm";
+    Error = userAdminConnector.createUser(user);
     //==================================================================================================================
 
     //Get an user in the IS user store using getUserbyUserName action===================================================
@@ -83,6 +89,9 @@ public function main (string[] args) {
     io:println("");
     io:println("create group Captain with iniesta in it");
     io:println(Error);
+    //create group BOSS
+    group.displayName = "BOSS";
+    Error = userAdminConnector.createGroup(group);
     //==================================================================================================================
 
     //Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
