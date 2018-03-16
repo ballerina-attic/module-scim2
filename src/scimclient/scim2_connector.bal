@@ -25,14 +25,14 @@ oauth2:ClientConnector scimOAuthClient;
 boolean isConnectorInitialized = false;
 string baseURL;
 
-@Description {value: "SCIM2.0 Client connector"}
-@Param {value: "baseUrl: The base URL of the server which uses SCIM2.0"}
-@Param {value: "accessToken: The access token generated using the clientId and clientSecret"}
-@Param {value: "clientId: The clientId generated for your credentials from the server"}
-@Param {value: "clientSecret: The client secret generated for your credentials from the server"}
-@Param {value: "refreshToken: The refresh token generated using the clientId and clientSecret"}
-@Param {value: "refreshTokenEndpoint: The end point to be called to get the refresh token"}
-@Param {value: "refreshTokenPath: The refresht token path"}
+@Description {value:"SCIM2.0 Client connector"}
+@Param {value:"baseUrl: The base URL of the server which uses SCIM2.0"}
+@Param {value:"accessToken: The access token generated using the clientId and clientSecret"}
+@Param {value:"clientId: The clientId generated for your credentials from the server"}
+@Param {value:"clientSecret: The client secret generated for your credentials from the server"}
+@Param {value:"refreshToken: The refresh token generated using the clientId and clientSecret"}
+@Param {value:"refreshTokenEndpoint: The end point to be called to get the refresh token"}
+@Param {value:"refreshTokenPath: The refresht token path"}
 public connector ScimConnector (string baseUrl, string accessToken, string clientId, string clientSecret,
                                 string refreshToken, string refreshTokenEndpoint, string refreshTokenPath) {
 
