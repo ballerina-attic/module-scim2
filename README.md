@@ -22,6 +22,8 @@ SCIM connector are invoked using a Ballerina main function.
 WSO2 Identity Server uses SCIM for identity provisioning and therefore you can deploay the wso2 
 Identity Server and use it to run the samples. 
 
+![alt text](SCIM2.png)
+
 The following sections provide you with information on how to use the Ballerina SCIM connector.
 
 ## Compatibility
