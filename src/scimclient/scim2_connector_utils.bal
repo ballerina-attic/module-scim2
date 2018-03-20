@@ -18,33 +18,13 @@
 
 package src.scimclient;
 
-import ballerina.net.http;
-import ballerina.config;
-
-
-@Description {value:"Get the http:Option with the trust store file location to provide the http connector
- with the public certificate for ssl"}
-function getConnectionConfigs () (http:Options) {
-    string password = config:getGlobalValue("trustStorePassword");
-    string location = config:getGlobalValue("truststoreLocation");
-    http:Options option = {
-                              ssl:{
-                                      trustStoreFile:location,
-                                      trustStorePassword:password
-                                  },
-                              followRedirects:{}
-
-                          };
-    return option;
-}
-
 @Description {value:"Obtain User from the received http response"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"response: The received http response"}
 @Param {value:"connectorError: Received httpConnectorError object"}
 @Param {value:"User: User struct"}
 @Param {value:"error: Error"}
-function resolveUser (string userName, http:InResponse response, http:HttpConnectorError connectorError) (User, error) {
+function resolveUser (string userName, http:Response response, http:HttpConnectorError connectorError) (User, error) {
     User user;
     error Error;
 
@@ -83,7 +63,7 @@ function resolveUser (string userName, http:InResponse response, http:HttpConnec
 @Param {value:"connectorError: Received httpConnectorError object"}
 @Param {value:"User: Group struct"}
 @Param {value:"error: Error"}
-function resolveGroup (string groupName, http:InResponse response, http:HttpConnectorError connectorE) (Group, error) {
+function resolveGroup (string groupName, http:Response response, http:HttpConnectorError connectorE) (Group, error) {
     Group receivedGroup;
     error Error;
 
@@ -119,8 +99,8 @@ function resolveGroup (string groupName, http:InResponse response, http:HttpConn
 @Description {value:"Add the necessary headers and body to the request"}
 @Param {value:"body: the json payload to be sent"}
 @Param {value:"OutRequest: http:OutRequest"}
-function createRequest (json body) (http:OutRequest) {
-    http:OutRequest request = {};
+function createRequest (json body) (http:Request) {
+    http:Request request = {};
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(body);
     return request;

@@ -5,19 +5,17 @@ import ballerina.io;
 import src.scimclient;
 import ballerina.config;
 
-public function main (string[] args) {
-    endpoint<scimclient:ScimConnector> userAdminConnector {
-        create scimclient:ScimConnector(getBaseUrl(), getAccessToken(), getClientId(), getClientSecret(),
-                                        getRefreshToken(),
-                                        getRefreshTokenEndpoint(), getRefreshTokenPath());
-    }
 
-    userAdminConnector.init();
+ public function main (string[] args) {
+
+    scimclient: ScimConnector scimCon = {};
+    scimCon.init(getBaseUrl(),getAccessToken(),getRefreshToken(),getClientId(),getClientSecret(),getRefreshTokenEndpoint(),getRefreshTokenPath());
+
     //create user=======================================================================================================
     scimclient:User user = {};
 
     scimclient:PhonePhotoIms phone = {};
-    phone.|type| = "work";
+    phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
@@ -35,7 +33,7 @@ public function main (string[] args) {
     address.country = "Spain";
     address.formatted = "no/2,Barcelona/Catalunia/Spain";
     address.primary = "true";
-    address.|type| = "work";
+    address.^"type" = "work";
 
     user.addresses = [address];
 
@@ -44,30 +42,30 @@ public function main (string[] args) {
 
     scimclient:Email email1 = {};
     email1.value = "messi@barca.com";
-    email1.|type| = "work";
+    email1.^"type" = "work";
 
     scimclient:Email email2 = {};
     email2.value = "messi@gg.com";
-    email2.|type| = "home";
+    email2.^"type" = "home";
 
     user.emails = [email1, email2];
 
     error Error;
-    Error = userAdminConnector.createUser(user);
+    Error = scimCon.createUser(user);
     io:println("creating user " + user.userName);
     io:println(Error);
     //create user iniesta
     user.userName = "iniesta";
-    Error = userAdminConnector.createUser(user);
+    Error = scimCon.createUser(user);
     //create user tnm
     user.userName = "tnm";
-    Error = userAdminConnector.createUser(user);
+    Error = scimCon.createUser(user);
     //==================================================================================================================
 
     //Get an user in the IS user store using getUserbyUserName action===================================================
     scimclient:User getUser = {};
     string userName = "iniesta";
-    getUser, Error = userAdminConnector.getUserByUsername(userName);
+    getUser, Error = scimCon.getUserByUsername(userName);
 
     io:println("");
     io:println("get user iniesta");
@@ -77,26 +75,26 @@ public function main (string[] args) {
     //==================================================================================================================
 
     //Create a Group in the IS user store using createUser action=======================================================
-    scimclient:Group group = {};
-    group.displayName = "Captain";
+    scimclient:Group gro = {};
+    gro.displayName = "Captain";
 
     scimclient:Member member = {};
     member.display = getUser.userName;
     member.value = getUser.id;
-    group.members = [member];
+    gro.members = [member];
 
-    Error = userAdminConnector.createGroup(group);
+    Error = scimCon.createGroup(gro);
     io:println("");
     io:println("create group Captain with iniesta in it");
     io:println(Error);
     //create group BOSS
-    group.displayName = "BOSS";
-    Error = userAdminConnector.createGroup(group);
+    gro.displayName = "BOSS";
+    Error = scimCon.createGroup(gro);
     //==================================================================================================================
 
     //Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
     scimclient:Group getGroup = {};
-    getGroup, Error = userAdminConnector.getGroupByName("Captain");
+    getGroup, Error = scimCon.getGroupByName("Captain");
 
     io:println("");
     io:println("get the Captain of the team");
@@ -108,13 +106,13 @@ public function main (string[] args) {
     //Add an existing user to a existing group==========================================================================
     userName = "leoMessi";
     string groupName = "Captain";
-    Error = userAdminConnector.addUserToGroup(userName, groupName);
+    Error = scimCon.addUserToGroup(userName, groupName);
 
     io:println("");
     io:println("Adding user leoMessi to group Captain");
     io:println(Error);
 
-    getGroup, Error = userAdminConnector.getGroupByName("Captain");
+    getGroup, Error = scimCon.getGroupByName("Captain");
     io:println("members in Captain");
     io:println(getGroup.members);
     //==================================================================================================================
@@ -123,12 +121,12 @@ public function main (string[] args) {
     userName = "iniesta";
     groupName = "Captain";
 
-    Error = userAdminConnector.removeUserFromGroup(userName, groupName);
+    Error = scimCon.removeUserFromGroup(userName, groupName);
     io:println("");
     io:println("Removing iniesta from Captain");
     io:println(Error);
 
-    getGroup, Error = userAdminConnector.getGroupByName("Captain");
+    getGroup, Error = scimCon.getGroupByName("Captain");
     io:println("members in Captain");
     io:println(getGroup.members);
     //==================================================================================================================
@@ -137,7 +135,7 @@ public function main (string[] args) {
     userName = "leoMessi";
     groupName = "Captain";
     boolean x;
-    x, Error = userAdminConnector.isUserInGroup(userName, groupName);
+    x, Error = scimCon.isUserInGroup(userName, groupName);
     io:println("");
     io:println("Check if leoMessi is the Captain");
     io:println(x);
@@ -147,7 +145,7 @@ public function main (string[] args) {
 
     //Delete an user from the user store================================================================================
     userName = "leoMessi";
-    Error = userAdminConnector.deleteUserByUsername(userName);
+    Error = scimCon.deleteUserByUsername(userName);
     io:println("");
     io:println("delete leoMessi");
     io:println(Error);
@@ -155,7 +153,7 @@ public function main (string[] args) {
 
     //Delete a group====================================================================================================
     groupName = "Captain";
-    Error = userAdminConnector.deleteGroupByName(groupName);
+    Error = scimCon.deleteGroupByName(groupName);
     io:println("");
     io:println("deleting group Captain");
     io:println(Error);
@@ -163,7 +161,7 @@ public function main (string[] args) {
 
     //Get the list of users in the user store===========================================================================
     scimclient:User[] userList;
-    userList, Error = userAdminConnector.getListOfUsers();
+    userList, Error = scimCon.getListOfUsers();
     io:println("");
     io:println("get the list of users");
     io:println(userList);
@@ -173,7 +171,7 @@ public function main (string[] args) {
 
     //Get the list of groups============================================================================================
     scimclient:Group[] groupList;
-    groupList, Error = userAdminConnector.getListOfGroups();
+    groupList, Error = scimCon.getListOfGroups();
     io:println("");
     io:println("get the list of Groups");
     io:println(groupList);
@@ -184,7 +182,7 @@ public function main (string[] args) {
 
     //add user to group using struct bound function=====================================================================
     userName = "tnm";
-    user, Error = userAdminConnector.getUserByUsername(userName);
+    user, Error = scimCon.getUserByUsername(userName);
     groupName = "BOSS";
     Error = user.addToGroup(groupName);
     io:println("");
@@ -194,7 +192,7 @@ public function main (string[] args) {
     ////================================================================================================================
 
     //remove an user from a group using strut bound function============================================================
-    user, Error = userAdminConnector.getUserByUsername(userName);
+    user, Error = scimCon.getUserByUsername(userName);
     Error = user.removeFromGroup(groupName);
     io:println("");
     io:println("remove a user by struct bound functions");
@@ -203,12 +201,12 @@ public function main (string[] args) {
     //==================================================================================================================
 
     //get the user that is currently authenticated======================================================================
-    user, Error = userAdminConnector.getMe();
+    user, Error = scimCon.getMe();
     io:println("");
     io:println("get the currently authenticated user");
     io:println(user);
     //==================================================================================================================
-}
+ }
 
 function getBaseUrl () (string) {
     string baseUrl = config:getGlobalValue("BaseUrl");

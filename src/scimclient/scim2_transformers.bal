@@ -108,59 +108,59 @@ transformer <json sourceJsonObject, User targetUserStruct> convertJsonToUser() {
 
 transformer <json sourceJsonObject, EnterpriseUserExtension targetExtension> convertJsonToEnterpriseExtension() {
     targetExtension.costCenter = sourceJsonObject.costCenter != null ?
-                                           sourceJsonObject.costCenter.toString() : "";
+                                           sourceJsonObject.costCenter.toString() : " ";
     targetExtension.department = sourceJsonObject.department != null ?
-                                           sourceJsonObject.department.toString() : "";
+                                           sourceJsonObject.department.toString() : " ";
     targetExtension.division = sourceJsonObject.division != null ?
-                                         sourceJsonObject.division.toString() : "";
+                                         sourceJsonObject.division.toString() : " ";
     targetExtension.employeeNumber = sourceJsonObject.employeeNumber != null ?
-                                               sourceJsonObject.employeeNumber.toString() : "";
+                                               sourceJsonObject.employeeNumber.toString() : " ";
     targetExtension.organization = sourceJsonObject.organization != null ?
-                                             sourceJsonObject.organization.toString() : "";
+                                             sourceJsonObject.organization.toString() : " ";
     targetExtension.manager = sourceJsonObject.manager != null ?
                                         <Manager, convertJsonToManager()>sourceJsonObject.manager : {};
 }
 
 transformer <json sourceJsonObject, Manager targetManagerStruct> convertJsonToManager() {
     targetManagerStruct.displayName = sourceJsonObject.displayName != null ?
-                                      sourceJsonObject.displayName.toString() : "";
+                                      sourceJsonObject.displayName.toString() : " ";
     targetManagerStruct.managerId = sourceJsonObject.managerId != null ?
-                                    sourceJsonObject.managerId.toString() : "";
+                                    sourceJsonObject.managerId.toString() : " ";
 }
 
 transformer <json sourceJsonObject, Address targetAddressStruct> convertJsonToAddress() {
     targetAddressStruct.streetAddress = sourceJsonObject.streetAddress != null ?
-                                        sourceJsonObject.streetAddress.toString() : "";
-    targetAddressStruct.formatted = sourceJsonObject.formatted != null ? sourceJsonObject.formatted.toString() : "";
-    targetAddressStruct.country = sourceJsonObject.country != null ? sourceJsonObject.country.toString() : "";
-    targetAddressStruct.locality = sourceJsonObject.locality != null ? sourceJsonObject.locality.toString() : "";
-    targetAddressStruct.postalCode = sourceJsonObject.postalCode != null ? sourceJsonObject.postalCode.toString() : "";
+                                        sourceJsonObject.streetAddress.toString() : " ";
+    targetAddressStruct.formatted = sourceJsonObject.formatted != null ? sourceJsonObject.formatted.toString() : " ";
+    targetAddressStruct.country = sourceJsonObject.country != null ? sourceJsonObject.country.toString() : " ";
+    targetAddressStruct.locality = sourceJsonObject.locality != null ? sourceJsonObject.locality.toString() : " ";
+    targetAddressStruct.postalCode = sourceJsonObject.postalCode != null ? sourceJsonObject.postalCode.toString() : " ";
     targetAddressStruct.primary = sourceJsonObject.primary != null ? sourceJsonObject.primary.toString() : "false";
-    targetAddressStruct.region = sourceJsonObject.region != null ? sourceJsonObject.region.toString() : "";
-    targetAddressStruct.|type| = sourceJsonObject.|type| != null ? sourceJsonObject.|type|.toString() : "";
+    targetAddressStruct.region = sourceJsonObject.region != null ? sourceJsonObject.region.toString() : " ";
+    targetAddressStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : " ";
 }
 
 transformer <json sourceJsonObject, Meta targetMetaStruct> convertJsonToMeta() {
-    targetMetaStruct.location = sourceJsonObject.location != null ? sourceJsonObject.location.toString() : "";
+    targetMetaStruct.location = sourceJsonObject.location != null ? sourceJsonObject.location.toString() : " ";
     targetMetaStruct.lastModified = sourceJsonObject.lastModified != null ?
-                                    sourceJsonObject.lastModified.toString() : "";
-    targetMetaStruct.created = sourceJsonObject.created != null ? sourceJsonObject.created.toString() : "";
+                                    sourceJsonObject.lastModified.toString() : " ";
+    targetMetaStruct.created = sourceJsonObject.created != null ? sourceJsonObject.created.toString() : " ";
 }
 
 transformer <json sourceJsonObject, PhonePhotoIms targetPhoneNumber> convertJsonToPhoneNumbers() {
     targetPhoneNumber.value = sourceJsonObject.value.toString();
-    targetPhoneNumber.|type| = sourceJsonObject.|type|.toString();
+    targetPhoneNumber.^"type" = sourceJsonObject.^"type".toString();
 }
 
 transformer <json sourceJsonObject, Email targetEmailStruct> convertJsonToEmail() {
-    targetEmailStruct.|type| = sourceJsonObject.|type| != null ? sourceJsonObject.|type|.toString() : "";
-    targetEmailStruct.value = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : "";
-    targetEmailStruct.primary = sourceJsonObject.primary != null ? sourceJsonObject.primary.toString() : "";
+    targetEmailStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : " ";
+    targetEmailStruct.value = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
+    targetEmailStruct.primary = sourceJsonObject.primary != null ? sourceJsonObject.primary.toString() : " ";
 }
 
 transformer <json sourceJsonObject, Group targetGroupStruct> convertJsonToGroupRelatedToUser() {
-    targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : "";
-    targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : "";
+    targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : " ";
+    targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
     targetGroupStruct.members = sourceJsonObject.members != null ?
                                 sourceJsonObject.members.map(
                                                         function (json nestedJsonInSource) (Member) {
@@ -170,8 +170,8 @@ transformer <json sourceJsonObject, Group targetGroupStruct> convertJsonToGroupR
 }
 
 transformer <json sourceJsonObject, Group targetGroupStruct> convertJsonToGroup() {
-    targetGroupStruct.displayName = sourceJsonObject.displayName != null ? sourceJsonObject.displayName.toString() : "";
-    targetGroupStruct.id = sourceJsonObject.id != null ? sourceJsonObject.id.toString() : "";
+    targetGroupStruct.displayName = sourceJsonObject.displayName != null ? sourceJsonObject.displayName.toString() : " ";
+    targetGroupStruct.id = sourceJsonObject.id != null ? sourceJsonObject.id.toString() : " ";
     targetGroupStruct.meta = <Meta, convertJsonToMeta()>sourceJsonObject.meta;
     targetGroupStruct.members = sourceJsonObject.members != null ?
                                 sourceJsonObject.members.map(
@@ -201,8 +201,8 @@ transformer <json sourceJsonObject, User targetUserStruct> convertReceivedPayloa
 
 //=========================================Struct to JSON transformers==================================================
 transformer <Group sourceGroupStruct, json targetJsonObject> convertGroupToJsonUserRelated() {
-    targetJsonObject.display = sourceGroupStruct.displayName;
-    targetJsonObject.value = sourceGroupStruct.id;
+    targetJsonObject.display = sourceGroupStruct.displayName != null ? sourceGroupStruct.displayName : "";
+    targetJsonObject.value = sourceGroupStruct.id != null ? sourceGroupStruct.id : "";
 }
 
 transformer <Group sourceGroupStruct, json targetJsonObject> convertGroupToJson() {
@@ -222,38 +222,38 @@ transformer <Member sourceMemberStruct, json targetJsonObject> convertMemberToJs
 }
 
 transformer <Name sourceNameStruct, json targetJsonObject> convertNameToJson() {
-    targetJsonObject.givenName = sourceNameStruct.givenName;
-    targetJsonObject.familyName = sourceNameStruct.familyName;
-    targetJsonObject.formatted = sourceNameStruct.formatted;
-    targetJsonObject.middleName = sourceNameStruct.middleName;
-    targetJsonObject.honorificPrefix = sourceNameStruct.honorificPrefix;
-    targetJsonObject.honorificSuffix = sourceNameStruct.honorificSuffix;
+    targetJsonObject.givenName = sourceNameStruct.givenName != null ? sourceNameStruct.givenName : "";
+    targetJsonObject.familyName = sourceNameStruct.familyName != null ? sourceNameStruct.familyName : "";
+    targetJsonObject.formatted = sourceNameStruct.formatted != null ? sourceNameStruct.formatted : "";
+    targetJsonObject.middleName = sourceNameStruct.middleName != null ? sourceNameStruct.middleName : "";
+    targetJsonObject.honorificPrefix = sourceNameStruct.honorificPrefix != null ? sourceNameStruct.honorificPrefix : "";
+    targetJsonObject.honorificSuffix = sourceNameStruct.honorificSuffix != null ? sourceNameStruct.honorificSuffix : "";
 }
 
 transformer <Address sourceAddressStruct, json targetJsonObject> convertAddressToJson() {
-    targetJsonObject.streetAddress = sourceAddressStruct.streetAddress;
-    targetJsonObject.formatted = sourceAddressStruct.formatted;
-    targetJsonObject.country = sourceAddressStruct.country;
-    targetJsonObject.locality = sourceAddressStruct.locality;
-    targetJsonObject.postalCode = sourceAddressStruct.postalCode;
-    targetJsonObject.primary = sourceAddressStruct.primary;
-    targetJsonObject.region = sourceAddressStruct.region;
-    targetJsonObject.|type| = sourceAddressStruct.|type|;
+    targetJsonObject.streetAddress = sourceAddressStruct.streetAddress != null ? sourceAddressStruct.streetAddress : "";
+    targetJsonObject.formatted = sourceAddressStruct.formatted != null ? sourceAddressStruct.formatted : "";
+    targetJsonObject.country = sourceAddressStruct.country != null ? sourceAddressStruct.country : "";
+    targetJsonObject.locality = sourceAddressStruct.locality != null ? sourceAddressStruct.locality : "";
+    targetJsonObject.postalCode = sourceAddressStruct.postalCode != null ? sourceAddressStruct.postalCode : "";
+    targetJsonObject.primary = sourceAddressStruct.primary != null ? sourceAddressStruct.primary : "";
+    targetJsonObject.region = sourceAddressStruct.region != null ? sourceAddressStruct.region : "";
+    targetJsonObject.^"type" = sourceAddressStruct.^"type" != null ? sourceAddressStruct.^"type" : "";
 }
 
 transformer <Email sourceEmailStruct, json targetJsonObject> convertEmailToJson() {
-    targetJsonObject.|type| = sourceEmailStruct.|type|;
-    targetJsonObject.value = sourceEmailStruct.value;
-    targetJsonObject.primary = sourceEmailStruct.primary;
+    targetJsonObject.^"type" = sourceEmailStruct.^"type";
+    targetJsonObject.value = sourceEmailStruct.value != null ? sourceEmailStruct.value : "";
+    targetJsonObject.primary = sourceEmailStruct.primary != null ? sourceEmailStruct.primary : "";
 }
 
 transformer <PhonePhotoIms sourcePhotoPhoneImsStruct, json targetJsonObject> convertPhonePhotoImsToJson() {
-    targetJsonObject.value = sourcePhotoPhoneImsStruct.value;
-    targetJsonObject.|type| = sourcePhotoPhoneImsStruct.|type|;
+    targetJsonObject.value = sourcePhotoPhoneImsStruct.value != null ? sourcePhotoPhoneImsStruct.value : "";
+    targetJsonObject.^"type" = sourcePhotoPhoneImsStruct.^"type" != null ? sourcePhotoPhoneImsStruct.^"type": "";
 }
 
 transformer <X509Certificate sourceXCertificate, json targetJsonObject> convertCertificateToJson() {
-    targetJsonObject.value = sourceXCertificate.value;
+    targetJsonObject.value = sourceXCertificate.value != null ? sourceXCertificate.value : "";
 }
 
 transformer <EnterpriseUserExtension sourceExtension, json targetJsonObject> convertEnterpriseExtensionToJson() {
@@ -272,19 +272,19 @@ transformer <Manager sourceManagerStruct, json targetJsonObject> convertManagerT
 }
 
 transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
-    targetJson.userName = sourceUserStruct.userName;
-    targetJson.id = sourceUserStruct.id;
-    targetJson.password = sourceUserStruct.password;
-    targetJson.externalId = sourceUserStruct.externalId;
-    targetJson.displayName = sourceUserStruct.displayName;
-    targetJson.nickName = sourceUserStruct.nickName;
-    targetJson.profileUrl = sourceUserStruct.profileUrl;
-    targetJson.userType = sourceUserStruct.userType;
-    targetJson.title = sourceUserStruct.title;
-    targetJson.preferredLanguage = sourceUserStruct.preferredLanguage;
-    targetJson.timezone = sourceUserStruct.timezone;
-    targetJson.active = sourceUserStruct.active;
-    targetJson.locale = sourceUserStruct.locale;
+    targetJson.userName = sourceUserStruct.userName != null ? sourceUserStruct.userName : "";
+    targetJson.id = sourceUserStruct.id != null ? sourceUserStruct.id : "";
+    targetJson.password = sourceUserStruct.password != null ? sourceUserStruct.password : "";
+    targetJson.externalId = sourceUserStruct.externalId != null ? sourceUserStruct.externalId : "";
+    targetJson.displayName = sourceUserStruct.displayName != null ? sourceUserStruct.displayName : "";
+    targetJson.nickName = sourceUserStruct.nickName != null ? sourceUserStruct.nickName : "";
+    targetJson.profileUrl = sourceUserStruct.profileUrl != null ? sourceUserStruct.profileUrl : "";
+    targetJson.userType = sourceUserStruct.userType != null ? sourceUserStruct.userType : "";
+    targetJson.title = sourceUserStruct.title != null ? sourceUserStruct.title : "";
+    targetJson.preferredLanguage = sourceUserStruct.preferredLanguage != null ? sourceUserStruct.preferredLanguage : "";
+    targetJson.timezone = sourceUserStruct.timezone != null ? sourceUserStruct.timezone : "";
+    targetJson.active = sourceUserStruct.active != null ? sourceUserStruct.active : "";
+    targetJson.locale = sourceUserStruct.locale != null ? sourceUserStruct.locale : "";
     targetJson.schemas = sourceUserStruct.schemas != null ? sourceUserStruct.schemas : [];
     targetJson.name = sourceUserStruct.name != null ? <json, convertNameToJson()>sourceUserStruct.name : {};
     targetJson.meta = {};
@@ -332,7 +332,7 @@ transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
                                                }) : [];
     targetJson.photos = listPhotos;
 
-    targetJson.|urn:ietf:params:scim:schemas:extension:enterprise:2.0:User| = sourceUserStruct.EnterpriseUser !=
+    targetJson.^"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User" = sourceUserStruct.EnterpriseUser !=
                                                                               null ?
                                                                               <json,
                                                                               convertEnterpriseExtensionToJson()>
