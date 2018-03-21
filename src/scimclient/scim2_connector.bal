@@ -20,25 +20,25 @@ package src.scimclient;
 
 import ballerina.net.http;
 import oauth2;
-import ballerina.io;
 import ballerina.config;
+import ballerina.io;
 
 boolean isConnectorInitialized = false;
 oauth2:OAuth2Client oauthCon = {};
 string baseURL;
 
-// @Description {value:"SCIM2.0 Client connector"}
-// {value:"baseUrl: The base URL of the server which uses SCIM2.0"}
-// @Param {value:"accessToken: The access token generated using the clientId and clientSecret"}
-// @Param {value:"clientId: The clientId generated for your credentials from the server"}
-// @Param {value:"clientSecret: The client secret generated for your credentials from the server"}
-// @Param {value:"refreshToken: The refresh token generated using the clientId and clientSecret"}
-// @Param {value:"refreshTokenEndpoint: The end point to be called to get the refresh token"}
-// @Param {value:"refreshTokenPath: The refresht token path"}
 public struct ScimConnector {
     string baseUrl;
 }
 
+@Description {value:"SCIM2.0 Client connector initializer"}
+@Param {value:"baseUrl: The base URL of the server which uses SCIM2.0"}
+@Param {value:"accessToken: The access token generated using the clientId and clientSecret"}
+@Param {value:"clientId: The clientId generated for your credentials from the server"}
+@Param {value:"clientSecret: The client secret generated for your credentials from the server"}
+@Param {value:"refreshToken: The refresh token generated using the clientId and clientSecret"}
+@Param {value:"refreshTokenEndpoint: The end point to be called to get the refresh token"}
+@Param {value:"refreshTokenPath: The refresht token path"}
 public function <ScimConnector scimCon> init (string baseUrl, string accessToken, string clientId, string clientSecret,
                                               string refreshToken, string refreshTokenEP, string refreshTokenPath) {
 
@@ -355,7 +355,6 @@ public function <ScimConnector scimConn> createUser (User user) (error) {
     json jsonPayload;
     try {
         jsonPayload = <json, convertUserToJson()>user;
-        io:println(jsonPayload);
     } catch (error e) {
         Error = {message:failedMessage + e.message, cause:e.cause};
         return Error;
@@ -570,7 +569,7 @@ public function <ScimConnector scimConn> deleteUserByUsername (string userName) 
 
     string failedMessage;
     failedMessage = "Deleting user:" + userName + " failed. ";
-
+   
     //get user
     http:Request userRequest = {};
     http:Response userResponse = {};
