@@ -102,14 +102,11 @@ You can easily test the SCIM2 connector actions by running the `sample.bal` file
 ## Working with SCIM connector actions
 
 In order for you to use the SCIM connector, first you need to create a ScimConnector 
-endpoint and then initialize it.
+struct in your local environment and then initialize it.
 
 ```ballerina
-endpoint<scimclient:ScimConnector> userAdminConnector {
-        create scimclient:ScimConnector(baseUrl, accessToken, clientId, clientSecret, refreshToken,
-                                               refreshTokenEndpoint, refreshTokenPath);
-}
-userAdminConnector.iniit();
+scimclient: ScimConnector scimCon = {};
+scimCon.init(getBaseUrl(),getAccessToken(),getRefreshToken(),getClientId(),getClientSecret(),getRefreshTokenEndpoint(),getRefreshTokenPath());
 ```
 ## createUser
 
@@ -129,7 +126,7 @@ Create a user in the user store.
     scimclient:User user = {};
 
     scimclient:PhonePhotoIms phone = {};
-    phone.|type| = "work";
+    phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
@@ -146,16 +143,16 @@ Create a user in the user store.
 
     scimclient:Email email1 = {};
     email1.value = "messi@barca.com";
-    email1.|type| = "work";
+    email1.^"type" = "work";
 
     scimclient:Email email2 = {};
     email2.value = "messi@gg.com";
-    email2.|type| = "home";
+    email2.^"type" = "home";
 
     user.emails = [email1, email2];
 
     error Error;
-    Error = userAdminConnector.createUser(user);
+    Error = scimCon.createUser(user);
     io:println("creating user " + user.userName);
     io:println(Error);
 ```
@@ -179,9 +176,9 @@ Create a group in the user store.
 #### Example
 
 ```ballerina
-    scimclient:Group group = {};
-    group.displayName = "Captain";
-    Error = userAdminConnector.createGroup(group);
+    scimclient:Group crtGroup = {};
+    crtGroup.displayName = "Captain";
+    Error = scimCon.createGroup(crtGroup);
     io:println(Error);
 ```
 
@@ -205,7 +202,7 @@ Get an user from the user store using the userName.
     error Error;
     scimclient:User getUser = {};
     string userName = "iniesta";
-    getUser, Error = userAdminConnector.getUserByUsername(userName);
+    getUser, Error = scimCon.getUserByUsername(userName);
 `````
 
 ## getGroup
@@ -224,7 +221,7 @@ Get a group from the user store using groupName.
 ````ballerina
     error Error;
     scimclient:Group getGroup = {};
-    getGroup, Error = userAdminConnector.getGroupByName("Captain");
+    getGroup, Error = scimCon.getGroupByName("Captain");
 ````
 
 ## addUserToGroup
@@ -243,7 +240,7 @@ Add a user specified by user name to a group specified by group name.
 ````ballerina
     userName = "leoMessi";
     string groupName = "Captain";
-    Error = userAdminConnector.addUserToGroup(userName, groupName);
+    Error = scimCon.addUserToGroup(userName, groupName);
 ````
  
 ## removeUserFromGroup
@@ -263,7 +260,7 @@ Remove an user specifed by user name from a group specified by group name.
     userName = "iniesta";
     groupName = "Captain";
 
-    Error = userAdminConnector.removeUserFromGroup(userName, groupName);
+    Error = scimCon.removeUserFromGroup(userName, groupName);
 ````
 
 ## isUserInGroup
@@ -284,7 +281,7 @@ Check whether the specified user is in the specified group.
     userName = "leoMessi";
     groupName = "Captain";
     boolean x;
-    x, Error = userAdminConnector.isUserInGroup(userName, groupName);
+    x, Error = scimCon.isUserInGroup(userName, groupName);
 ````
 
 ## deleteUserByUserName
@@ -301,7 +298,7 @@ Delete an user in the user store using his user name.
 
 ````ballerina
     userName = "leoMessi";
-    Error = userAdminConnector.deleteUserByUsername(userName);
+    Error = scimCon.deleteUserByUsername(userName);
 ````
 
 ## deleteGroupByName
@@ -318,7 +315,7 @@ Delete an group using its group name
 
 ````ballerina
     groupName = "Captain";
-    Error = userAdminConnector.deleteGroupByName(groupName);
+    Error = scimCon.deleteGroupByName(groupName);
 ````
 
 ## getListOfUsers
@@ -333,7 +330,7 @@ Get the list of users in the user store.
 
 ````ballerina
     scimclient:User[] userList;
-    userList, Error = userAdminConnector.getListOfUsers();
+    userList, Error = scimCon.getListOfUsers();
 ````
 
 ## getListOfGroups
@@ -348,7 +345,7 @@ Get the list of groups.
 
 ````ballerina
     scimclient:Group[] groupList;
-    groupList, Error = userAdminConnector.getListOfGroups();
+    groupList, Error = scimCon.getListOfGroups();
 ````
 
 ## getMe
@@ -362,7 +359,7 @@ Get the currently authenticated user.
 #### Example
 
 ````ballerina
-user,Error = userAdminConnector.getMe();
+user,Error = scimCon.getMe();
 ````
 
 ## Using User struct bound functions
@@ -371,7 +368,7 @@ First get a user using connector action `getUserByUsername`.
 
 ```ballerina
     userName = "tnm";
-    user , Error = userAdminConnector.getUserByUsername(userName);
+    user , Error = scimCon.getUserByUsername(userName);
 
 ```
 
