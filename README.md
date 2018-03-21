@@ -29,7 +29,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Connector Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.963.1-SNAPSHOT     | 0.1 | SCIM2.0 |
+| ballerina-0.964.1-SNAPSHOT     | 0.1 | SCIM2.0 |
 
 - [Getting started](#getting-started)
 - [Running Samples](#running-samples)
