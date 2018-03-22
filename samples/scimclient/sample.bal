@@ -8,7 +8,7 @@ import ballerina.config;
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "fbb03535-857c-3b29-831e-f881e385bd61";
+string AccessToken = "a9680c51-bdbd-39ff-95fb-010a450660d9";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";
@@ -18,88 +18,88 @@ string RefreshTokenPath = "/oauth2/token";
 
  public function main (string[] args) {
 
-    string s = "kimsGroup";
-    string u = "Omare333";
-    scimclient: User g = {};
-    g.userName = u;
-    g.password = "fasfdefsds";
     scimclient: ScimConnector scimCon = {};
     scimCon.init(BaseUrl,AccessToken,ClientId,ClientSecret,RefreshToken,RefreshTokenEndpoint,RefreshTokenPath,
                  truststoreLocation,trustStorePassword);
-    var response = scimCon.removeUserFromGroup(u,s);
-    match response {
-        string lis => io:println(lis);
-        error er => io:println(er);
-    }
 
     //create user=======================================================================================================
-    //scimclient:User user = {};
-    //
-    //scimclient:PhonePhotoIms phone = {};
-    //phone.^"type" = "work";
-    //phone.value = "0777777777";
-    //user.phoneNumbers = [phone];
-    //
-    //scimclient:Name name = {};
-    //name.givenName = "Leo";
-    //name.familyName = "Messi";
-    //name.formatted = "Lionel Messi";
-    //user.name = name;
-    //
-    //scimclient:Address address = {};
-    //address.postalCode = "23433";
-    //address.streetAddress = "no/2";
-    //address.region = "Catalunia";
-    //address.locality = "Barcelona";
-    //address.country = "Spain";
-    //address.formatted = "no/2,Barcelona/Catalunia/Spain";
-    //address.primary = "true";
-    //address.^"type" = "work";
-    //
-    //user.addresses = [address];
-    //
-    //user.userName = "leoMessi";
-    //user.password = "greatest";
-    //
-    //scimclient:Email email1 = {};
-    //email1.value = "messi@barca.com";
-    //email1.^"type" = "work";
-    //
-    //scimclient:Email email2 = {};
-    //email2.value = "messi@gg.com";
-    //email2.^"type" = "home";
-    //
-    //user.emails = [email1, email2];
-    //
-    //error Error;
-    //Error = scimCon.createUser(user);
-    //io:println("=======================================creating user " + user.userName + "============================");
-    //io:println(Error);
-    //
-    ////create user iniesta
-    //user.userName = "iniesta";
-    //io:println("=======================================creating user " + user.userName + "============================");
-    //Error = scimCon.createUser(user);
-    //io:println(Error);
-    //
-    ////create user tnm
-    //user.userName = "tnm";
-    //io:println("=======================================creating user " + user.userName + "============================");
-    //Error = scimCon.createUser(user);
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Get an user in the IS user store using getUserbyUserName action===================================================
-    //scimclient:User getUser = {};
-    //string userName = "iniesta";
-    //getUser, Error = scimCon.getUserByUsername(userName);
-    //
-    //io:println("");
-    //io:println("=======================================get user iniesta===============================================");
-    //io:println(getUser);
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
+    scimclient:User user = {};
+    
+    scimclient:PhonePhotoIms phone = {};
+    phone.^"type" = "work";
+    phone.value = "0777777777";
+    user.phoneNumbers = [phone];
+    
+    scimclient:Name name = {};
+    name.givenName = "Leo";
+    name.familyName = "Messi";
+    name.formatted = "Lionel Messi";
+    user.name = name;
+    
+    scimclient:Address address = {};
+    address.postalCode = "23433";
+    address.streetAddress = "no/2";
+    address.region = "Catalunia";
+    address.locality = "Barcelona";
+    address.country = "Spain";
+    address.formatted = "no/2,Barcelona/Catalunia/Spain";
+    address.primary = "true";
+    address.^"type" = "work";
+    
+    user.addresses = [address];
+    
+    user.userName = "leoMessi";
+    user.password = "greatest";
+    
+    scimclient:Email email1 = {};
+    email1.value = "messi@barca.com";
+    email1.^"type" = "work";
+    
+    scimclient:Email email2 = {};
+    email2.value = "messi@gg.com";
+    email2.^"type" = "home";
+    
+    user.emails = [email1, email2];
+    io:println("");
+    io:println("=======================================creating user " + user.userName + "============================");
+    var response1 = scimCon.createUser(user);
+    match response1 {
+        string message => io:println(message);
+        error er => io:println(er);
+    }
+    
+    //create user iniesta
+    user.userName = "iniesta";
+    io:println("");
+    io:println("=======================================creating user " + user.userName + "============================");
+    var response2 = scimCon.createUser(user);
+    match response2 {
+        string message => io:println(message);
+        error er => io:println(er);
+    }
+    
+    //create user tnm
+    user.userName = "tnm";
+    io:println("");
+    io:println("=======================================creating user " + user.userName + "============================");
+    var response3 = scimCon.createUser(user);
+    match response3 {
+        string message => io:println(message);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Get an user in the IS user store using getUserbyUserName action===================================================
+    // scimclient:User getUser = {};
+    // string userName = "iniesta";
+    // getUser, Error = scimCon.getUserByUsername(userName);
+    
+    // io:println("");
+    // io:println("=======================================get user iniesta===============================================");
+    // io:println(getUser);
+    // io:print("error: ");
+    // io:println(Error);
+    //==================================================================================================================
     //
     ////Create a Group in the IS user store using createUser action=======================================================
     //scimclient:Group gro = {};

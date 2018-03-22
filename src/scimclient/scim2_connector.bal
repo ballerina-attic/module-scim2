@@ -695,132 +695,159 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
     }
 }
 
-// @Description {value:"Check whether an user is in a certain group"}
-// @Param {value:"userName: User name of the user"}
-// @Param {value:"groupName: Display name of the group"}
-// @Param {value:"boolean: true/false"}
-// @Param {value:"error: Error"}
-// public function <ScimConnector scimConn> isUserInGroup (string userName, string groupName) (boolean, error) {
+@Description {value:"Check whether an user is in a certain group"}
+@Param {value:"userName: User name of the user"}
+@Param {value:"groupName: Display name of the group"}
+@Param {value:"boolean: true/false"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> isUserInGroup (string userName, string groupName) returns boolean|error {
 
-//     http:Request request = {};
-//     error Error = {};
-//     User user = {};
+    http:Request request = {};
+    error Error = {};
+    User user = {};
 
-//     if (!isConnectorInitialized) {
-//         Error = {message:"error: Connector not initialized"};
-//         return false, Error;
-//     }
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
 
-//     response, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
-//     user, userE = resolveUser(userName, response, connectorError);
-//     if (user == null) {
-//         Error = {message:"failed to check" + userE.message, cause:userE.cause};
-//         return false, Error;
-//     } else {
-//         if (user.groups == null) {
-//             return false, null;
-//         } else {
-//             foreach gro in user.groups {
-//                 if (gro.displayName.equalsIgnoreCase(groupName)) {
-//                     return true, null;
-//                 }
-//             }
-//         }
-//         return false, null;
-//     }
-// }
+    var res = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedUser = resolveUser(userName, response);
+            match receivedUser {
+                User usr => {
+                    user = usr;
+                    foreach gro in user.groups {
+                        if (gro.displayName.equalsIgnoreCase(groupName)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                error userError => {
+                    Error = {message:"failed to resolve user " + userError.message};
+                    return Error;
+                }
+            }
+        }
+    }   
+}
 
-//@Description {value:"Delete an user from user store using his user name"}
-//@Param {value:"userName: User name of the user"}
-//@Param {value:"string: string literal"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> deleteUserByUsername (string userName) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    http:HttpConnectorError connectorError;
-//    error Error;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Deleting user:" + userName + " failed. ";
-//
-//    //get user
-//    http:Request userRequest = {};
-//    http:Response userResponse = {};
-//    http:HttpConnectorError userError;
-//    User user;
-//    error userE;
-//    userResponse, userError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-//                                           userName, userRequest);
-//    user, userE = resolveUser(userName, userResponse, userError);
-//    if (user == null) {
-//        Error = {message:failedMessage + userE.message, cause:userE.cause};
-//        return Error;
-//    }
-//
-//    string userId = user.id;
-//    response, connectorError = oauthCon.delete(SCIM_USER_END_POINT + "/" + userId, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_NO_CONTENT) {
-//        Error = {message:"deleted"};
-//        return Error;
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase};
-//    return Error;
-//}
-//
-//@Description {value:"Delete group using its name"}
-//@Param {value:"groupName: Display name of the group"}
-//@Param {value:"string: string literal"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> deleteGroupByName (string groupName) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    http:HttpConnectorError connectorError;
-//    error Error;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Deleting group:" + groupName + " failed. ";
-//
-//    //get the group
-//    http:Request groupRequest = {};
-//    http:Response groupResponse = {};
-//    error groupE;
-//    http:HttpConnectorError groupError;
-//    Group gro;
-//    string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-//    groupResponse, groupError = oauthCon.get(s, groupRequest);
-//    gro, groupE = resolveGroup(groupName, groupResponse, groupError);
-//    if (gro == null) {
-//        Error = {message:failedMessage + groupE.message, cause:groupE.cause};
-//        return Error;
-//    }
-//
-//    string groupId = gro.id;
-//    response, connectorError = oauthCon.delete(SCIM_GROUP_END_POINT + "/" + groupId, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_NO_CONTENT) {
-//        Error = {message:"deleted"};
-//        return Error;
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase};
-//    return Error;
-//}
-//
+@Description {value:"Delete an user from user store using his user name"}
+@Param {value:"userName: User name of the user"}
+@Param {value:"string: string literal"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> deleteUserByUsername (string userName) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Deleting user:" + userName + " failed. ";
+
+    //get user
+    http:Request userRequest = {};
+    User user = {};
+    var resUser = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, userRequest);
+    match resUser {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedUser = resolveUser(userName, response);
+            match receivedUser {
+                User usr => {
+                    user = usr;     
+                    string userId = user.id;
+                    var res = oauthCon.delete(SCIM_USER_END_POINT + "/" + userId, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_NO_CONTENT) {
+                                return "deleted";
+                            }
+                            Error = {message:failedMessage + response.reasonPhrase};
+                            return Error;
+                        }
+                    }
+                }
+                error userError => {
+                    Error = {message:failedMessage + userError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+}
+
+@Description {value:"Delete group using its name"}
+@Param {value:"groupName: Display name of the group"}
+@Param {value:"string: string literal"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> deleteGroupByName (string groupName) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Deleting group:" + groupName + " failed. ";
+
+    //get the group
+    http:Request groupRequest = {};
+    Group gro = {};
+    string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
+    var resGroup = oauthCon.get(s, groupRequest);
+    match resGroup {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            match receivedGroup {
+                Group grp => {
+                    gro = grp;     
+                    string groupId = gro.id;
+                    var res = oauthCon.delete(SCIM_GROUP_END_POINT + "/" + groupId, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_NO_CONTENT) {
+                                return "deleted";
+                            }
+                            Error = {message:failedMessage + response.reasonPhrase};
+                            return Error;
+                        }
+                    }
+                }
+                error groupError => {
+                    Error = {message:failedMessage + groupError.message};
+                    return Error;
+                }
+            }
+        }
+    }    
+}
+

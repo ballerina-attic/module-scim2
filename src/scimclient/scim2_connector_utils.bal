@@ -112,12 +112,12 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
     return Error;
 }
 
-//@Description {value:"Add the necessary headers and body to the request"}
-//@Param {value:"body: the json payload to be sent"}
-//@Param {value:"OutRequest: http:OutRequest"}
-//function createRequest (json body) (http:Request) {
-//    http:Request request = {};
-//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//    request.setJsonPayload(body);
-//    return request;
-//}
+@Description {value:"Add the necessary headers and body to the request"}
+@Param {value:"body: the json payload to be sent"}
+@Param {value:"OutRequest: http:OutRequest"}
+function createRequest (json body) returns http:Request {
+   http:Request request = {};
+   request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+   request.setJsonPayload(body);
+   return request;
+}

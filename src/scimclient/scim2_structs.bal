@@ -122,126 +122,138 @@ public struct Manager {
 //===========================all the struct bind functions are here=====================================================
 
 //===========================================add or remove user=========================================================
-//
-//@Description {value:"Add the user to the group specified by its name"}
-//@Param {value:"groupName: Name of the group"}
-//@Param {value:"error: Error"}
-//public function <User user> addToGroup (string groupName) (error) {
-//
-//   error Error;
-//   error connectorError;
-//   http:Request request = {};
-//   http:Response response = {};
-//   http:HttpConnectorError httpError;
-//
-//   if (!isConnectorInitialized) {
-//       Error = {message:"error: Connector not initialized"};
-//       return Error;
-//   }
-//
-//   if (user == null || groupName == "") {
-//       connectorError = {message:"User and group names should be valid"};
-//       return connectorError;
-//   }
-//
-//   http:Request requestGroup = {};
-//   http:Response responseGroup = {};
-//   error groupError;
-//   Group gro = {};
-//   responseGroup, httpError = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-//                                             groupName, requestGroup);
-//   gro, groupError = resolveGroup(groupName, responseGroup, httpError);
-//   if (gro == null) {
-//       return groupError;
-//   }
-//
-//   string value = user.id;
-//   string ref = baseURL + SCIM_USER_END_POINT + "/" + value;
-//   string url = SCIM_GROUP_END_POINT + "/" + gro.id;
-//   json body;
-//   body, _ = <json>SCIM_GROUP_PATCH_ADD_BODY;
-//   body.Operations[0].value.members[0].display = user.userName;
-//   body.Operations[0].value.members[0]["$ref"] = ref;
-//   body.Operations[0].value.members[0].value = value;
-//
-//   request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//   request.setJsonPayload(body);
-//   response, httpError = oauthCon.patch(url, request);
-//   if (httpError != null) {
-//       Error = {message:httpError.message, cause:httpError.cause};
-//       return Error;
-//   }
-//   if (response.statusCode == HTTP_OK) {
-//       Error = {message:"user added"};
-//       return Error;
-//
-//   }
-//
-//   Error = {message:response.reasonPhrase};
-//   return Error;
-//
-//}
-//
-//@Description {value:"Remove the user from the group specified by its name"}
-//@Param {value:"groupName: Name of the group"}
-//@Param {value:"error: Error"}
-//public function <User user> removeFromGroup (string groupName) (error) {
-//
-//   error connectorError;
-//
-//   if (user == null || groupName == "") {
-//       connectorError = {message:"User and nick name should be valid"};
-//       return connectorError;
-//   }
-//
-//   http:Request groupRequest = {};
-//   http:Response groupResponse = {};
-//   http:Request request = {};
-//   http:Response response = {};
-//   error groupError;
-//   Group gro = {};
-//   error Error;
-//   http:HttpConnectorError httpError;
-//
-//   if (!isConnectorInitialized) {
-//       Error = {message:"error: Connector not initialized"};
-//       return Error;
-//   }
-//
-//   groupResponse, httpError = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
-//                                             groupRequest);
-//   gro, groupError = resolveGroup(groupName, groupResponse, httpError);
-//   if (gro == null) {
-//       return groupError;
-//   }
-//
-//   json body;
-//   body, _ = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
-//   string path = "members[display eq " + user.userName + "]";
-//   body.Operations[0].path = path;
-//   string url = SCIM_GROUP_END_POINT + "/" + gro.id;
-//
-//   request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//   request.setJsonPayload(body);
-//   response, httpError = oauthCon.patch(url, request);
-//
-//   if (httpError != null) {
-//       Error = {message:httpError.message, cause:httpError.cause};
-//       return Error;
-//   }
-//   if (httpError != null) {
-//       Error = {message:httpError.message, cause:httpError.cause};
-//       return Error;
-//   }
-//   if (response.statusCode == HTTP_OK) {
-//       Error = {message:"user removed"};
-//       return Error;
-//   }
-//   Error = {message:response.reasonPhrase};
-//   return Error;
-//
-//}
-//
+
+@Description {value:"Add the user to the group specified by its name"}
+@Param {value:"groupName: Name of the group"}
+@Param {value:"error: Error"}
+public function <User user> addToGroup (string groupName) returns string|error {
+
+    error Error = {};
+    http:Request request = {};
+    
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    if (user.id.equalsIgnoreCase("") || groupName == "") {
+        Error = {message:"User and group names should be valid"};
+        return Error;
+    }
+
+    http:Request requestGroup = {};
+    Group gro = {};
+    var resGroup = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
+    match resGroup {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            match receivedGroup {
+                Group grp => {
+                    gro = grp;     
+                    string value = user.id;
+                    string ref = baseURL + SCIM_USER_END_POINT + "/" + value;
+                    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+                    json body;
+                    body, _ = <json>SCIM_GROUP_PATCH_ADD_BODY;
+                    body.Operations[0].value.members[0].display = user.userName;
+                    body.Operations[0].value.members[0]["$ref"] = ref;
+                    body.Operations[0].value.members[0].value = value;
+
+                    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+                    request.setJsonPayload(body);
+
+                    var res = oauthCon.patch(url, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:"Failed to add. " + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_OK) {
+                                return "user added";
+                            }
+                            Error = {message:"Failed to add. " + response.reasonPhrase};
+                            return Error;
+                        }
+                    }
+                }
+                error groupError => {
+                    Error = {message:"Failed to add. " + groupError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+}
+
+@Description {value:"Remove the user from the group specified by its name"}
+@Param {value:"groupName: Name of the group"}
+@Param {value:"error: Error"}
+public function <User user> removeFromGroup (string groupName) returns string|error {
+    http:Request groupRequest = {};
+    http:Request request = {};
+    Group gro = {};
+    error Error = {};
+
+    if (user == null || groupName == "") {
+        Error = {message:"User and nick name should be valid"};
+        return Error;
+    }
+    
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    var resGroup = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
+                                            groupRequest);
+    match resGroup {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            match receivedGroup {
+                Group grp => {
+                    gro = grp;     
+                    json body;
+                    body, _ = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
+                    string path = "members[display eq " + user.userName + "]";
+                    body.Operations[0].path = path;
+                    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+
+                    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+                    request.setJsonPayload(body);
+
+                    var res = oauthCon.patch(url, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:"Failed to remove. " + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_OK) {
+                                return "user removed";
+                            }
+                            Error = {message:"Failed to add. " + response.reasonPhrase};
+                            return Error;
+                        }
+                    }
+                }
+                error groupError => {
+                    Error = {message:"Failed to remove. " + groupError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+}
+
 //////=====================================================updating User===================================================
 //
 //@Description {value:"Update the nick name of the user"}
