@@ -1,4 +1,4 @@
-package samples.scimclient;
+package tests.scimclient;
 
 
 import ballerina.io;
