@@ -51,7 +51,7 @@ public const string SCIM_GROUP_PATCH_REMOVE_BODY = "{" +
                                                    "                                           \"path\": \"\"" +
                                                    "                                       }]" +
                                                    "                    }";
-
+public const string SCIM_ME_ENDPOINT = "/scim2/Me";
 public const string SCIM_TOTAL_RESULTS = "totalResults";
 public const string SCIM_USER_END_POINT = "/scim2/Users";
 

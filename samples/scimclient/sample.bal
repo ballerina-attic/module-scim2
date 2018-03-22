@@ -8,7 +8,7 @@ import ballerina.config;
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "d587de4e-7f50-3d30-9482-3606250ebd0c";
+string AccessToken = "fbb03535-857c-3b29-831e-f881e385bd61";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";
@@ -18,12 +18,17 @@ string RefreshTokenPath = "/oauth2/token";
 
  public function main (string[] args) {
 
+    string s = "kimsGroup";
+    string u = "Omare333";
+    scimclient: User g = {};
+    g.userName = u;
+    g.password = "fasfdefsds";
     scimclient: ScimConnector scimCon = {};
     scimCon.init(BaseUrl,AccessToken,ClientId,ClientSecret,RefreshToken,RefreshTokenEndpoint,RefreshTokenPath,
                  truststoreLocation,trustStorePassword);
-    var response = scimCon.getListOfGroups();
+    var response = scimCon.removeUserFromGroup(u,s);
     match response {
-        scimclient:Group[] lis => io:println(lis);
+        string lis => io:println(lis);
         error er => io:println(er);
     }
 

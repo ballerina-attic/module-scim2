@@ -48,9 +48,23 @@ public function <OAuth2Client oAuth2Client> init(string baseUrl, string accessTo
 public function <OAuth2Client oAuth2Client> get (string path, http:Request originalRequest)
                                                                         returns http:Response|http:HttpConnectorError {
     endpoint http:ClientEndpoint httpClient = oAuth2Client.httpClient;
-    originalRequest.setHeader("Authorization","Bearer d587de4e-7f50-3d30-9482-3606250ebd0c");
+    originalRequest.setHeader("Authorization","Bearer 1b5d3bef-f3f4-3cda-a48a-b9766d377e40");
     var response = httpClient -> get(path, originalRequest);
     http:Request request = {};
+    return response;
+}
+public function <OAuth2Client oAuth2Client> post (string path, http:Request originalRequest)
+                                                                        returns http:Response|http:HttpConnectorError {
+    endpoint http:ClientEndpoint httpClient = oAuth2Client.httpClient;
+    originalRequest.setHeader("Authorization","Bearer 1b5d3bef-f3f4-3cda-a48a-b9766d377e40");
+    var response = httpClient -> post(path, originalRequest);
+    return response;
+}
+public function <OAuth2Client oAuth2Client> patch (string path, http:Request originalRequest)
+                                                                        returns http:Response|http:HttpConnectorError {
+    endpoint http:ClientEndpoint httpClient = oAuth2Client.httpClient;
+    originalRequest.setHeader("Authorization","Bearer 1b5d3bef-f3f4-3cda-a48a-b9766d377e40");
+    var response = httpClient -> patch(path, originalRequest);
     return response;
 }
 //

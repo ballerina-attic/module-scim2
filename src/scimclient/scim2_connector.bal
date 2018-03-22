@@ -70,47 +70,53 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
     var res = oauthCon.get(SCIM_USER_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
-                                           Error = {message:failedMessage + connectorError.message,
-                                                               cause:connectorError.cause};
-                                           return Error;
-                                       }
+            Error = {message:failedMessage + connectorError.message,
+            cause:connectorError.cause};
+            return Error;
+        }
         http:Response response => {
-                                  if (response.statusCode == HTTP_OK) {
-                                           var receivedBinaryPayload = response.getBinaryPayload();
-                                           match receivedBinaryPayload {
-                                               blob b => {
-                                                   string receivedPayload = b.toString("UTF-8");
-                                                   var payload, _ = <json>receivedPayload;
-                                                   match payload {
-                                                       json j => {
-                                                                 var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
-                                                                 if (noOfResults.equalsIgnoreCase("0")) {
-                                                                    Error = {message:"There are no users"};
-                                                                    return Error;
-                                                                 } else {
-                                                                    User[] userList = [];
-                                                                    payload = payload["Resources"];
-                                                                    int k = 0;
-                                                                    foreach element in payload {
-                                                                        User user = {};
-                                                                        user = <User, convertJsonToUser()>element;
-                                                                        userList[k] = user;
-                                                                        k = k + 1;
-                                                                    }
-                                                                    return userList;
-                                                                 }
-                                                       }
-                                                   }
-                                               }
-                                               error e =>{
-                                                             Error = {message:failedMessage + e.message, cause:e.cause};
-                                                             return Error;
-                                                         }
-                                           }
-                                  } else {
-                                  Error = {message:failedMessage + response.reasonPhrase};
-                                  return Error;}
-                                  }
+            if (response.statusCode == HTTP_OK) {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null){
+                            match payload {
+                                json j => {
+                                    var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
+                                    if (noOfResults.equalsIgnoreCase("0")) {
+                                        Error = {message:"There are no users"};
+                                        return Error;
+                                    } else {
+                                        User[] userList = [];
+                                        payload = payload["Resources"];
+                                        int k = 0;
+                                        foreach element in payload {
+                                            User user = {};
+                                            user = <User, convertJsonToUser()>element;
+                                            userList[k] = user;
+                                            k = k + 1;
+                                        }
+                                        return userList;
+                                    }
+                                }
+                            }
+                        } else {
+                            Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
+                            return Error;
+                        }
+                    }   
+                    error e =>{
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }
+            } else {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            }
+        }
     }
 }
 
@@ -132,24 +138,25 @@ public function <ScimConnector scimConn> getListOfGroups () returns Group[]|erro
 
     var res = oauthCon.get(SCIM_GROUP_END_POINT, request);
     match res {
-         http:HttpConnectorError connectorError => {
-              Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-              return Error;
-         }
-         http:Response response => {
-              if (response.statusCode == HTTP_OK) {
-                   var receivedBinaryPayload = response.getBinaryPayload();
-                   match receivedBinaryPayload {
-                       blob b => {
-                           string receivedPayload = b.toString("UTF-8");
-                           var payload, _ = <json>receivedPayload;
-                           match payload {
-                               json j => {
-                                   var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
-                                   if (noOfResults.equalsIgnoreCase("0")) {
+        http:HttpConnectorError connectorError => {
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            if (response.statusCode == HTTP_OK) {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null){
+                            match payload {
+                                json j => {
+                                    var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
+                                    if (noOfResults.equalsIgnoreCase("0")) {
                                         Error = {message:"There are no Groups"};
                                         return Error;
-                                   } else {
+                                    } else {
                                         Group[] groupList = [];
                                         payload = payload["Resources"];
                                         int k = 0;
@@ -160,416 +167,569 @@ public function <ScimConnector scimConn> getListOfGroups () returns Group[]|erro
                                             k = k + 1;
                                         }
                                         return groupList;
-                                   }
-                               }
-                           }
-                       }
-                       error e =>{
-                            Error = {message:failedMessage + e.message, cause:e.cause};
+                                    }
+                                }
+                            }
+                        } else {
+                            Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
                             return Error;
-                       }
-                   }
-              } else {
-                    Error = {message:failedMessage + response.reasonPhrase};
-                    return Error;}
-         }
+                        }
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }
+            } else {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            }
+        }
     }
 }
 
-//@Description {value:"Get the user that is currently authenticated"}
-//@Param {value:"User: User struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> getMe () returns User|error {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    http:HttpConnectorError connectorError;
-//    error Error;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//    User user;
-//
-//    string failedMessage = "Getting currently authenticated user failed. ";
-//
-//    response, connectorError = oauthCon.get("/scim2/Me", request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_OK) {
-//        try {
-//
-//            var receivedBinaryPayload, _ = response.getBinaryPayload();
-//            string receivedPayload = receivedBinaryPayload.toString("UTF-8");
-//            var payload, _ = <json>receivedPayload;
-//            user = <User, convertJsonToUser()>payload;
-//            return user;
-//        } catch (error e) {
-//            Error = {message:failedMessage + e.message, cause:e.cause};
-//            return Error;
-//        }
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase};
-//    return Error;
-//}
-//
-//@Description {value:"Get a group in the user store by name"}
-//@Param {value:"groupName: The display Name of the group"}
-//@Param {value:"Group: Group struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> getGroupByName (string groupName) returns Group|error {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    error Error;
-//    http:HttpConnectorError connectorError;
-//    Group receivedGroup = {};
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return null, Error;
-//    }
-//
-//    string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-//    response, connectorError = oauthCon.get(s, request);
-//
-//    receivedGroup, Error = resolveGroup(groupName, response, connectorError);
-//    return receivedGroup, Error;
-//}
-//
-//@Description {value:"Get a user in the user store by his user name"}
-//@Param {value:"userName: User name of the user"}
-//@Param {value:"User: User struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> getUserByUsername (string userName) (User, error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    error Error;
-//    http:HttpConnectorError connectorError;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return null, Error;
-//    }
-//
-//    response, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
-//    User user = {};
-//    user, Error = resolveUser(userName, response, connectorError);
-//    return user, Error;
-//}
-//
-//@Description {value:"Create a group in the user store"}
-//@Param {value:"group: Group struct with group details"}
-//@Param {value:"Group: Group struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> createGroup (Group crtGroup) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    error Error;
-//    http:HttpConnectorError connectorError;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Creating group:" + crtGroup.displayName + " failed. ";
-//
-//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//
-//    json jsonPayload = <json, convertGroupToJson()>crtGroup;
-//    request.setJsonPayload(jsonPayload);
-//    response, connectorError = oauthCon.post(SCIM_GROUP_END_POINT, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    int statusCode = response.statusCode;
-//    if (statusCode == HTTP_UNAUTHORIZED) {
-//        Error = {message:failedMessage + response.reasonPhrase};
-//        return Error;
-//    } else if (statusCode == HTTP_CREATED) {
-//        Error = {message:response.reasonPhrase};
-//        return Error;
-//    } else {
-//        try {
-//            var receivedBinaryPayload, _ = response.getBinaryPayload();
-//            string receivedPayload = receivedBinaryPayload.toString("UTF-8");
-//            var payload, _ = <json>receivedPayload;
-//            Error = {message:failedMessage + payload.detail.toString()};
-//            return Error;
-//        } catch (error e) {
-//            Error = {message:failedMessage + e.message, cause:e.cause};
-//            return Error;
-//        }
-//    }
-//    return Error;
-//}
-//
-//@Description {value:"Create a user in the user store"}
-//@Param {value:"user: user struct with user details"}
-//@Param {value:"string: string indicating whether user creation was successful or failed"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> createUser (User user) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    error Error;
-//    http:HttpConnectorError connectorError;
-//
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Creating user:" + user.userName + " failed. ";
-//
-//    if (user.emails != null) {
-//        foreach email in user.emails {
-//            if (!email["type"].equalsIgnoreCase("work") && !email["type"].equalsIgnoreCase("home")
-//                                                            && !email["type"].equalsIgnoreCase("other")) {
-//                Error = {message:failedMessage + "Email should either be home or work"};
-//                return Error;
-//            }
-//        }
-//    }
-//    if (user.addresses != null) {
-//        foreach address in user.addresses {
-//            if (!address["type"].equalsIgnoreCase("work") && !address["type"].equalsIgnoreCase("home")
-//                                                              && !address["type"].equalsIgnoreCase("other")) {
-//                Error = {message:failedMessage + "Address type should either be work or home"};
-//                return Error;
-//            }
-//        }
-//    }
-//    if (user.phoneNumbers != null) {
-//        foreach phone in user.phoneNumbers {
-//            if (!phone["type"].equalsIgnoreCase("work") && !phone["type"].equalsIgnoreCase("home")
-//                                                            && !phone["type"].equalsIgnoreCase("mobile")
-//                                                                && !phone["type"].equalsIgnoreCase("fax")
-//                                                                    && !phone["type"].equalsIgnoreCase("pager")
-//                                                                        && !phone["type"].equalsIgnoreCase("other")) {
-//                Error = {message:failedMessage + "Phone number type should be work,mobile,fax,pager,home or other"};
-//                return Error;
-//            }
-//        }
-//    }
-//    if (user.photos != null) {
-//        foreach photo in user.photos {
-//            if (!photo["type"].equalsIgnoreCase("photo") && !photo["type"].equalsIgnoreCase("thumbnail")) {
-//                Error = {message:failedMessage + "Photo type should either be photo or thumbnail"};
-//                return Error;
-//            }
-//        }
-//    }
-//
-//    json jsonPayload;
-//    try {
-//        jsonPayload = <json, convertUserToJson()>user;
-//    } catch (error e) {
-//        Error = {message:failedMessage + e.message, cause:e.cause};
-//        return Error;
-//    }
-//
-//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//    request.setJsonPayload(jsonPayload);
-//    response, connectorError = oauthCon.post(SCIM_USER_END_POINT, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_CREATED) {
-//        Error = {message:response.reasonPhrase};
-//        return Error;
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase, cause:null};
-//    return Error;
-//}
-//
-//
-//@Description {value:"Add an user in the user store to a existing group"}
-//@Param {value:"userName: User name of the user"}
-//@Param {value:"groupName: Display name of the group"}
-//@Param {value:"Group: Group struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> addUserToGroup (string userName, string groupName) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    error Error;
-//    http:HttpConnectorError connectorError;
-//
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Adding user:" + userName + " to group:" + groupName + " failed.";
-//
-//    //check if user valid
-//    http:Request requestUser = {};
-//    http:Response responseUser = {};
-//    error userError;
-//    User user;
-//    responseUser, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-//                                                userName, requestUser);
-//    user, userError = resolveUser(userName, responseUser, connectorError);
-//    if (user == null) {
-//        Error = {message:failedMessage + userError.message};
-//        return Error;
-//    }
-//    //check if group valid
-//    http:Request requestGroup = {};
-//    http:Response responseGroup = {};
-//    Group gro;
-//    error groupError;
-//    responseGroup, connectorError = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-//                                                 groupName, requestGroup);
-//    gro, groupError = resolveGroup(groupName, responseGroup, connectorError);
-//    if (gro == null) {
-//        Error = {message:failedMessage + groupError.message};
-//        return Error;
-//    }
-//    //create request body
-//    string value = user.id;
-//    string ref = scimConn.baseUrl + SCIM_USER_END_POINT + "/" + value;
-//    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
-//    json body;
-//    body, _ = <json>SCIM_GROUP_PATCH_ADD_BODY;
-//    body.Operations[0].value.members[0].display = userName;
-//    body.Operations[0].value.members[0]["$ref"] = ref;
-//    body.Operations[0].value.members[0].value = value;
-//
-//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//    request.setJsonPayload(body);
-//    response, connectorError = oauthCon.patch(url, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_OK) {
-//        Error = {message:"user added"};
-//        return Error;
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase};
-//    return Error;
-//}
-//
-//@Description {value:"Remove an user from a group"}
-//@Param {value:"userName: User name of the user"}
-//@Param {value:"groupName: Display name of the group"}
-//@Param {value:"Group: Group struct"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> removeUserFromGroup (string userName, string groupName) (error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    http:HttpConnectorError connectorError;
-//    error Error;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return Error;
-//    }
-//
-//    string failedMessage;
-//    failedMessage = "Removing user:" + userName + " from group:" + groupName + " failed.";
-//
-//    //check if user valid
-//    http:Request requestUser = {};
-//    http:Response responseUser = {};
-//    error userError;
-//    User user;
-//    responseUser, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-//                                                userName, requestUser);
-//    user, userError = resolveUser(userName, responseUser, connectorError);
-//    if (user == null) {
-//        Error = {message:failedMessage + userError.message};
-//        return Error;
-//    }
-//    //check if group valid
-//    Group gro;
-//    error groupError;
-//    http:Request groupRequest = {};
-//    http:Response groupResponse = {};
-//    groupResponse, connectorError = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-//                                                 groupName, groupRequest);
-//    gro, groupError = resolveGroup(groupName, groupResponse, connectorError);
-//    if (gro == null) {
-//        Error = {message:failedMessage + groupError.message};
-//        return Error;
-//    }
-//    //create request body
-//    json body;
-//    body, _ = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
-//    string path = "members[display eq " + userName + "]";
-//    body.Operations[0].path = path;
-//    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
-//
-//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-//    request.setJsonPayload(body);
-//    response, connectorError = oauthCon.patch(url, request);
-//    if (connectorError != null) {
-//        Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-//        return Error;
-//    }
-//    if (response.statusCode == HTTP_OK) {
-//        Error = {message:"removed"};
-//        return Error;
-//    }
-//    Error = {message:failedMessage + response.reasonPhrase};
-//    return Error;
-//}
-//
-//
-//@Description {value:"Check whether an user is in a certain group"}
-//@Param {value:"userName: User name of the user"}
-//@Param {value:"groupName: Display name of the group"}
-//@Param {value:"boolean: true/false"}
-//@Param {value:"error: Error"}
-//public function <ScimConnector scimConn> isUserInGroup (string userName, string groupName) (boolean, error) {
-//
-//    http:Request request = {};
-//    http:Response response = {};
-//    http:HttpConnectorError connectorError;
-//    error Error;
-//    User user = {};
-//    error userE;
-//
-//    if (!isConnectorInitialized) {
-//        Error = {message:"error: Connector not initialized"};
-//        return false, Error;
-//    }
-//
-//    response, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
-//    user, userE = resolveUser(userName, response, connectorError);
-//    if (user == null) {
-//        Error = {message:"failed to check" + userE.message, cause:userE.cause};
-//        return false, Error;
-//    } else {
-//        if (user.groups == null) {
-//            return false, null;
-//        } else {
-//            foreach gro in user.groups {
-//                if (gro.displayName.equalsIgnoreCase(groupName)) {
-//                    return true, null;
-//                }
-//            }
-//        }
-//        return false, null;
-//    }
-//}
-//
+@Description {value:"Get the user that is currently authenticated"}
+@Param {value:"User: User struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> getMe () returns User|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+    User user = {};
+
+    string failedMessage = "Getting currently authenticated user failed. ";
+
+    var res = oauthCon.get(SCIM_ME_ENDPOINT, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            if (response.statusCode == HTTP_OK) {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null){
+                            match payload {
+                                json j => {
+                                    user = <User, convertJsonToUser()>payload;
+                                    return user;
+                                }
+                            } 
+                        } else {
+                            Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
+                            return Error;
+                        }
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }
+            } else {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            }
+        }
+    }
+}
+
+@Description {value:"Get a group in the user store by name"}
+@Param {value:"groupName: The display Name of the group"}
+@Param {value:"Group: Group struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> getGroupByName (string groupName) returns Group|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+       Error = {message:"error: Connector not initialized"};
+       return Error;
+    }
+
+    string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
+    var res = oauthCon.get(s, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            return receivedGroup;
+        }
+    }
+}
+
+@Description {value:"Get a user in the user store by his user name"}
+@Param {value:"userName: User name of the user"}
+@Param {value:"User: User struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> getUserByUsername (string userName) returns User|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    var res = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedUser = resolveUser(userName, response);
+            return receivedUser;
+        }
+    }
+}
+
+@Description {value:"Create a group in the user store"}
+@Param {value:"group: Group struct with group details"}
+@Param {value:"Group: Group struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> createGroup (Group crtGroup) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Creating group:" + crtGroup.displayName + " failed. ";
+
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+
+    json jsonPayload = <json, convertGroupToJson()>crtGroup;
+    request.setJsonPayload(jsonPayload);
+    var res = oauthCon.post(SCIM_GROUP_END_POINT, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+           return Error;
+        }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_CREATED) {
+                return "Group Created";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null) {
+                            match payload {
+                                json j => {
+                                    Error = {message:failedMessage + payload.detail.toString()};
+                                    return Error;
+                                }
+                            }
+                        } else {
+                            Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
+                            return Error;
+                        }
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }  
+            }
+        }
+   }
+}
+
+@Description {value:"Create a user in the user store"}
+@Param {value:"user: user struct with user details"}
+@Param {value:"string: string indicating whether user creation was successful or failed"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> createUser (User user) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Creating user:" + user.userName + " failed. ";
+
+    if (user.emails != null) {
+        foreach email in user.emails {
+            if (!email["type"].equalsIgnoreCase("work") && !email["type"].equalsIgnoreCase("home")
+                                                            && !email["type"].equalsIgnoreCase("other")) {
+                Error = {message:failedMessage + "Email should either be home or work"};
+                return Error;
+            }
+        }
+    }
+    if (user.addresses != null) {
+        foreach address in user.addresses {
+            if (!address["type"].equalsIgnoreCase("work") && !address["type"].equalsIgnoreCase("home")
+                                                                && !address["type"].equalsIgnoreCase("other")) {
+                Error = {message:failedMessage + "Address type should either be work or home"};
+                return Error;
+            }
+        }
+    }
+    if (user.phoneNumbers != null) {
+        foreach phone in user.phoneNumbers {
+            if (!phone["type"].equalsIgnoreCase("work") && !phone["type"].equalsIgnoreCase("home")
+                                                            && !phone["type"].equalsIgnoreCase("mobile")
+                                                                && !phone["type"].equalsIgnoreCase("fax")
+                                                                    && !phone["type"].equalsIgnoreCase("pager")
+                                                                        && !phone["type"].equalsIgnoreCase("other")) {
+                Error = {message:failedMessage + "Phone number type should be work,mobile,fax,pager,home or other"};
+                return Error;
+            }
+        }
+    }
+    if (user.photos != null) {
+        foreach photo in user.photos {
+            if (!photo["type"].equalsIgnoreCase("photo") && !photo["type"].equalsIgnoreCase("thumbnail")) {
+                Error = {message:failedMessage + "Photo type should either be photo or thumbnail"};
+                return Error;
+            }
+        }
+    }
+
+    json jsonPayload = <json, convertUserToJson()>user;
+
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(jsonPayload);
+    var res = oauthCon.post(SCIM_USER_END_POINT, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+           return Error;
+        }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_CREATED) {
+                return "User Created";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null) {
+                            match payload {
+                                json j => {
+                                    Error = {message:failedMessage + payload.detail.toString()};
+                                    return Error;
+                                }
+                            }
+                        } else {
+                            Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
+                            return Error;
+                        }
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }  
+            }
+        }
+    }
+}
+
+@Description {value:"Add an user in the user store to a existing group"}
+@Param {value:"userName: User name of the user"}
+@Param {value:"groupName: Display name of the group"}
+@Param {value:"Group: Group struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> addUserToGroup (string userName, string groupName) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Adding user:" + userName + " to group:" + groupName + " failed.";
+
+    //check if user valid
+    http:Request requestUser = {};
+    User user = {};
+    var resUser = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, requestUser);
+    match resUser {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedUser = resolveUser(userName, response);
+            match receivedUser {
+                User usr => {
+                    user = usr;     
+                }
+                error userError => {
+                    Error = {message:failedMessage + userError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+    //check if group valid
+    http:Request requestGroup = {};
+    Group gro = {};
+    var resGroup = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
+    match resGroup {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            match receivedGroup {
+                Group grp => {
+                    gro = grp;     
+                }
+                error groupError => {
+                    Error = {message:failedMessage + groupError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+    //create request body
+    string value = user.id;
+    string ref = scimConn.baseUrl + SCIM_USER_END_POINT + "/" + value;
+    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+    json body;
+    body, _ = <json>SCIM_GROUP_PATCH_ADD_BODY;
+    body.Operations[0].value.members[0].display = userName;
+    body.Operations[0].value.members[0]["$ref"] = ref;
+    body.Operations[0].value.members[0].value = value;
+
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(body);
+    var res = oauthCon.patch(url, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+           return Error;
+        }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_OK) {
+                return "User Added";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null) {
+                            match payload {
+                                json j => {
+                                    Error = {message:failedMessage + payload.detail.toString()};
+                                    return Error;
+                                }
+                            }
+                        } else {
+                            Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
+                            return Error;
+                        }
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }  
+            }
+        }
+    }
+}
+
+@Description {value:"Remove an user from a group"}
+@Param {value:"userName: User name of the user"}
+@Param {value:"groupName: Display name of the group"}
+@Param {value:"Group: Group struct"}
+@Param {value:"error: Error"}
+public function <ScimConnector scimConn> removeUserFromGroup (string userName, string groupName) returns string|error {
+
+    http:Request request = {};
+    error Error = {};
+
+    if (!isConnectorInitialized) {
+        Error = {message:"error: Connector not initialized"};
+        return Error;
+    }
+
+    string failedMessage;
+    failedMessage = "Removing user:" + userName + " from group:" + groupName + " failed.";
+
+    //check if user valid
+    http:Request requestUser = {};
+    User user = {};
+    var resUser = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
+                                                userName, requestUser);
+    match resUser {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedUser = resolveUser(userName, response);
+            match receivedUser {
+                User usr => {
+                    user = usr;     
+                }
+                error userError => {
+                    Error = {message:failedMessage + userError.message};
+                    return Error;
+                }
+            }
+        }
+    }                                            
+    
+    //check if group valid
+    Group gro = {};
+    http:Request groupRequest = {};
+    var resGroup = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
+                                                    groupName, groupRequest);
+    match resGroup {
+        http:HttpConnectorError connectorError => {
+            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            var receivedGroup = resolveGroup(groupName, response);
+            match receivedGroup {
+                Group grp => {
+                    gro = grp;     
+                }
+                error groupError => {
+                    Error = {message:failedMessage + groupError.message};
+                    return Error;
+                }
+            }
+        }
+    }
+    //create request body
+    json body;
+    body, _ = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
+    string path = "members[display eq " + userName + "]";
+    body.Operations[0].path = path;
+    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(body);
+    var res = oauthCon.patch(url, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+           return Error;
+        }
+            http:Response response => {
+                int statusCode = response.statusCode;
+                if (statusCode == HTTP_OK) {
+                    return "User Removed";
+                }
+                else if (statusCode == HTTP_UNAUTHORIZED) {
+                    Error = {message:failedMessage + response.reasonPhrase};
+                    return Error;
+                } else {
+                    var receivedBinaryPayload = response.getBinaryPayload();
+                    match receivedBinaryPayload {
+                        blob b => {
+                            string receivedPayload = b.toString("UTF-8");
+                            var payload, conversionEr = <json>receivedPayload;
+                            if (conversionEr == null) {
+                                match payload {
+                                    json j => {
+                                        Error = {message:failedMessage + payload.detail.toString()};
+                                        return Error;
+                                    }
+                                }
+                            } else {
+                                Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
+                                return Error;
+                            }
+                        }
+                        error e => {
+                            Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
+                    }
+                }  
+            }
+        }
+    }
+}
+
+// @Description {value:"Check whether an user is in a certain group"}
+// @Param {value:"userName: User name of the user"}
+// @Param {value:"groupName: Display name of the group"}
+// @Param {value:"boolean: true/false"}
+// @Param {value:"error: Error"}
+// public function <ScimConnector scimConn> isUserInGroup (string userName, string groupName) (boolean, error) {
+
+//     http:Request request = {};
+//     error Error = {};
+//     User user = {};
+
+//     if (!isConnectorInitialized) {
+//         Error = {message:"error: Connector not initialized"};
+//         return false, Error;
+//     }
+
+//     response, connectorError = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
+//     user, userE = resolveUser(userName, response, connectorError);
+//     if (user == null) {
+//         Error = {message:"failed to check" + userE.message, cause:userE.cause};
+//         return false, Error;
+//     } else {
+//         if (user.groups == null) {
+//             return false, null;
+//         } else {
+//             foreach gro in user.groups {
+//                 if (gro.displayName.equalsIgnoreCase(groupName)) {
+//                     return true, null;
+//                 }
+//             }
+//         }
+//         return false, null;
+//     }
+// }
+
 //@Description {value:"Delete an user from user store using his user name"}
 //@Param {value:"userName: User name of the user"}
 //@Param {value:"string: string literal"}
