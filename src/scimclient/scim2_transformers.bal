@@ -53,9 +53,9 @@ transformer <json sourceJsonObject, User targetUserStruct> convertJsonToUser() {
                                         sourceJsonObject.x509Certificates.map(
                                                                          function (json nestedJsonInSource)
                                                                          returns X509Certificate {return
-                                                                                            <X509Certificate,
-                                                                                            convertJsonToCertificate()>
-                                                                                            nestedJsonInSource;
+                                                                                                  <X509Certificate,
+                                                                                                  convertJsonToCertificate()>
+                                                                                                  nestedJsonInSource;
                                                                          }) : [];
     targetUserStruct.schemas = sourceJsonObject.schemas != null ?
                                sourceJsonObject.schemas.map(
@@ -71,16 +71,16 @@ transformer <json sourceJsonObject, User targetUserStruct> convertJsonToUser() {
     targetUserStruct.phoneNumbers = sourceJsonObject.phoneNumbers != null ?
                                     sourceJsonObject.phoneNumbers.map(function (json nestedJsonInSource)
                                                                       returns PhonePhotoIms {return
-                                                                                       <PhonePhotoIms,
-                                                                                       convertJsonToPhoneNumbers()>
-                                                                                       nestedJsonInSource;
+                                                                                             <PhonePhotoIms,
+                                                                                             convertJsonToPhoneNumbers()>
+                                                                                             nestedJsonInSource;
                                                                       }) : [];
     targetUserStruct.photos = sourceJsonObject.photos != null ?
                               sourceJsonObject.photos.map(
                                                      function (json nestedJsonInSource) returns PhonePhotoIms {
                                                          return <PhonePhotoIms,
                                                                 convertJsonToPhoneNumbers()>nestedJsonInSource;
-                                                                                       }) : [];
+                                                     }) : [];
     targetUserStruct.ims = sourceJsonObject.ims != null ? sourceJsonObject.ims.map(
                                                                               function (json nestedJsonInSource)
                                                                               returns PhonePhotoIms {
@@ -103,22 +103,22 @@ transformer <json sourceJsonObject, User targetUserStruct> convertJsonToUser() {
                                                      }) : [];
     targetUserStruct.EnterpriseUser = sourceJsonObject.EnterpriseUser != null ?
                                       <EnterpriseUserExtension, convertJsonToEnterpriseExtension()>
-                                                                                sourceJsonObject.EnterpriseUser : {};
+                                      sourceJsonObject.EnterpriseUser : {};
 }
 
 transformer <json sourceJsonObject, EnterpriseUserExtension targetExtension> convertJsonToEnterpriseExtension() {
     targetExtension.costCenter = sourceJsonObject.costCenter != null ?
-                                           sourceJsonObject.costCenter.toString() : " ";
+                                 sourceJsonObject.costCenter.toString() : " ";
     targetExtension.department = sourceJsonObject.department != null ?
-                                           sourceJsonObject.department.toString() : " ";
+                                 sourceJsonObject.department.toString() : " ";
     targetExtension.division = sourceJsonObject.division != null ?
-                                         sourceJsonObject.division.toString() : " ";
+                               sourceJsonObject.division.toString() : " ";
     targetExtension.employeeNumber = sourceJsonObject.employeeNumber != null ?
-                                               sourceJsonObject.employeeNumber.toString() : " ";
+                                     sourceJsonObject.employeeNumber.toString() : " ";
     targetExtension.organization = sourceJsonObject.organization != null ?
-                                             sourceJsonObject.organization.toString() : " ";
+                                   sourceJsonObject.organization.toString() : " ";
     targetExtension.manager = sourceJsonObject.manager != null ?
-                                        <Manager, convertJsonToManager()>sourceJsonObject.manager : {};
+                              <Manager, convertJsonToManager()>sourceJsonObject.manager : {};
 }
 
 transformer <json sourceJsonObject, Manager targetManagerStruct> convertJsonToManager() {
@@ -249,7 +249,7 @@ transformer <Email sourceEmailStruct, json targetJsonObject> convertEmailToJson(
 
 transformer <PhonePhotoIms sourcePhotoPhoneImsStruct, json targetJsonObject> convertPhonePhotoImsToJson() {
     targetJsonObject.value = sourcePhotoPhoneImsStruct.value != null ? sourcePhotoPhoneImsStruct.value : "";
-    targetJsonObject.^"type" = sourcePhotoPhoneImsStruct.^"type" != null ? sourcePhotoPhoneImsStruct.^"type": "";
+    targetJsonObject.^"type" = sourcePhotoPhoneImsStruct.^"type" != null ? sourcePhotoPhoneImsStruct.^"type" : "";
 }
 
 transformer <X509Certificate sourceXCertificate, json targetJsonObject> convertCertificateToJson() {
@@ -291,7 +291,7 @@ transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
     json[] listCertificates = sourceUserStruct.x509Certificates != null ?
                               sourceUserStruct.x509Certificates.map(
                                                                function (X509Certificate nestedXCertificate)
-                                                                        returns json {
+                                                               returns json {
                                                                    return <json,
                                                                           convertCertificateToJson()>nestedXCertificate;
                                                                }) : [];
@@ -334,8 +334,8 @@ transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
     targetJson.photos = listPhotos;
 
     targetJson.^"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User" = sourceUserStruct.EnterpriseUser !=
-                                                                              null ?
-                                                                              <json,
-                                                                              convertEnterpriseExtensionToJson()>
-                                                                              sourceUserStruct.EnterpriseUser : {};
+                                                                               null ?
+                                                                               <json,
+                                                                               convertEnterpriseExtensionToJson()>
+                                                                               sourceUserStruct.EnterpriseUser : {};
 }

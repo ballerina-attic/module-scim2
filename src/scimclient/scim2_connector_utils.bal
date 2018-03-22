@@ -38,7 +38,7 @@ function resolveUser (string userName, http:Response response) returns User|erro
             blob b => {
                 string receivedPayload = b.toString("UTF-8");
                 var payload, conversionEr = <json>receivedPayload;
-                if (conversionEr == null){
+                if (conversionEr == null) {
                     match payload {
                         json j => {
                             user = <User, convertReceivedPayloadToUser()>payload;
@@ -49,7 +49,7 @@ function resolveUser (string userName, http:Response response) returns User|erro
                                 return user;
                             }
                         }
-                    } 
+                    }
                 } else {
                     Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
                     return Error;
@@ -85,7 +85,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
             blob b => {
                 string receivedPayload = b.toString("UTF-8");
                 var payload, conversionEr = <json>receivedPayload;
-                if (conversionEr == null){
+                if (conversionEr == null) {
                     match payload {
                         json j => {
                             receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
@@ -96,7 +96,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
                                 return receivedGroup;
                             }
                         }
-                    } 
+                    }
                 } else {
                     Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
                     return Error;
@@ -116,8 +116,8 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 @Param {value:"body: the json payload to be sent"}
 @Param {value:"OutRequest: http:OutRequest"}
 function createRequest (json body) returns http:Request {
-   http:Request request = {};
-   request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-   request.setJsonPayload(body);
-   return request;
+    http:Request request = {};
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(body);
+    return request;
 }

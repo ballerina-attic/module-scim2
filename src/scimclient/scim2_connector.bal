@@ -20,8 +20,6 @@ package src.scimclient;
 
 import ballerina.net.http;
 import oauth2;
-import ballerina.config;
-import ballerina.io;
 
 boolean isConnectorInitialized = false;
 oauth2:OAuth2Client oauthCon = {};
@@ -71,7 +69,7 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message,
-            cause:connectorError.cause};
+                        cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -81,7 +79,7 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
                     blob b => {
                         string receivedPayload = b.toString("UTF-8");
                         var payload, conversionEr = <json>receivedPayload;
-                        if (conversionEr == null){
+                        if (conversionEr == null) {
                             match payload {
                                 json j => {
                                     var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
@@ -106,8 +104,8 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
                             Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
                             return Error;
                         }
-                    }   
-                    error e =>{
+                    }
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -149,7 +147,7 @@ public function <ScimConnector scimConn> getListOfGroups () returns Group[]|erro
                     blob b => {
                         string receivedPayload = b.toString("UTF-8");
                         var payload, conversionEr = <json>receivedPayload;
-                        if (conversionEr == null){
+                        if (conversionEr == null) {
                             match payload {
                                 json j => {
                                     var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
@@ -217,13 +215,13 @@ public function <ScimConnector scimConn> getMe () returns User|error {
                     blob b => {
                         string receivedPayload = b.toString("UTF-8");
                         var payload, conversionEr = <json>receivedPayload;
-                        if (conversionEr == null){
+                        if (conversionEr == null) {
                             match payload {
                                 json j => {
                                     user = <User, convertJsonToUser()>payload;
                                     return user;
                                 }
-                            } 
+                            }
                         } else {
                             Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
                             return Error;
@@ -252,8 +250,8 @@ public function <ScimConnector scimConn> getGroupByName (string groupName) retur
     error Error = {};
 
     if (!isConnectorInitialized) {
-       Error = {message:"error: Connector not initialized"};
-       return Error;
+        Error = {message:"error: Connector not initialized"};
+        return Error;
     }
 
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
@@ -321,8 +319,8 @@ public function <ScimConnector scimConn> createGroup (Group crtGroup) returns st
     var res = oauthCon.post(SCIM_GROUP_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
-           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-           return Error;
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
         }
         http:Response response => {
             int statusCode = response.statusCode;
@@ -354,10 +352,10 @@ public function <ScimConnector scimConn> createGroup (Group crtGroup) returns st
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
-                }  
+                }
             }
         }
-   }
+    }
 }
 
 @Description {value:"Create a user in the user store"}
@@ -390,7 +388,7 @@ public function <ScimConnector scimConn> createUser (User user) returns string|e
     if (user.addresses != null) {
         foreach address in user.addresses {
             if (!address["type"].equalsIgnoreCase("work") && !address["type"].equalsIgnoreCase("home")
-                                                                && !address["type"].equalsIgnoreCase("other")) {
+                                                              && !address["type"].equalsIgnoreCase("other")) {
                 Error = {message:failedMessage + "Address type should either be work or home"};
                 return Error;
             }
@@ -424,8 +422,8 @@ public function <ScimConnector scimConn> createUser (User user) returns string|e
     var res = oauthCon.post(SCIM_USER_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
-           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-           return Error;
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
         }
         http:Response response => {
             int statusCode = response.statusCode;
@@ -457,7 +455,7 @@ public function <ScimConnector scimConn> createUser (User user) returns string|e
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
-                }  
+                }
             }
         }
     }
@@ -494,7 +492,7 @@ public function <ScimConnector scimConn> addUserToGroup (string userName, string
             var receivedUser = resolveUser(userName, response);
             match receivedUser {
                 User usr => {
-                    user = usr;     
+                    user = usr;
                 }
                 error userError => {
                     Error = {message:failedMessage + userError.message};
@@ -516,7 +514,7 @@ public function <ScimConnector scimConn> addUserToGroup (string userName, string
             var receivedGroup = resolveGroup(groupName, response);
             match receivedGroup {
                 Group grp => {
-                    gro = grp;     
+                    gro = grp;
                 }
                 error groupError => {
                     Error = {message:failedMessage + groupError.message};
@@ -540,8 +538,8 @@ public function <ScimConnector scimConn> addUserToGroup (string userName, string
     var res = oauthCon.patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
-           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-           return Error;
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
         }
         http:Response response => {
             int statusCode = response.statusCode;
@@ -573,7 +571,7 @@ public function <ScimConnector scimConn> addUserToGroup (string userName, string
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
-                }  
+                }
             }
         }
     }
@@ -601,7 +599,7 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
     http:Request requestUser = {};
     User user = {};
     var resUser = oauthCon.get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-                                                userName, requestUser);
+                               userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
@@ -611,7 +609,7 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
             var receivedUser = resolveUser(userName, response);
             match receivedUser {
                 User usr => {
-                    user = usr;     
+                    user = usr;
                 }
                 error userError => {
                     Error = {message:failedMessage + userError.message};
@@ -619,13 +617,13 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
                 }
             }
         }
-    }                                            
-    
+    }
+
     //check if group valid
     Group gro = {};
     http:Request groupRequest = {};
     var resGroup = oauthCon.get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-                                                    groupName, groupRequest);
+                                groupName, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
@@ -635,7 +633,7 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
             var receivedGroup = resolveGroup(groupName, response);
             match receivedGroup {
                 Group grp => {
-                    gro = grp;     
+                    gro = grp;
                 }
                 error groupError => {
                     Error = {message:failedMessage + groupError.message};
@@ -656,40 +654,40 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
     var res = oauthCon.patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
-           Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-           return Error;
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
         }
-            http:Response response => {
-                int statusCode = response.statusCode;
-                if (statusCode == HTTP_OK) {
-                    return "User Removed";
-                }
-                else if (statusCode == HTTP_UNAUTHORIZED) {
-                    Error = {message:failedMessage + response.reasonPhrase};
-                    return Error;
-                } else {
-                    var receivedBinaryPayload = response.getBinaryPayload();
-                    match receivedBinaryPayload {
-                        blob b => {
-                            string receivedPayload = b.toString("UTF-8");
-                            var payload, conversionEr = <json>receivedPayload;
-                            if (conversionEr == null) {
-                                match payload {
-                                    json j => {
-                                        Error = {message:failedMessage + payload.detail.toString()};
-                                        return Error;
-                                    }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_OK) {
+                return "User Removed";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var receivedBinaryPayload = response.getBinaryPayload();
+                match receivedBinaryPayload {
+                    blob b => {
+                        string receivedPayload = b.toString("UTF-8");
+                        var payload, conversionEr = <json>receivedPayload;
+                        if (conversionEr == null) {
+                            match payload {
+                                json j => {
+                                    Error = {message:failedMessage + payload.detail.toString()};
+                                    return Error;
                                 }
-                            } else {
-                                Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
-                                return Error;
                             }
+                        } else {
+                            Error = {message:failedMessage + "No payload received", cause:conversionEr.cause};
+                            return Error;
                         }
-                        error e => {
-                            Error = {message:failedMessage + e.message, cause:e.cause};
+                    }
+                    error e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
-                }  
+                }
             }
         }
     }
@@ -735,7 +733,7 @@ public function <ScimConnector scimConn> isUserInGroup (string userName, string 
                 }
             }
         }
-    }   
+    }
 }
 
 @Description {value:"Delete an user from user store using his user name"}
@@ -768,7 +766,7 @@ public function <ScimConnector scimConn> deleteUserByUsername (string userName) 
             var receivedUser = resolveUser(userName, response);
             match receivedUser {
                 User usr => {
-                    user = usr;     
+                    user = usr;
                     string userId = user.id;
                     var res = oauthCon.delete(SCIM_USER_END_POINT + "/" + userId, request);
                     match res {
@@ -825,7 +823,7 @@ public function <ScimConnector scimConn> deleteGroupByName (string groupName) re
             var receivedGroup = resolveGroup(groupName, response);
             match receivedGroup {
                 Group grp => {
-                    gro = grp;     
+                    gro = grp;
                     string groupId = gro.id;
                     var res = oauthCon.delete(SCIM_GROUP_END_POINT + "/" + groupId, request);
                     match res {
@@ -848,6 +846,6 @@ public function <ScimConnector scimConn> deleteGroupByName (string groupName) re
                 }
             }
         }
-    }    
+    }
 }
 

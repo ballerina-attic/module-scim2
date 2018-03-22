@@ -16,26 +16,26 @@ string RefreshTokenEndpoint = "https://localhost:9443";
 string RefreshTokenPath = "/oauth2/token";
 
 
- public function main (string[] args) {
+public function main (string[] args) {
 
-    scimclient: ScimConnector scimCon = {};
-    scimCon.init(BaseUrl,AccessToken,ClientId,ClientSecret,RefreshToken,RefreshTokenEndpoint,RefreshTokenPath,
-                 truststoreLocation,trustStorePassword);
+    scimclient:ScimConnector scimCon = {};
+    scimCon.init(BaseUrl, AccessToken, ClientId, ClientSecret, RefreshToken, RefreshTokenEndpoint, RefreshTokenPath,
+                 truststoreLocation, trustStorePassword);
 
     //create user=======================================================================================================
     scimclient:User user = {};
-    
+
     scimclient:PhonePhotoIms phone = {};
     phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
-    
+
     scimclient:Name name = {};
     name.givenName = "Leo";
     name.familyName = "Messi";
     name.formatted = "Lionel Messi";
     user.name = name;
-    
+
     scimclient:Address address = {};
     address.postalCode = "23433";
     address.streetAddress = "no/2";
@@ -45,20 +45,20 @@ string RefreshTokenPath = "/oauth2/token";
     address.formatted = "no/2,Barcelona/Catalunia/Spain";
     address.primary = "true";
     address.^"type" = "work";
-    
+
     user.addresses = [address];
-    
+
     user.userName = "leoMessi";
     user.password = "greatest";
-    
+
     scimclient:Email email1 = {};
     email1.value = "messi@barca.com";
     email1.^"type" = "work";
-    
+
     scimclient:Email email2 = {};
     email2.value = "messi@gg.com";
     email2.^"type" = "home";
-    
+
     user.emails = [email1, email2];
     io:println("");
     io:println("=======================================creating user " + user.userName + "============================");
@@ -67,7 +67,7 @@ string RefreshTokenPath = "/oauth2/token";
         string message => io:println(message);
         error er => io:println(er);
     }
-    
+
     //create user iniesta
     user.userName = "iniesta";
     io:println("");
@@ -77,7 +77,7 @@ string RefreshTokenPath = "/oauth2/token";
         string message => io:println(message);
         error er => io:println(er);
     }
-    
+
     //create user tnm
     user.userName = "tnm";
     io:println("");
@@ -88,7 +88,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Get an user in the IS user store using getUserbyUserName action===================================================
     scimclient:User getUser = {};
     string userName = "iniesta";
@@ -100,16 +100,16 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Create a Group in the IS user store using createUser action=======================================================
     scimclient:Group gro = {};
     gro.displayName = "Captain";
-    
+
     scimclient:Member member = {};
     member.display = getUser.userName;
     member.value = getUser.id;
     gro.members = [member];
-    
+
     io:println("");
     io:println("==================================create group Captain with iniesta in it============================");
     var response5 = scimCon.createGroup(gro);
@@ -126,7 +126,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
     io:println("");
     string groupName = "Captain";
@@ -137,7 +137,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Add an existing user to a existing group==========================================================================
     userName = "leoMessi";
 
@@ -148,7 +148,7 @@ string RefreshTokenPath = "/oauth2/token";
         string msg => io:println(msg);
         error er => io:println(er);
     }
-    
+
     io:println("==================================members in Captain=================================================");
     var response9 = scimCon.getGroupByName(groupName);
     match response9 {
@@ -156,19 +156,19 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Remove an user from a given group=================================================================================
     userName = "iniesta";
     groupName = "Captain";
-    
+
     io:println("");
     io:println("=============================Removing iniesta from Captain===========================================");
-    var response10 = scimCon.removeUserFromGroup(userName,groupName);
+    var response10 = scimCon.removeUserFromGroup(userName, groupName);
     match response10 {
         string msg => io:println(msg);
         error er => io:println(er);
     }
-    
+
     io:println("====================================members in Captain===============================================");
     var response11 = scimCon.getGroupByName(groupName);
     match response11 {
@@ -176,19 +176,19 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Check whether a user with certain user name is in a certain group=================================================
     userName = "leoMessi";
     groupName = "Captain";
     io:println("");
     io:println("============================Check if leoMessi is the Captain=========================================");
-    var response12 = scimCon.isUserInGroup(userName,groupName);
+    var response12 = scimCon.isUserInGroup(userName, groupName);
     match response12 {
         boolean x => io:println(x);
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Delete an user from the user store================================================================================
     userName = "leoMessi";
     io:println("");
@@ -199,7 +199,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Delete a group====================================================================================================
     groupName = "Captain";
     io:println("");
@@ -210,7 +210,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Get the list of users in the user store===========================================================================
     io:println("");
     io:println("=======================================get the list of users=========================================");
@@ -220,7 +220,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //Get the list of groups============================================================================================
     io:println("");
     io:println("=======================================get the list of Groups========================================");
@@ -230,7 +230,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-        
+
     //add user to group using struct bound function=====================================================================
     userName = "tnm";
     var response17 = scimCon.getUserByUsername(userName);
@@ -247,7 +247,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //================================================================================================================
-    
+
     //remove an user from a group using strut bound function============================================================
     io:println("");
     io:println("============================remove a user by struct bound functions==================================");
@@ -257,7 +257,7 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
-    
+
     //get the user that is currently authenticated======================================================================
     io:println("");
     io:println("=========================================get the currently authenticated use=========================r");
@@ -267,5 +267,5 @@ string RefreshTokenPath = "/oauth2/token";
         error er => io:println(er);
     }
     //==================================================================================================================
- }
+}
 
