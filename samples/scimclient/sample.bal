@@ -8,7 +8,7 @@ import ballerina.config;
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "b6f81416-ec54-3c21-a941-55007b67e19d";
+string AccessToken = "7992c4ba-4c4d-343e-846a-75f83719795b";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";
@@ -61,7 +61,8 @@ public function main (string[] args) {
 
     user.emails = [email1, email2];
     io:println("");
-    io:println("=======================================creating user " + user.userName + "============================");
+    io:println("=======================================creating user " +
+               user.userName + "========================================");
     var response1 = scimCon.createUser(user);
     match response1 {
         string message => io:println(message);
@@ -71,7 +72,8 @@ public function main (string[] args) {
     //create user iniesta
     user.userName = "iniesta";
     io:println("");
-    io:println("=======================================creating user " + user.userName + "============================");
+    io:println("=======================================creating user " +
+               user.userName + "=========================================");
     var response2 = scimCon.createUser(user);
     match response2 {
         string message => io:println(message);
@@ -81,7 +83,8 @@ public function main (string[] args) {
     //create user tnm
     user.userName = "tnm";
     io:println("");
-    io:println("=======================================creating user " + user.userName + "============================");
+    io:println("=======================================creating user " +
+               user.userName + "=============================================");
     var response3 = scimCon.createUser(user);
     match response3 {
         string message => io:println(message);
@@ -93,7 +96,7 @@ public function main (string[] args) {
     scimclient:User getUser = {};
     string userName = "iniesta";
     io:println("");
-    io:println("=======================================get user iniesta===============================================");
+    io:println("======================================get user iniesta===============================================");
     var response4 = scimCon.getUserByUsername(userName);
     match response4 {
         scimclient:User usr => io:println(usr);
@@ -239,7 +242,8 @@ public function main (string[] args) {
         error er => io:println(er);
     }
     io:println("");
-    io:println("==================adding user " + userName + " to " + groupName + " using struct bind functions======");
+    io:println("==================adding user " + userName + " to " + groupName +
+               " using struct bind functions ============================");
     groupName = "BOSS";
     var response18 = user.addToGroup(groupName);
     match response18 {
@@ -260,7 +264,8 @@ public function main (string[] args) {
 
     //get the user that is currently authenticated======================================================================
     io:println("");
-    io:println("=========================================get the currently authenticated use=========================r");
+    io:println("=========================================get the currently " +
+             "authenticateduser=========================");
     var response20 = scimCon.getMe();
     match response20 {
         scimclient:User usr => io:println(usr);
