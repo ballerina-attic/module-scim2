@@ -52,58 +52,58 @@ transformer <json sourceJsonObject, User targetUserStruct> convertJsonToUser() {
     targetUserStruct.x509Certificates = sourceJsonObject.x509Certificates != null ?
                                         sourceJsonObject.x509Certificates.map(
                                                                          function (json nestedJsonInSource)
-                                                                         (X509Certificate) {return
+                                                                         returns X509Certificate {return
                                                                                             <X509Certificate,
                                                                                             convertJsonToCertificate()>
                                                                                             nestedJsonInSource;
                                                                          }) : [];
     targetUserStruct.schemas = sourceJsonObject.schemas != null ?
                                sourceJsonObject.schemas.map(
-                                                       function (json nestedJsonInSource) (string) {
+                                                       function (json nestedJsonInSource) returns string {
                                                            return nestedJsonInSource.toString();
                                                        }) : [];
     targetUserStruct.addresses = sourceJsonObject.addresses != null ?
                                  sourceJsonObject.addresses.map(
-                                                           function (json nestedJsonInSource) (Address) {
+                                                           function (json nestedJsonInSource) returns Address {
                                                                return <Address,
                                                                       convertJsonToAddress()>nestedJsonInSource;
                                                            }) : [];
     targetUserStruct.phoneNumbers = sourceJsonObject.phoneNumbers != null ?
                                     sourceJsonObject.phoneNumbers.map(function (json nestedJsonInSource)
-                                                                      (PhonePhotoIms) {return
+                                                                      returns PhonePhotoIms {return
                                                                                        <PhonePhotoIms,
                                                                                        convertJsonToPhoneNumbers()>
                                                                                        nestedJsonInSource;
                                                                       }) : [];
     targetUserStruct.photos = sourceJsonObject.photos != null ?
                               sourceJsonObject.photos.map(
-                                                     function (json nestedJsonInSource) (PhonePhotoIms) {
+                                                     function (json nestedJsonInSource) returns PhonePhotoIms {
                                                          return <PhonePhotoIms,
                                                                 convertJsonToPhoneNumbers()>nestedJsonInSource;
                                                                                        }) : [];
     targetUserStruct.ims = sourceJsonObject.ims != null ? sourceJsonObject.ims.map(
                                                                               function (json nestedJsonInSource)
-                                                                              (PhonePhotoIms) {
+                                                                              returns PhonePhotoIms {
                                                                                   return <PhonePhotoIms,
                                                                                          convertJsonToPhoneNumbers()>
                                                                                          nestedJsonInSource;
                                                                               }) : [];
     targetUserStruct.emails = sourceJsonObject.emails != null ?
                               sourceJsonObject.emails.map(function (json nestedJsonInSource)
-                                                          (Email) {
+                                                          returns Email {
                                                               return <Email, convertJsonToEmail()>
                                                                      nestedJsonInSource;
                                                           }) : [];
     targetUserStruct.groups = sourceJsonObject.groups != null ?
                               sourceJsonObject.groups.map(
                                                      function (json nestedJsonInSource)
-                                                     (Group) {
+                                                     returns Group {
                                                          return <Group,
                                                                 convertJsonToGroupRelatedToUser()>nestedJsonInSource;
                                                      }) : [];
     targetUserStruct.EnterpriseUser = sourceJsonObject.EnterpriseUser != null ?
                                       <EnterpriseUserExtension, convertJsonToEnterpriseExtension()>
-                                                                                sourceJsonObject.EnterpriseUser : null;
+                                                                                sourceJsonObject.EnterpriseUser : {};
 }
 
 transformer <json sourceJsonObject, EnterpriseUserExtension targetExtension> convertJsonToEnterpriseExtension() {
@@ -163,7 +163,7 @@ transformer <json sourceJsonObject, Group targetGroupStruct> convertJsonToGroupR
     targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
     targetGroupStruct.members = sourceJsonObject.members != null ?
                                 sourceJsonObject.members.map(
-                                                        function (json nestedJsonInSource) (Member) {
+                                                        function (json nestedJsonInSource) returns Member {
                                                             return <Member, convertJsonToMember()>nestedJsonInSource;
                                                         }) : [];
     targetGroupStruct.meta = sourceJsonObject.meta != null ? <Meta, convertJsonToMeta()>sourceJsonObject : {};
@@ -175,7 +175,7 @@ transformer <json sourceJsonObject, Group targetGroupStruct> convertJsonToGroup(
     targetGroupStruct.meta = <Meta, convertJsonToMeta()>sourceJsonObject.meta;
     targetGroupStruct.members = sourceJsonObject.members != null ?
                                 sourceJsonObject.members.map(
-                                                        function (json j) (Member) {
+                                                        function (json j) returns Member {
                                                             return <Member, convertJsonToMember()>j;
                                                         }) : [];
 }
@@ -191,12 +191,12 @@ transformer <json sourceJsonObject, X509Certificate targetXCertificate> convertJ
 
 transformer <json sourceJsonObject, Group targetGroupStruct> convertReceivedPayloadToGroup() {
     targetGroupStruct = sourceJsonObject.Resources != null ?
-                        <Group, convertJsonToGroup()>sourceJsonObject.Resources[0] : null;
+                        <Group, convertJsonToGroup()>sourceJsonObject.Resources[0] : {};
 }
 
 transformer <json sourceJsonObject, User targetUserStruct> convertReceivedPayloadToUser() {
     targetUserStruct = sourceJsonObject.Resources != null ?
-                       <User, convertJsonToUser()>sourceJsonObject.Resources[0] : null;
+                       <User, convertJsonToUser()>sourceJsonObject.Resources[0] : {};
 }
 
 //=========================================Struct to JSON transformers==================================================
@@ -210,7 +210,7 @@ transformer <Group sourceGroupStruct, json targetJsonObject> convertGroupToJson(
     targetJsonObject.id = sourceGroupStruct.id != null ? sourceGroupStruct.id : "";
     json[] listMembers = sourceGroupStruct.members != null ?
                          sourceGroupStruct.members.map(
-                                                  function (Member nestedMemberStruct) (json) {
+                                                  function (Member nestedMemberStruct) returns json {
                                                       return <json, convertMemberToJson()>nestedMemberStruct;
                                                   }) : [];
     targetJsonObject.members = listMembers;
@@ -290,44 +290,45 @@ transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
     targetJson.meta = {};
     json[] listCertificates = sourceUserStruct.x509Certificates != null ?
                               sourceUserStruct.x509Certificates.map(
-                                                               function (X509Certificate nestedXCertificate) (json) {
+                                                               function (X509Certificate nestedXCertificate)
+                                                                        returns json {
                                                                    return <json,
                                                                           convertCertificateToJson()>nestedXCertificate;
                                                                }) : [];
     targetJson.x509Certificates = listCertificates;
     json[] listGroups = sourceUserStruct.groups != null ?
                         sourceUserStruct.groups.map(
-                                               function (Group nestedGroup) (json) {
+                                               function (Group nestedGroup) returns json {
                                                    return <json, convertGroupToJsonUserRelated()>nestedGroup;
                                                }) : [];
     targetJson.groups = listGroups;
     json[] listAddresses = sourceUserStruct.addresses != null ?
                            sourceUserStruct.addresses.map(
-                                                     function (Address nestedAddress) (json) {
+                                                     function (Address nestedAddress) returns json {
                                                          return <json, convertAddressToJson()>nestedAddress;
                                                      }) : [];
     targetJson.addresses = listAddresses;
     json[] listEmails = sourceUserStruct.emails != null ?
                         sourceUserStruct.emails.map(
-                                               function (Email nestedEmail) (json) {
+                                               function (Email nestedEmail) returns json {
                                                    return <json, convertEmailToJson()>nestedEmail;
                                                }) : [];
     targetJson.emails = listEmails;
     json[] listNumbers = sourceUserStruct.phoneNumbers != null ?
                          sourceUserStruct.phoneNumbers.map(
-                                                      function (PhonePhotoIms nestedPhoneNumbers) (json) {
+                                                      function (PhonePhotoIms nestedPhoneNumbers) returns json {
                                                           return <json, convertPhonePhotoImsToJson()>nestedPhoneNumbers;
                                                       }) : [];
     targetJson.phoneNumbers = listNumbers;
     json[] listIms = sourceUserStruct.ims != null ?
                      sourceUserStruct.ims.map(
-                                         function (PhonePhotoIms nestedIMS) (json) {
+                                         function (PhonePhotoIms nestedIMS) returns json {
                                              return <json, convertPhonePhotoImsToJson()>nestedIMS;
                                          }) : [];
     targetJson.ims = listIms;
     json[] listPhotos = sourceUserStruct.photos != null ?
                         sourceUserStruct.photos.map(
-                                               function (PhonePhotoIms nestedPhotos) (json) {
+                                               function (PhonePhotoIms nestedPhotos) returns json {
                                                    return <json, convertPhonePhotoImsToJson()>nestedPhotos;
                                                }) : [];
     targetJson.photos = listPhotos;
