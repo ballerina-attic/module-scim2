@@ -8,7 +8,7 @@ import ballerina.config;
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "a9680c51-bdbd-39ff-95fb-010a450660d9";
+string AccessToken = "b6f81416-ec54-3c21-a941-55007b67e19d";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";
@@ -90,205 +90,182 @@ string RefreshTokenPath = "/oauth2/token";
     //==================================================================================================================
     
     //Get an user in the IS user store using getUserbyUserName action===================================================
-    // scimclient:User getUser = {};
-    // string userName = "iniesta";
-    // getUser, Error = scimCon.getUserByUsername(userName);
-    
-    // io:println("");
-    // io:println("=======================================get user iniesta===============================================");
-    // io:println(getUser);
-    // io:print("error: ");
-    // io:println(Error);
+    scimclient:User getUser = {};
+    string userName = "iniesta";
+    io:println("");
+    io:println("=======================================get user iniesta===============================================");
+    var response4 = scimCon.getUserByUsername(userName);
+    match response4 {
+        scimclient:User usr => io:println(usr);
+        error er => io:println(er);
+    }
     //==================================================================================================================
-    //
-    ////Create a Group in the IS user store using createUser action=======================================================
-    //scimclient:Group gro = {};
-    //gro.displayName = "Captain";
-    //
-    //scimclient:Member member = {};
-    //member.display = getUser.userName;
-    //member.value = getUser.id;
-    //gro.members = [member];
-    //
-    //Error = scimCon.createGroup(gro);
-    //io:println("");
-    //io:println("==================================create group Captain with iniesta in it============================");
-    //io:println(Error);
-    ////create group BOSS
-    //gro.displayName = "BOSS";
-    //io:println("==================================create group BOSS==================================================");
-    //Error = scimCon.createGroup(gro);
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
-    //scimclient:Group getGroup = {};
-    //getGroup, Error = scimCon.getGroupByName("Captain");
-    //
-    //io:println("");
-    //io:println("===================================get the Members of the Captain====================================");
-    //io:println(getGroup);
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Add an existing user to a existing group==========================================================================
-    //userName = "leoMessi";
-    //string groupName = "Captain";
-    //Error = scimCon.addUserToGroup(userName, groupName);
-    //
-    //io:println("");
-    //io:println("================================Adding user leoMessi to group Captain================================");
-    //io:println(Error);
-    //
-    //getGroup, Error = scimCon.getGroupByName("Captain");
-    //io:println("==================================members in Captain=================================================");
-    //io:println(getGroup.members);
-    ////==================================================================================================================
-    //
-    ////Remove an user from a given group=================================================================================
-    //userName = "iniesta";
-    //groupName = "Captain";
-    //
-    //Error = scimCon.removeUserFromGroup(userName, groupName);
-    //io:println("");
-    //io:println("=============================Removing iniesta from Captain===========================================");
-    //io:println(Error);
-    //
-    //getGroup, Error = scimCon.getGroupByName("Captain");
-    //io:println("====================================members in Captain===============================================");
-    //io:println(getGroup.members);
-    ////==================================================================================================================
-    //
-    ////Check whether a user with certain user name is in a certain group=================================================
-    //userName = "leoMessi";
-    //groupName = "Captain";
-    //boolean x;
-    //x, Error = scimCon.isUserInGroup(userName, groupName);
-    //io:println("");
-    //io:println("============================Check if leoMessi is the Captain=========================================");
-    //io:println(x);
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Delete an user from the user store================================================================================
-    //userName = "leoMessi";
-    //Error = scimCon.deleteUserByUsername(userName);
-    //io:println("");
-    //io:println("=========================================delete leoMessi=============================================");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Delete a group====================================================================================================
-    //groupName = "Captain";
-    //Error = scimCon.deleteGroupByName(groupName);
-    //io:println("");
-    //io:println("==========================================deleting group Captain=====================================");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Get the list of users in the user store===========================================================================
-    //scimclient:User[] userList;
-    //userList, Error = scimCon.getListOfUsers();
-    //io:println("");
-    //io:println("=======================================get the list of users=========================================");
-    //io:println(userList);
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////Get the list of groups============================================================================================
-    //scimclient:Group[] groupList;
-    //groupList, Error = scimCon.getListOfGroups();
-    //io:println("");
-    //io:println("=======================================get the list of Groups========================================");
-    //io:println(groupList);
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    //
-    ////add user to group using struct bound function=====================================================================
-    //userName = "tnm";
-    //user, Error = scimCon.getUserByUsername(userName);
-    //groupName = "BOSS";
-    //Error = user.addToGroup(groupName);
-    //io:println("");
-    //io:println("==================adding user " + userName + " to " + groupName + " using struct bind functions======");
-    //io:print("error: ");
-    //io:println(Error);
-    //////================================================================================================================
-    //
-    ////remove an user from a group using strut bound function============================================================
-    //user, Error = scimCon.getUserByUsername(userName);
-    //Error = user.removeFromGroup(groupName);
-    //io:println("");
-    //io:println("============================remove a user by struct bound functions==================================");
-    //io:print("error: ");
-    //io:println(Error);
-    ////==================================================================================================================
-    //
-    ////get the user that is currently authenticated======================================================================
-    //user, Error = scimCon.getMe();
-    //io:println("");
-    //io:println("=========================================get the currently authenticated use=========================r");
-    //io:println(user);
-    ////==================================================================================================================
+    
+    //Create a Group in the IS user store using createUser action=======================================================
+    scimclient:Group gro = {};
+    gro.displayName = "Captain";
+    
+    scimclient:Member member = {};
+    member.display = getUser.userName;
+    member.value = getUser.id;
+    gro.members = [member];
+    
+    io:println("");
+    io:println("==================================create group Captain with iniesta in it============================");
+    var response5 = scimCon.createGroup(gro);
+    match response5 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //create group BOSS
+    gro.displayName = "BOSS";
+    io:println("==================================create group BOSS==================================================");
+    var response6 = scimCon.createGroup(gro);
+    match response6 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
+    io:println("");
+    string groupName = "Captain";
+    io:println("===================================get the Members of the Captain====================================");
+    var response7 = scimCon.getGroupByName(groupName);
+    match response7 {
+        scimclient:Group grp => io:println(grp.members);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Add an existing user to a existing group==========================================================================
+    userName = "leoMessi";
+
+    io:println("");
+    io:println("================================Adding user leoMessi to group Captain================================");
+    var response8 = scimCon.addUserToGroup(userName, groupName);
+    match response8 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    
+    io:println("==================================members in Captain=================================================");
+    var response9 = scimCon.getGroupByName(groupName);
+    match response9 {
+        scimclient:Group grp => io:println(grp.members);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Remove an user from a given group=================================================================================
+    userName = "iniesta";
+    groupName = "Captain";
+    
+    io:println("");
+    io:println("=============================Removing iniesta from Captain===========================================");
+    var response10 = scimCon.removeUserFromGroup(userName,groupName);
+    match response10 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    
+    io:println("====================================members in Captain===============================================");
+    var response11 = scimCon.getGroupByName(groupName);
+    match response11 {
+        scimclient:Group grp => io:println(grp.members);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Check whether a user with certain user name is in a certain group=================================================
+    userName = "leoMessi";
+    groupName = "Captain";
+    io:println("");
+    io:println("============================Check if leoMessi is the Captain=========================================");
+    var response12 = scimCon.isUserInGroup(userName,groupName);
+    match response12 {
+        boolean x => io:println(x);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Delete an user from the user store================================================================================
+    userName = "leoMessi";
+    io:println("");
+    io:println("=========================================delete leoMessi=============================================");
+    var response13 = scimCon.deleteUserByUsername(userName);
+    match response13 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Delete a group====================================================================================================
+    groupName = "Captain";
+    io:println("");
+    io:println("==========================================deleting group Captain=====================================");
+    var response14 = scimCon.deleteGroupByName(groupName);
+    match response14 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Get the list of users in the user store===========================================================================
+    io:println("");
+    io:println("=======================================get the list of users=========================================");
+    var response15 = scimCon.getListOfUsers();
+    match response15 {
+        scimclient:User[] lst => io:println(lst);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //Get the list of groups============================================================================================
+    io:println("");
+    io:println("=======================================get the list of Groups========================================");
+    var response16 = scimCon.getListOfGroups();
+    match response16 {
+        scimclient:Group[] lst => io:println(lst);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+        
+    //add user to group using struct bound function=====================================================================
+    userName = "tnm";
+    var response17 = scimCon.getUserByUsername(userName);
+    match response17 {
+        scimclient:User usr => user = usr;
+        error er => io:println(er);
+    }
+    io:println("");
+    io:println("==================adding user " + userName + " to " + groupName + " using struct bind functions======");
+    groupName = "BOSS";
+    var response18 = user.addToGroup(groupName);
+    match response18 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //================================================================================================================
+    
+    //remove an user from a group using strut bound function============================================================
+    io:println("");
+    io:println("============================remove a user by struct bound functions==================================");
+    var response19 = user.removeFromGroup(groupName);
+    match response19 {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
+    
+    //get the user that is currently authenticated======================================================================
+    io:println("");
+    io:println("=========================================get the currently authenticated use=========================r");
+    var response20 = scimCon.getMe();
+    match response20 {
+        scimclient:User usr => io:println(usr);
+        error er => io:println(er);
+    }
+    //==================================================================================================================
  }
 
-//function getBaseUrl () returns string{
-//    var baseUrl = config:getGlobalValue("BaseUrl");
-//    match baseUrl {
-//        string s => return s;
-//    }
-//    return "";
-//}
-//
-//function getAccessToken () returns string {
-//    var accessToken = config:getGlobalValue("AccessToken");
-//    match accessToken {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
-//
-//function getClientId () returns string {
-//    var clientId = config:getGlobalValue("ClientId");
-//    match clientId {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
-//
-//function getClientSecret () returns string {
-//    var clientSecret = config:getGlobalValue("ClientSecret");
-//    match clientSecret {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
-//
-//function getRefreshToken () returns string {
-//    var refreshToken = config:getGlobalValue("RefreshToken");
-//    match refreshToken {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
-//
-//function getRefreshTokenEndpoint () returns string {
-//    var refreshTokenEndpoint = config:getGlobalValue("RefreshTokenEndpoint");
-//    match refreshTokenEndpoint {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
-//
-//function getRefreshTokenPath () returns string {
-//    var refreshTokenPath = config:getGlobalValue("RefreshTokenPath");
-//    match refreshTokenPath {
-//        string s => return s;
-//        error e => return "";
-//    }
-//}
