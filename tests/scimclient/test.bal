@@ -99,7 +99,10 @@ public function main (string[] args) {
     io:println("======================================get user iniesta===============================================");
     var response4 = scimCon.getUserByUsername(userName);
     match response4 {
-        scimclient:User usr => io:println(usr);
+        scimclient:User usr => {
+            io:println(usr);
+            getUser = usr;
+        }
         error er => io:println(er);
     }
     //==================================================================================================================
