@@ -16,7 +16,9 @@
 // under the License.
 //
 
-package src.scimclient;
+package scimclient;
+
+import ballerina/net.http;
 
 @Description {value:"Obtain User from the received http response"}
 @Param {value:"userName: User name of the user"}
@@ -37,25 +39,20 @@ function resolveUser (string userName, http:Response response) returns User|erro
         match receivedBinaryPayload {
             blob b => {
                 string receivedPayload = b.toString("UTF-8");
-                var payload, conversionEr = <json>receivedPayload;
-                if (conversionEr == null) {
-                    match payload {
-                        json j => {
-                            user = <User, convertReceivedPayloadToUser()>payload;
-                            if (user.id.equalsIgnoreCase("")) {
-                                Error = {message:failedMessage + "No User with user name " + userName};
-                                return Error;
-                            } else {
-                                return user;
-                            }
+                var receivedJson = <json>receivedPayload;
+                match receivedJson {
+                    json payload => {
+                        user = <User, convertReceivedPayloadToUser()>payload;
+                        if (user.id.equalsIgnoreCase("")) {
+                            Error = {message:failedMessage + "No User with user name " + userName};
+                            return Error;
+                        } else {
+                            return user;
                         }
                     }
-                } else {
-                    Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
-                    return Error;
                 }
             }
-            error e => {
+            mime:EntityError e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
                 return Error;
             }
@@ -84,25 +81,20 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
         match receivedBinaryPayload {
             blob b => {
                 string receivedPayload = b.toString("UTF-8");
-                var payload, conversionEr = <json>receivedPayload;
-                if (conversionEr == null) {
-                    match payload {
-                        json j => {
-                            receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
-                            if (receivedGroup.id.equalsIgnoreCase("")) {
-                                Error = {message:failedMessage + "No Group named " + groupName};
-                                return Error;
-                            } else {
-                                return receivedGroup;
-                            }
+                var receivedJson = <json>receivedPayload;
+                match receivedJson {
+                    json payload => {
+                        receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
+                        if (receivedGroup.id.equalsIgnoreCase("")) {
+                            Error = {message:failedMessage + "No Group named " + groupName};
+                            return Error;
+                        } else {
+                            return receivedGroup;
                         }
                     }
-                } else {
-                    Error = {message:failedMessage + "Authentication failed", cause:conversionEr.cause};
-                    return Error;
                 }
             }
-            error e => {
+            mime:EntityError e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
                 return Error;
             }

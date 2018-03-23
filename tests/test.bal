@@ -1,14 +1,13 @@
-package tests.scimclient;
+package tests;
 
 
-import ballerina.io;
-import src.scimclient;
-import ballerina.config;
+import ballerina/io;
+import scimclient;
 
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "7992c4ba-4c4d-343e-846a-75f83719795b";
+string AccessToken = "8fc7bd74-7631-35e4-b512-2cb86343096a";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";
@@ -268,7 +267,7 @@ public function main (string[] args) {
     //get the user that is currently authenticated======================================================================
     io:println("");
     io:println("=========================================get the currently " +
-             "authenticateduser=========================");
+               "authenticateduser=========================");
     var response20 = scimCon.getMe();
     match response20 {
         scimclient:User usr => io:println(usr);

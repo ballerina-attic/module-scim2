@@ -17,7 +17,7 @@
 //
 
 
-package src.scimclient;
+package scimclient;
 
 //These are the constants that are used
 
