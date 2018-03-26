@@ -7,7 +7,7 @@ import scimclient;
 string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
 string trustStorePassword = "wso2carbon";
 string BaseUrl = "https://localhost:9443";
-string AccessToken = "8fc7bd74-7631-35e4-b512-2cb86343096a";
+string AccessToken = "65bf7270-9d2f-371a-a0d1-258f281e9688";
 string ClientId = "QtjGpXRMEdfwXM2Z62H9efpf56sa";
 string ClientSecret = "c21GZApujqJOhYEsznxXEqJDG8Qa";
 string RefreshToken = "95002c96-347c-3c37-8e8d-dd5191cfe321";

@@ -35,21 +35,15 @@ function resolveUser (string userName, http:Response response) returns User|erro
 
     int statusCode = response.statusCode;
     if (statusCode == HTTP_OK) {
-        var receivedBinaryPayload = response.getBinaryPayload();
-        match receivedBinaryPayload {
-            blob b => {
-                string receivedPayload = b.toString("UTF-8");
-                var receivedJson = <json>receivedPayload;
-                match receivedJson {
-                    json payload => {
-                        user = <User, convertReceivedPayloadToUser()>payload;
-                        if (user.id.equalsIgnoreCase("")) {
-                            Error = {message:failedMessage + "No User with user name " + userName};
-                            return Error;
-                        } else {
-                            return user;
-                        }
-                    }
+        var received = response.getJsonPayload();
+        match received {
+            json payload => {
+                user = <User, convertReceivedPayloadToUser()>payload;
+                if (user.id.equalsIgnoreCase("")) {
+                    Error = {message:failedMessage + "No User with user name " + userName};
+                    return Error;
+                } else {
+                    return user;
                 }
             }
             mime:EntityError e => {
@@ -77,21 +71,15 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 
     int statusCode = response.statusCode;
     if (statusCode == HTTP_OK) {
-        var receivedBinaryPayload = response.getBinaryPayload();
-        match receivedBinaryPayload {
-            blob b => {
-                string receivedPayload = b.toString("UTF-8");
-                var receivedJson = <json>receivedPayload;
-                match receivedJson {
-                    json payload => {
-                        receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
-                        if (receivedGroup.id.equalsIgnoreCase("")) {
-                            Error = {message:failedMessage + "No Group named " + groupName};
-                            return Error;
-                        } else {
-                            return receivedGroup;
-                        }
-                    }
+        var received = response.getJsonPayload();
+        match received {
+            json payload => {
+                receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
+                if (receivedGroup.id.equalsIgnoreCase("")) {
+                    Error = {message:failedMessage + "No Group named " + groupName};
+                    return Error;
+                } else {
+                    return receivedGroup;
                 }
             }
             mime:EntityError e => {
@@ -104,12 +92,12 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
     return Error;
 }
 
-@Description {value:"Add the necessary headers and body to the request"}
-@Param {value:"body: the json payload to be sent"}
-@Param {value:"OutRequest: http:OutRequest"}
-function createRequest (json body) returns http:Request {
-    http:Request request = {};
-    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-    request.setJsonPayload(body);
-    return request;
-}
+//@Description {value:"Add the necessary headers and body to the request"}
+//@Param {value:"body: the json payload to be sent"}
+//@Param {value:"OutRequest: http:OutRequest"}
+//function createRequest (json body) returns http:Request {
+//    http:Request request = {};
+//    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+//    request.setJsonPayload(body);
+//    return request;
+//}

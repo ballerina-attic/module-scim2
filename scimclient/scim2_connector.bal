@@ -21,7 +21,7 @@ package scimclient;
 import ballerina/net.http;
 import ballerina/mime;
 import oauth2;
-import ballerina/io;
+import ballerina/util;
 
 boolean isConnectorInitialized = false;
 oauth2:OAuth2Client oauthCon = {};
@@ -76,30 +76,24 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                var receivedBinaryPayload = response.getBinaryPayload();
-                match receivedBinaryPayload {
-                    blob b => {
-                        string receivedPayload = b.toString("UTF-8");
-                        var receivedJson = <json>receivedPayload;
-                        match receivedJson {
-                            json payload => {
-                                var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
-                                if (noOfResults.equalsIgnoreCase("0")) {
-                                    Error = {message:"There are no users"};
-                                    return Error;
-                                } else {
-                                    User[] userList = [];
-                                    payload = payload["Resources"];
-                                    int k = 0;
-                                    foreach element in payload {
-                                        User user = {};
-                                        user = <User, convertJsonToUser()>element;
-                                        userList[k] = user;
-                                        k = k + 1;
-                                    }
-                                    return userList;
-                                }
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
+                        if (noOfResults.equalsIgnoreCase("0")) {
+                            Error = {message:"There are no users"};
+                            return Error;
+                        } else {
+                            User[] userList = [];
+                            payload = payload["Resources"];
+                            int k = 0;
+                            foreach element in payload {
+                                User user = {};
+                                user = <User, convertJsonToUser()>element;
+                                userList[k] = user;
+                                k = k + 1;
                             }
+                            return userList;
                         }
                     }
                     mime:EntityError e => {
@@ -128,8 +122,7 @@ public function <ScimConnector scimConn> getListOfGroups () returns Group[]|erro
         return Error;
     }
 
-    string failedMessage;
-    failedMessage = "Listing groups failed. ";
+    string failedMessage = "Listing groups failed. ";
 
     var res = oauthCon.get(SCIM_GROUP_END_POINT, request);
     match res {
@@ -139,34 +132,24 @@ public function <ScimConnector scimConn> getListOfGroups () returns Group[]|erro
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                var receivedBinaryPayload = response.getBinaryPayload();
-                match receivedBinaryPayload {
-                    blob b => {
-                        string receivedPayload = b.toString("UTF-8");
-                        var receivedJson = <json>receivedPayload;
-                        match receivedJson {
-                            json payload => {
-                                match payload {
-                                    json j => {
-                                        var noOfResults = j[SCIM_TOTAL_RESULTS].toString();
-                                        if (noOfResults.equalsIgnoreCase("0")) {
-                                            Error = {message:"There are no Groups"};
-                                            return Error;
-                                        } else {
-                                            Group[] groupList = [];
-                                            payload = payload["Resources"];
-                                            int k = 0;
-                                            foreach element in payload {
-                                                Group group1 = {};
-                                                group1 = <Group, convertJsonToGroup()>element;
-                                                groupList[k] = group1;
-                                                k = k + 1;
-                                            }
-                                            return groupList;
-                                        }
-                                    }
-                                }
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
+                        if (noOfResults.equalsIgnoreCase("0")) {
+                            Error = {message:"There are no Groups"};
+                            return Error;
+                        } else {
+                            Group[] groupList = [];
+                            payload = payload["Resources"];
+                            int k = 0;
+                            foreach element in payload {
+                                Group group1 = {};
+                                group1 = <Group, convertJsonToGroup()>element;
+                                groupList[k] = group1;
+                                k = k + 1;
                             }
+                            return groupList;
                         }
                     }
                     mime:EntityError e => {
@@ -206,17 +189,11 @@ public function <ScimConnector scimConn> getMe () returns User|error {
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                var receivedBinaryPayload = response.getBinaryPayload();
-                match receivedBinaryPayload {
-                    blob b => {
-                        string receivedPayload = b.toString("UTF-8");
-                        var receivedJson = <json>receivedPayload;
-                        match receivedJson {
-                            json payload => {
-                                user = <User, convertJsonToUser()>payload;
-                                return user;
-                            }
-                        }
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        user = <User, convertJsonToUser()>payload;
+                        return user;
                     }
                     mime:EntityError e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
@@ -322,17 +299,11 @@ public function <ScimConnector scimConn> createGroup (Group crtGroup) returns st
                 Error = {message:failedMessage + response.reasonPhrase};
                 return Error;
             } else {
-                var receivedBinaryPayload = response.getBinaryPayload();
-                match receivedBinaryPayload {
-                    blob b => {
-                        string receivedPayload = b.toString("UTF-8");
-                        var receivedJson = <json>receivedPayload;
-                        match receivedJson {
-                            json payload => {
-                                Error = {message:failedMessage + payload.detail.toString()};
-                                return Error;
-                            }
-                        }
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        Error = {message:failedMessage + payload.detail.toString()};
+                        return Error;
                     }
                     mime:EntityError e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
@@ -402,7 +373,6 @@ public function <ScimConnector scimConn> createUser (User user) returns string|e
     }
 
     json jsonPayload = <json, convertUserToJson()>user;
-    io:println(jsonPayload);
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(jsonPayload);
@@ -421,17 +391,11 @@ public function <ScimConnector scimConn> createUser (User user) returns string|e
                 Error = {message:failedMessage + response.reasonPhrase};
                 return Error;
             } else {
-                var receivedBinaryPayload = response.getBinaryPayload();
-                match receivedBinaryPayload {
-                    blob b => {
-                        string receivedPayload = b.toString("UTF-8");
-                        var receivedJson = <json>receivedPayload;
-                        match receivedJson {
-                            json payload => {
-                                Error = {message:failedMessage + payload.detail.toString()};
-                                return Error;
-                            }
-                        }
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        Error = {message:failedMessage + payload.detail.toString()};
+                        return Error;
                     }
                     mime:EntityError e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
@@ -510,53 +474,42 @@ public function <ScimConnector scimConn> addUserToGroup (string userName, string
     string ref = scimConn.baseUrl + SCIM_USER_END_POINT + "/" + value;
     string url = SCIM_GROUP_END_POINT + "/" + gro.id;
 
-    var jsonBody = <json>SCIM_GROUP_PATCH_ADD_BODY;
-    match jsonBody {
-        json body => {
-            body.Operations[0].value.members[0].display = userName;
-            body.Operations[0].value.members[0]["$ref"] = ref;
-            body.Operations[0].value.members[0].value = value;
+    var body =? util:parseJson(SCIM_GROUP_PATCH_ADD_BODY);
+    body.Operations[0].value.members[0].display = userName;
+    body.Operations[0].value.members[0]["$ref"] = ref;
+    body.Operations[0].value.members[0].value = value;
 
-            request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-            request.setJsonPayload(body);
-            var res = oauthCon.patch(url, request);
-            match res {
-                http:HttpConnectorError connectorError => {
-                    Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-                    return Error;
-                }
-                http:Response response => {
-                    int statusCode = response.statusCode;
-                    if (statusCode == HTTP_OK) {
-                        return "User Added";
-                    }
-                    else if (statusCode == HTTP_UNAUTHORIZED) {
-                        Error = {message:failedMessage + response.reasonPhrase};
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(body);
+    var res = oauthCon.patch(url, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_OK) {
+                return "User Added";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        Error = {message:failedMessage + payload.detail.toString()};
                         return Error;
-                    } else {
-                        var receivedBinaryPayload = response.getBinaryPayload();
-                        match receivedBinaryPayload {
-                            blob b => {
-                                string receivedPayload = b.toString("UTF-8");
-                                var receivedJson = <json>receivedPayload;
-                                match receivedJson {
-                                    json payload => {
-                                        Error = {message:failedMessage + payload.detail.toString()};
-                                        return Error;
-                                    }
-                                }
-                            }
-                            mime:EntityError e => {
-                                Error = {message:failedMessage + e.message, cause:e.cause};
-                                return Error;
-                            }
-                        }
+                    }
+                    mime:EntityError e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
                     }
                 }
             }
         }
     }
-
 }
 
 @Description {value:"Remove an user from a group"}
@@ -625,47 +578,37 @@ public function <ScimConnector scimConn> removeUserFromGroup (string userName, s
         }
     }
     //create request body
-    var jsonBody = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
-    match jsonBody {
-        json body => {
-            string path = "members[display eq " + userName + "]";
-            body.Operations[0].path = path;
-            string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+    var body =? util:parseJson(SCIM_GROUP_PATCH_REMOVE_BODY);
+    string path = "members[display eq " + userName + "]";
+    body.Operations[0].path = path;
+    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
 
-            request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-            request.setJsonPayload(body);
-            var res = oauthCon.patch(url, request);
-            match res {
-                http:HttpConnectorError connectorError => {
-                    Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
-                    return Error;
-                }
-                http:Response response => {
-                    int statusCode = response.statusCode;
-                    if (statusCode == HTTP_OK) {
-                        return "User Removed";
-                    }
-                    else if (statusCode == HTTP_UNAUTHORIZED) {
-                        Error = {message:failedMessage + response.reasonPhrase};
+    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.setJsonPayload(body);
+    var res = oauthCon.patch(url, request);
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+            return Error;
+        }
+        http:Response response => {
+            int statusCode = response.statusCode;
+            if (statusCode == HTTP_OK) {
+                return "User Removed";
+            }
+            else if (statusCode == HTTP_UNAUTHORIZED) {
+                Error = {message:failedMessage + response.reasonPhrase};
+                return Error;
+            } else {
+                var received = response.getJsonPayload();
+                match received {
+                    json payload => {
+                        Error = {message:failedMessage + payload.detail.toString()};
                         return Error;
-                    } else {
-                        var receivedBinaryPayload = response.getBinaryPayload();
-                        match receivedBinaryPayload {
-                            blob b => {
-                                string receivedPayload = b.toString("UTF-8");
-                                var receivedJson = <json>receivedPayload;
-                                match receivedJson {
-                                    json payload => {
-                                        Error = {message:failedMessage + payload.detail.toString()};
-                                        return Error;
-                                    }
-                                }
-                            }
-                            mime:EntityError e => {
-                                Error = {message:failedMessage + e.message, cause:e.cause};
-                                return Error;
-                            }
-                        }
+                    }
+                    mime:EntityError e => {
+                        Error = {message:failedMessage + e.message, cause:e.cause};
+                        return Error;
                     }
                 }
             }

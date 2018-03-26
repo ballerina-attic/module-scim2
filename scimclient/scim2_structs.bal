@@ -1,4 +1,3 @@
-//
 // Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
@@ -20,6 +19,7 @@ package scimclient;
 
 
 import ballerina/net.http;
+import ballerina/util;
 import oauth2;
 
 //All the Struct objects that are used
@@ -157,30 +157,26 @@ public function <User user> addToGroup (string groupName) returns string|error {
                     string value = user.id;
                     string ref = baseURL + SCIM_USER_END_POINT + "/" + value;
                     string url = SCIM_GROUP_END_POINT + "/" + gro.id;
-                    var jsonBody = <json>SCIM_GROUP_PATCH_ADD_BODY;
-                    match jsonBody {
-                        json body => {
-                            body.Operations[0].value.members[0].display = user.userName;
-                            body.Operations[0].value.members[0]["$ref"] = ref;
-                            body.Operations[0].value.members[0].value = value;
+                    var body =? util:parseJson(SCIM_GROUP_PATCH_ADD_BODY);
+                    body.Operations[0].value.members[0].display = user.userName;
+                    body.Operations[0].value.members[0]["$ref"] = ref;
+                    body.Operations[0].value.members[0].value = value;
 
-                            request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-                            request.setJsonPayload(body);
+                    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+                    request.setJsonPayload(body);
 
-                            var res = oauthCon.patch(url, request);
-                            match res {
-                                http:HttpConnectorError connectorError => {
-                                    Error = {message:"Failed to add. " + connectorError.message, cause:connectorError.cause};
-                                    return Error;
-                                }
-                                http:Response resp => {
-                                    if (resp.statusCode == HTTP_OK) {
-                                        return "user added";
-                                    }
-                                    Error = {message:"Failed to add. " + response.reasonPhrase};
-                                    return Error;
-                                }
+                    var res = oauthCon.patch(url, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:"Failed to add. " + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_OK) {
+                                return "user added";
                             }
+                            Error = {message:"Failed to add. " + response.reasonPhrase};
+                            return Error;
                         }
                     }
                 }
@@ -224,30 +220,26 @@ public function <User user> removeFromGroup (string groupName) returns string|er
             match receivedGroup {
                 Group grp => {
                     gro = grp;
-                    var jsonBody = <json>SCIM_GROUP_PATCH_REMOVE_BODY;
-                    match jsonBody {
-                        json body => {
-                            string path = "members[display eq " + user.userName + "]";
-                            body.Operations[0].path = path;
-                            string url = SCIM_GROUP_END_POINT + "/" + gro.id;
+                    var body =? util:parseJson(SCIM_GROUP_PATCH_REMOVE_BODY);
+                    string path = "members[display eq " + user.userName + "]";
+                    body.Operations[0].path = path;
+                    string url = SCIM_GROUP_END_POINT + "/" + gro.id;
 
-                            request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
-                            request.setJsonPayload(body);
+                    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+                    request.setJsonPayload(body);
 
-                            var res = oauthCon.patch(url, request);
-                            match res {
-                                http:HttpConnectorError connectorError => {
-                                    Error = {message:"Failed to remove. " + connectorError.message, cause:connectorError.cause};
-                                    return Error;
-                                }
-                                http:Response resp => {
-                                    if (resp.statusCode == HTTP_OK) {
-                                        return "user removed";
-                                    }
-                                    Error = {message:"Failed to remove. " + response.reasonPhrase};
-                                    return Error;
-                                }
+                    var res = oauthCon.patch(url, request);
+                    match res {
+                        http:HttpConnectorError connectorError => {
+                            Error = {message:"Failed to remove. " + connectorError.message, cause:connectorError.cause};
+                            return Error;
+                        }
+                        http:Response resp => {
+                            if (resp.statusCode == HTTP_OK) {
+                                return "user removed";
                             }
+                            Error = {message:"Failed to remove. " + response.reasonPhrase};
+                            return Error;
                         }
                     }
                 }
