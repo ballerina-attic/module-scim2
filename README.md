@@ -29,7 +29,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Connector Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.964.1-SNAPSHOT     | 0.1 | SCIM2.0 |
+| ballerina-0.970-alpha-1-SNAPSHOT     | 0.2 | SCIM2.0 |
 
 - [Getting started](#getting-started)
 - [Running Samples](#running-samples)
@@ -43,15 +43,7 @@ file at
 2. Extract the Ballerina distribution created at
  `distribution/zip/ballerina/target/ballerina-<version>-SNAPSHOT.zip` and set the 
  PATH environment variable to the bin directory.
-3. Create a server-config-file-name.conf file with truststore.p12 file location and password
-in the following format.
-
-| Credential       | Description | 
-| ------------- |:----------------:|
-| truststoreLocation    |Your truststore.p12 file location|
-| trustStorePassword  |password of the truststore   |
-
-4. Obtain the base URL, client_id, client_secret, access_token, refresh_token, refresh_token_endpoint
+3. Obtain the base URL, client_id, client_secret, access_token, refresh_token, refresh_token_endpoint
 and the refresh_token path related to your Server.
 
 
@@ -81,23 +73,24 @@ https://localhost:9443/oauth2/token
 
 ## Running Samples
 
-To run the samples you have to modify the server-config-file-name.conf to the following format.
+To run the tests you need to update the following code lines with relevant
+details and add these lines between import commands and main function of
+ `test.bal` file at `package-scim2/tests`.
 
-| Credential       | Description | 
-| ------------- |:----------------:|
-| truststoreLocation    |Your truststore.p12 file location|
-| trustStorePassword  |password of the truststore   |
-| BaseUrl |Base URL of the Identity Server (`https://localhost:9443/`) |
-| AccessToken |Access token|
-| ClientId |Client ID|
-| ClientSecret |Client secret|
-| RefreshToken |Refresh token|
-| RefreshTokenEndpoint |Refresh token end point|
-| RefreshTokenPath |Refresh token path|
+```
+string truststoreLocation = <trust_store_file_location>
+string trustStorePassword = <trust_store_password>
+string BaseUrl = <base_url_of_IS>
+string AccessToken = <access_token>
+string ClientId = <client_id>
+string ClientSecret = <client_secret>
+string RefreshToken = <refresh_token>
+string RefreshTokenEndpoint = <base_refresh_token_path>
+string RefreshTokenPath = <refresh_token_path>
+```
 
-
-You can easily test the SCIM2 connector actions by running the `sample.bal` file.
- - Run `ballerina run /samples/scimclient Bballerina.conf=path/to/conf/file/server-config-file-name.conf`
+You can easily test the SCIM2 connector actions by running the `test.bal` file.
+ - Run `ballerina run tests`
 
 ## Working with SCIM connector actions
 
@@ -106,7 +99,8 @@ struct in your local environment and then initialize it.
 
 ```ballerina
 scimclient: ScimConnector scimCon = {};
-scimCon.init(getBaseUrl(),getAccessToken(),getRefreshToken(),getClientId(),getClientSecret(),getRefreshTokenEndpoint(),getRefreshTokenPath());
+scimCon.init(BaseUrl, AccessToken, ClientId, ClientSecret, RefreshToken, RefreshTokenEndpoint, RefreshTokenPath,
+                              truststoreLocation, trustStorePassword);
 ```
 ## createUser
 
@@ -123,38 +117,49 @@ Create a user in the user store.
 #### Example
 
 ```ballerina
-    scimclient:User user = {};
+        scimclient:User user = {};
+    
+        scimclient:PhonePhotoIms phone = {};
+        phone.^"type" = "work";
+        phone.value = "0777777777";
+        user.phoneNumbers = [phone];
+    
+        scimclient:Name name = {};
+        name.givenName = "Leo";
+        name.familyName = "Messi";
+        name.formatted = "Lionel Messi";
+        user.name = name;
+    
+        scimclient:Address address = {};
+        address.postalCode = "23433";
+        address.streetAddress = "no/2";
+        address.region = "Catalunia";
+        address.locality = "Barcelona";
+        address.country = "Spain";
+        address.formatted = "no/2,Barcelona/Catalunia/Spain";
+        address.primary = "true";
+        address.^"type" = "work";
+    
+        user.addresses = [address];
+    
+        user.userName = "leoMessi";
+        user.password = "greatest";
+    
+        scimclient:Email email1 = {};
+        email1.value = "messi@barca.com";
+        email1.^"type" = "work";
+    
+        scimclient:Email email2 = {};
+        email2.value = "messi@gg.com";
+        email2.^"type" = "home";
+    
+        user.emails = [email1, email2];
+        var response1 = scimCon.createUser(user);
+        match response1 {
+            string message => io:println(message);
+            error er => io:println(er);
+        }
 
-    scimclient:PhonePhotoIms phone = {};
-    phone.^"type" = "work";
-    phone.value = "0777777777";
-    user.phoneNumbers = [phone];
-
-    scimclient:Name name = {};
-    name.givenName = "Leo";
-    name.familyName = "Messi";
-    name.formatted = "Lionel Messi";
-    user.name = name;
-
-    user.addresses = [address];
-
-    user.userName = "leoMessi";
-    user.password = "greatest";
-
-    scimclient:Email email1 = {};
-    email1.value = "messi@barca.com";
-    email1.^"type" = "work";
-
-    scimclient:Email email2 = {};
-    email2.value = "messi@gg.com";
-    email2.^"type" = "home";
-
-    user.emails = [email1, email2];
-
-    error Error;
-    Error = scimCon.createUser(user);
-    io:println("creating user " + user.userName);
-    io:println(Error);
 ```
 
 `creating user leoMessi
@@ -176,10 +181,14 @@ Create a group in the user store.
 #### Example
 
 ```ballerina
-    scimclient:Group crtGroup = {};
-    crtGroup.displayName = "Captain";
-    Error = scimCon.createGroup(crtGroup);
-    io:println(Error);
+scimclient:Group gro = {};
+    gro.displayName = "Captain";
+
+    var response = scimCon.createGroup(gro);
+    match response {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
 ```
 
 if successfull `{message:"Created", cause:null}`
@@ -199,10 +208,14 @@ Get an user from the user store using the userName.
 
 
 ````ballerina
-    error Error;
-    scimclient:User getUser = {};
-    string userName = "iniesta";
-    getUser, Error = scimCon.getUserByUsername(userName);
+        string userName = "iniesta";
+        var response = scimCon.getUserByUsername(userName);
+        match response {
+            scimclient:User usr => {
+                io:println(usr);
+            }
+            error er => io:println(er);
+        }         
 `````
 
 ## getGroup
@@ -219,9 +232,13 @@ Get a group from the user store using groupName.
 #### Example
 
 ````ballerina
-    error Error;
-    scimclient:Group getGroup = {};
-    getGroup, Error = scimCon.getGroupByName("Captain");
+    string groupName = "Captain";
+    var response = scimCon.getGroupByName(groupName);
+    match response {
+        scimclient:Group grp => io:println(grp.members);
+        error er => io:println(er);
+    }
+   
 ````
 
 ## addUserToGroup
@@ -238,9 +255,11 @@ Add a user specified by user name to a group specified by group name.
 #### Example
 
 ````ballerina
-    userName = "leoMessi";
-    string groupName = "Captain";
-    Error = scimCon.addUserToGroup(userName, groupName);
+        var response = scimCon.addUserToGroup(userName, groupName);
+        match response {
+            string msg => io:println(msg);
+            error er => io:println(er);
+        }
 ````
  
 ## removeUserFromGroup
@@ -257,10 +276,11 @@ Remove an user specifed by user name from a group specified by group name.
 #### Example
 
 ````ballerina
-    userName = "iniesta";
-    groupName = "Captain";
-
-    Error = scimCon.removeUserFromGroup(userName, groupName);
+    var response = scimCon.removeUserFromGroup(userName, groupName);
+    match response {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
 ````
 
 ## isUserInGroup
@@ -278,10 +298,11 @@ Check whether the specified user is in the specified group.
 #### Example
 
 ````ballerina
-    userName = "leoMessi";
-    groupName = "Captain";
-    boolean x;
-    x, Error = scimCon.isUserInGroup(userName, groupName);
+        var response = scimCon.isUserInGroup(userName, groupName);
+        match response {
+            boolean x => io:println(x);
+            error er => io:println(er);
+        }
 ````
 
 ## deleteUserByUserName
@@ -297,8 +318,11 @@ Delete an user in the user store using his user name.
 #### Example
 
 ````ballerina
-    userName = "leoMessi";
-    Error = scimCon.deleteUserByUsername(userName);
+        var response = scimCon.deleteUserByUsername(userName);
+        match response {
+            string msg => io:println(msg);
+            error er => io:println(er);
+        }
 ````
 
 ## deleteGroupByName
@@ -314,8 +338,11 @@ Delete an group using its group name
 #### Examples
 
 ````ballerina
-    groupName = "Captain";
-    Error = scimCon.deleteGroupByName(groupName);
+    var response = scimCon.deleteGroupByName(groupName);
+    match response {
+        string msg => io:println(msg);
+        error er => io:println(er);
+    }
 ````
 
 ## getListOfUsers
@@ -329,8 +356,11 @@ Get the list of users in the user store.
 #### Examples
 
 ````ballerina
-    scimclient:User[] userList;
-    userList, Error = scimCon.getListOfUsers();
+    var response = scimCon.getListOfUsers();
+    match response {
+        scimclient:User[] lst => io:println(lst);
+        error er => io:println(er);
+    }
 ````
 
 ## getListOfGroups
@@ -344,8 +374,11 @@ Get the list of groups.
 #### Examples
 
 ````ballerina
-    scimclient:Group[] groupList;
-    groupList, Error = scimCon.getListOfGroups();
+        var response = scimCon.getListOfGroups();
+        match response {
+            scimclient:Group[] lst => io:println(lst);
+            error er => io:println(er);
+        }
 ````
 
 ## getMe
@@ -359,20 +392,18 @@ Get the currently authenticated user.
 #### Example
 
 ````ballerina
-user,Error = scimCon.getMe();
+    var response = scimCon.getMe();
+    match response {
+        scimclient:User usr => io:println(usr);
+        error er => io:println(er);
+    }
 ````
 
 ## Using User struct bound functions
 
 First get a user using connector action `getUserByUsername`.
 
-```ballerina
-    userName = "tnm";
-    user , Error = scimCon.getUserByUsername(userName);
-
-```
-
-### addToGroup
+### addToGroup()
 
 Add the user to group specified by the groupName;
 
@@ -382,14 +413,7 @@ Add the user to group specified by the groupName;
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    groupName = "BOSS";
-    Error = user.addToGroup(groupName);
-````
-
-### removeFromGroup
+### removeFromGroup()
 
 Remove the user from the group specified by the groupName;
 
@@ -399,14 +423,7 @@ Remove the user from the group specified by the groupName;
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    groupName = "BOSS";
-    Error = user.removeFromGroup(groupName);
-````
-
-### updateActive
+### updateActive()
 
 Update active status of the user
 
@@ -416,14 +433,7 @@ Update active status of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    boolean active = true;
-    Error = user.updateActive(active);
-````
-
-### updateAddress
+### updateAddress()
 
 Update addresses of of the user
 
@@ -433,21 +443,9 @@ Update addresses of of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
 
-````ballerina
-    Address address1 = {};
-    Address address2 = {};
-    address1.formatted = "no-123,st.peters',colombo";
-    address1.|type| = "home"
-    address2.streetAddress = "2/4,avenue";
-    address2.|type| = "work";
-    
-    Address[] addresses = [address1,address2];
-    Error = user.updateAddress(addresses);
-````
 
-### updateDisplayName
+### updateDisplayName()
 
 Update the display name of the user
 
@@ -457,14 +455,7 @@ Update the display name of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string displayName = "Lionel Messi";
-    Error = user.updateDisplayName(displayName);
-````
-
-### updateEmails
+### updateEmails()
 
 Update the emails of the user
 
@@ -474,21 +465,7 @@ Update the emails of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    Email email1 = {};
-    Email email2 = {};
-    email1.value = "mail.com";
-    email1.|type| = "home";
-    email2.value = "email@cc.org";
-    email2.|type| = "work";
-    
-    Email[] emails = [email1,email2];
-    Error = user.updateAddress(emails);
-````
-
-### updateExternalId
+### updateExternalId()
 
 Update the external id of the user
 
@@ -498,13 +475,7 @@ Update the external id of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string externalId = "12321313ddddd";
-    Error = user.updateExternalId(externalId);
-````````
-### updateLocale
+### updateLocale()
 
 Update locale of the user
 
@@ -514,13 +485,7 @@ Update locale of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string locale = "Colombo";
-    Error = user.updateLocale("locale");
-````
-### updateNickname
+### updateNickname()
 
 Update the nick name of the user
 
@@ -530,14 +495,7 @@ Update the nick name of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string nickName = "leo";
-    Error = user.updateNickname(nickName);
-````
-
-### updatePassword
+### updatePassword()
 
 Update the password of the user
 
@@ -547,14 +505,7 @@ Update the password of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string password = "password";
-    Error = user.updatePassword(password);
-````
-
-### updatePrefferedLanguage
+### updatePrefferedLanguage()
 
 Update the preferred language of the user
 
@@ -564,14 +515,7 @@ Update the preferred language of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string preferredLanguage = "English";
-    Error = user.updateDisplayName(preferredLanguage);
-````
-
-### updateProfileUrl
+### updateProfileUrl()
 
 Update the profile URL of the user
 
@@ -581,14 +525,7 @@ Update the profile URL of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string profileUrl = "1.1.1.1";
-    Error = user.updateProfileUrl(profileUrl);
-````
-
-### updateTimezone
+### updateTimezone()
 
 Update the timezone of the user
 
@@ -598,14 +535,7 @@ Update the timezone of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string timezone = "Indian";
-    Error = user.updateTimezone(timezone);
-````
-
-### updateTitle
+### updateTitle()
 
 Update the title of the user
 
@@ -615,14 +545,7 @@ Update the title of the user
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-    string title = "GOAT";
-    Error = user.updateTitle(title);
-````
-
-### updateUserType
+### updateUserType()
 
 Update the user type of the user
 
@@ -631,10 +554,3 @@ Update the user type of the user
 
 #### Returns
 - `error` struct with the status message.
-
-#### Example
-
-````ballerina
-    string userType = "Lionel Messi";
-    Error = user.updateUserType(userType);
-````
