@@ -403,7 +403,7 @@ Get the currently authenticated user.
 
 First get a user using connector action `getUserByUsername`.
 
-### addToGroup
+### addToGroup()
 
 Add the user to group specified by the groupName;
 
@@ -413,7 +413,7 @@ Add the user to group specified by the groupName;
 #### Returns
 - `error` struct with the status message.
 
-### removeFromGroup
+### removeFromGroup()
 
 Remove the user from the group specified by the groupName;
 
@@ -423,7 +423,7 @@ Remove the user from the group specified by the groupName;
 #### Returns
 - `error` struct with the status message.
 
-### updateActive
+### updateActive()
 
 Update active status of the user
 
@@ -433,7 +433,7 @@ Update active status of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateAddress
+### updateAddress()
 
 Update addresses of of the user
 
@@ -445,7 +445,7 @@ Update addresses of of the user
 
 
 
-### updateDisplayName
+### updateDisplayName()
 
 Update the display name of the user
 
@@ -455,7 +455,7 @@ Update the display name of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateEmails
+### updateEmails()
 
 Update the emails of the user
 
@@ -465,7 +465,7 @@ Update the emails of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateExternalId
+### updateExternalId()
 
 Update the external id of the user
 
@@ -475,7 +475,7 @@ Update the external id of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateLocale
+### updateLocale()
 
 Update locale of the user
 
@@ -485,7 +485,7 @@ Update locale of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateNickname
+### updateNickname()
 
 Update the nick name of the user
 
@@ -495,7 +495,7 @@ Update the nick name of the user
 #### Returns
 - `error` struct with the status message.
 
-### updatePassword
+### updatePassword()
 
 Update the password of the user
 
@@ -505,7 +505,7 @@ Update the password of the user
 #### Returns
 - `error` struct with the status message.
 
-### updatePrefferedLanguage
+### updatePrefferedLanguage()
 
 Update the preferred language of the user
 
@@ -515,7 +515,7 @@ Update the preferred language of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateProfileUrl
+### updateProfileUrl()
 
 Update the profile URL of the user
 
@@ -525,7 +525,7 @@ Update the profile URL of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateTimezone
+### updateTimezone()
 
 Update the timezone of the user
 
@@ -535,7 +535,7 @@ Update the timezone of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateTitle
+### updateTitle()
 
 Update the title of the user
 
@@ -545,7 +545,7 @@ Update the title of the user
 #### Returns
 - `error` struct with the status message.
 
-### updateUserType
+### updateUserType()
 
 Update the user type of the user
 
