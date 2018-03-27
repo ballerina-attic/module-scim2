@@ -350,7 +350,7 @@ public function <User user> updatePassword (string password) returns string|erro
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Password updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -385,7 +385,7 @@ public function <User user> updateProfileUrl (string profileUrl) returns string|
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Profile Url updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -420,7 +420,7 @@ public function <User user> updateLocale (string locale) returns string|error {
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Locale updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -455,7 +455,7 @@ public function <User user> updateTimezone (string timezone) returns string|erro
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Time zone updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -497,7 +497,7 @@ public function <User user> updateActive (boolean active) returns string|error {
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Active updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -532,7 +532,7 @@ public function <User user> updatePreferredLanguage (string preferredLanguage) r
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Preferred Language updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -579,7 +579,7 @@ public function <User user> updateEmails (Email[] emails) returns string|error {
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Email updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -626,7 +626,7 @@ public function <User user> updateAddresses (Address[] addresses) returns string
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Address updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -661,7 +661,7 @@ public function <User user> updateUserType (string userType) returns string|erro
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "User Type updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -696,7 +696,7 @@ public function <User user> updateDisplayName (string displayName) returns strin
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "Display name updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;
@@ -731,7 +731,7 @@ public function <User user> updateExternalId (string externalId) returns string|
         }
         http:Response response => {
             if (response.statusCode == HTTP_OK) {
-                return "Nick name updated";
+                return "External ID updated";
             }
             Error = {message:response.reasonPhrase};
             return Error;

@@ -19,6 +19,7 @@ package oauth2;
 import ballerina/net.http;
 import ballerina/mime;
 import ballerina/io;
+import ballerina/util;
 
 public struct OAuth2Client {
     http:ClientEndpoint httpClient;
@@ -268,10 +269,13 @@ returns (string)|http:HttpConnectorError {
     http:Response httpRefreshTokenResponse = {};
     json accessTokenFromRefreshTokenJSONResponse;
 
-    string accessTokenFromRefreshTokenReq = refreshTokenPath + "?refresh_token=" + refreshToken
-                                            + "&grant_type=refresh_token&client_secret=" + clientSecret
-                                            + "&client_id=" + clientId;
-    var refreshTokenResponse = refreshTokenHTTPEP -> post(accessTokenFromRefreshTokenReq, refreshTokenRequest);
+    string clientIdSecret = clientId + ":" + clientSecret;
+    string base64ClientIdSecret = util:base64Encode(clientIdSecret);
+    refreshTokenRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    refreshTokenRequest.addHeader("Authorization", "Basic " + base64ClientIdSecret);
+    refreshTokenRequest.setStringPayload("grant_type=refresh_token&refresh_token=" + refreshToken);
+    var refreshTokenResponse = refreshTokenHTTPEP -> post(refreshTokenPath, refreshTokenRequest);
+    io:println(refreshTokenResponse);
     match refreshTokenResponse {
         http:Response httpResponse => httpRefreshTokenResponse = httpResponse;
         http:HttpConnectorError err => return err;
