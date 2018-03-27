@@ -44,7 +44,7 @@ public function <ScimConnector scimCon> init (string baseUrl, string accessToken
                                               string location, string password) {
 
     scimCon.baseUrl = baseUrl;
-    oauthCon.init(baseUrl, accessToken, clientId, clientSecret, refreshToken, refreshTokenEP, refreshTokenPath,
+    oauthCon.init(baseUrl, accessToken, refreshToken, clientId, clientSecret,  refreshTokenEP, refreshTokenPath,
                   location, password);
 
     baseURL = baseUrl;
