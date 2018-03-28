@@ -275,7 +275,7 @@ returns (string)|http:HttpConnectorError {
     refreshTokenRequest.addHeader("Authorization", "Basic " + base64ClientIdSecret);
     refreshTokenRequest.setStringPayload("grant_type=refresh_token&refresh_token=" + refreshToken);
     var refreshTokenResponse = refreshTokenHTTPEP -> post(refreshTokenPath, refreshTokenRequest);
-    io:println(refreshTokenResponse);
+
     match refreshTokenResponse {
         http:Response httpResponse => httpRefreshTokenResponse = httpResponse;
         http:HttpConnectorError err => return err;
