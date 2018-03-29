@@ -101,3 +101,47 @@ function createRequest (json body) returns http:Request {
     request.setJsonPayload(body);
     return request;
 }
+
+function createUpdateBody (string valueType, string newValue) returns json|error {
+    json body =? util:parseJson(SCIM_PATCH_ADD_BODY);
+    error Error = {};
+
+    if (valueType.equalsIgnoreCase("nickName")) {
+        body.Operations[0].value = {"nickName":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("preferredLanguage")) {
+        body.Operations[0].value = {"preferredLanguage":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("title")) {
+        body.Operations[0].value = {"title":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("password")) {
+        body.Operations[0].value = {"password":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("profileUrl")) {
+        body.Operations[0].value = {"profileUrl":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("locale")) {
+        body.Operations[0].value = {"locale":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("timezone")) {
+        body.Operations[0].value = {"timezone":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("active")) {
+        body.Operations[0].value = {"active":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("userType")) {
+        body.Operations[0].value = {"userType":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("displayName")) {
+        body.Operations[0].value = {"displayName":newValue};
+        return body;
+    } if (valueType.equalsIgnoreCase("externalId")) {
+        body.Operations[0].value = {"externalId":newValue};
+        return body;
+    } else {
+        Error = {message: "No matching value"};
+        return Error;
+    }
+
+}

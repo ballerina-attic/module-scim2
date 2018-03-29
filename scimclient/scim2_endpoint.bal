@@ -14,6 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
+
 package scimclient;
 
 import ballerina/net.http;
@@ -46,10 +47,12 @@ public function <Scim2Endpoint scimEP> init (Scim2Configuration scim2Config) {
         refreshTokenEP:scim2Config.refreshTokenEP,
         refreshTokenPath:scim2Config.refreshTokenPath,
         baseUrl:scim2Config.baseUrl,
-        clientConfig: scim2Config.clientConfig
+        clientConfig: scim2Config.clientConfig,
+        useUriParams: true
     };
 
-    scimEP.scim2Connector.ep=oauthEP;
+    scimEP.scim2Connector.oauthEP = oauthEP;
+    scimEP.scim2Connector.baseUrl = scim2Config.baseUrl;
 
 }
 
