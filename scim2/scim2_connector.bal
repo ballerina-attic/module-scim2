@@ -185,7 +185,8 @@ public function <ScimConnector scimCon> getGroupByName (string groupName) return
     var res = oauthEP -> get(s, request);
     match res {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get Group " + groupName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -207,7 +208,8 @@ public function <ScimConnector scimCon> getUserByUsername (string userName) retu
     var res = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
     match res {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get User " + userName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -369,7 +371,8 @@ public function <ScimConnector scimCon> addUserToGroup (string userName, string 
     var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get User " + userName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -391,7 +394,8 @@ public function <ScimConnector scimCon> addUserToGroup (string userName, string 
     var resGroup = oauthEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
     match resGroup {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get Group " + groupName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -470,7 +474,8 @@ public function <ScimConnector scimCon> removeUserFromGroup (string userName, st
                                userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get User " + userName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -494,7 +499,8 @@ public function <ScimConnector scimCon> removeUserFromGroup (string userName, st
                                 groupName, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get Group " + groupName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -563,7 +569,8 @@ public function <ScimConnector scimCon> isUserInGroup (string userName, string g
     var res = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
     match res {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get User " + userName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -605,7 +612,8 @@ public function <ScimConnector scimCon> deleteUserByUsername (string userName) r
     var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, userRequest);
     match resUser {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get User " + userName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -657,7 +665,8 @@ public function <ScimConnector scimCon> deleteGroupByName (string groupName) ret
     var resGroup = oauthEP -> get(s, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." + connectorError.message, cause:connectorError.cause};
+            Error = {message:"Failed to get Group " + groupName + "." +
+                             connectorError.message, cause:connectorError.cause};
             return Error;
         }
         http:Response response => {
@@ -821,7 +830,7 @@ public function <ScimConnector scimCon> updateAddresses (string id, Address[] ad
     }
 }
 
-public function <ScimConnector scimCon> updateUser (User user) returns http:Response|error {
+public function <ScimConnector scimCon> updateUser (User user) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
     error Error = {};
     http:Request request = {};
@@ -830,5 +839,17 @@ public function <ScimConnector scimCon> updateUser (User user) returns http:Resp
     request = createRequest(body);
     string url = SCIM_USER_END_POINT + "/" + user.id;
     var res = oauthEP -> put(url,request);
-    return res;
+    match res {
+        http:HttpConnectorError connectorError => {
+            Error = {message:connectorError.message};
+            return Error;
+        }
+        http:Response response => {
+            if (response.statusCode == HTTP_OK) {
+                return "User updated";
+            }
+            Error = {message:response.reasonPhrase};
+            return Error;
+        }
+    }
 }
