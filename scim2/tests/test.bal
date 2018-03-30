@@ -2,11 +2,10 @@ package tests;
 
 
 import ballerina/io;
-import scim2;
 
 public function main (string[] args) {
 
-    endpoint scim2:Scim2Endpoint scimEP {
+    endpoint Scim2Endpoint scimEP {
         oauthClientConfig: {
                                accessToken: "b5b7aa96-ad43-316f-a912-094d2622561",
                                baseUrl: "https://localhost:9443",
@@ -29,14 +28,14 @@ public function main (string[] args) {
     };
 
 
-
-    //scim2:User getUser = {};
+    //
+    //User getUser = {};
     //string userName = "iniesta";
     //io:println("");
     //io:println("======================================get user iniesta===============================================");
     //var response4 = scimEP -> getUserByUsername(userName);
     //match response4 {
-    //    scim2:User usr => {
+    //    User usr => {
     //       // io:println(usr);
     //        getUser = usr;
     //    }
@@ -49,21 +48,21 @@ public function main (string[] args) {
     //io:println(res);
 
 
-    //create user=======================================================================================================
-    //scim2:User user = {};
+    ////create user=======================================================================================================
+    //User user = {};
     //
-    //scim2:PhonePhotoIms phone = {};
+    //PhonePhotoIms phone = {};
     //phone.^"type" = "work";
     //phone.value = "0777777777";
     //user.phoneNumbers = [phone];
     //
-    //scim2:Name name = {};
+    //Name name = {};
     //name.givenName = "Leo";
     //name.familyName = "Messi";
     //name.formatted = "Lionel Messi";
     //user.name = name;
     //
-    //scim2:Address address = {};
+    //Address address = {};
     //address.postalCode = "23433";
     //address.streetAddress = "no/2";
     //address.region = "Catalunia";
@@ -78,11 +77,11 @@ public function main (string[] args) {
     //user.userName = "leoMessi";
     //user.password = "greatest";
     //
-    //scim2:Email email1 = {};
+    //Email email1 = {};
     //email1.value = "messi@barca.com";
     //email1.^"type" = "work";
     //
-    //scim2:Email email2 = {};
+    //Email email2 = {};
     //email2.value = "messi@gg.com";
     //email2.^"type" = "home";
     //
@@ -106,7 +105,7 @@ public function main (string[] args) {
     //    string message => io:println(message);
     //    error er => io:println(er);
     //}
-    //
+
     ////create user tnm
     //user.userName = "tnm";
     //io:println("");
