@@ -2,12 +2,12 @@ package tests;
 
 
 import ballerina/io;
-import scimclient;
+import scim2;
 
 
 public function main (string[] args) {
 
-    endpoint scimclient:Scim2Endpoint scimEP {
+    endpoint scim2:Scim2Endpoint scimEP {
         oauthClientConfig: {
                                accessToken: "b5b7aa96-ad43-316f-a912-094d2622561",
                                baseUrl: "https://localhost:9443",
@@ -31,20 +31,20 @@ public function main (string[] args) {
 
 
     //create user=======================================================================================================
-    scimclient:User user = {};
+    scim2:User user = {};
 
-    scimclient:PhonePhotoIms phone = {};
+    scim2:PhonePhotoIms phone = {};
     phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
-    scimclient:Name name = {};
+    scim2:Name name = {};
     name.givenName = "Leo";
     name.familyName = "Messi";
     name.formatted = "Lionel Messi";
     user.name = name;
 
-    scimclient:Address address = {};
+    scim2:Address address = {};
     address.postalCode = "23433";
     address.streetAddress = "no/2";
     address.region = "Catalunia";
@@ -59,11 +59,11 @@ public function main (string[] args) {
     user.userName = "leoMessi";
     user.password = "greatest";
 
-    scimclient:Email email1 = {};
+    scim2:Email email1 = {};
     email1.value = "messi@barca.com";
     email1.^"type" = "work";
 
-    scimclient:Email email2 = {};
+    scim2:Email email2 = {};
     email2.value = "messi@gg.com";
     email2.^"type" = "home";
 
@@ -101,13 +101,13 @@ public function main (string[] args) {
     //==================================================================================================================
 
     //Get an user in the IS user store using getUserbyUserName action===================================================
-    scimclient:User getUser = {};
+    scim2:User getUser = {};
     string userName = "iniesta";
     io:println("");
     io:println("======================================get user iniesta===============================================");
     var response4 = scimEP -> getUserByUsername(userName);
     match response4 {
-        scimclient:User usr => {
+        scim2:User usr => {
             io:println(usr);
             getUser = usr;
         }
@@ -116,10 +116,10 @@ public function main (string[] args) {
     //==================================================================================================================
 
     //Create a Group in the IS user store using createUser action=======================================================
-    scimclient:Group gro = {};
+    scim2:Group gro = {};
     gro.displayName = "Captain";
 
-    scimclient:Member member = {};
+    scim2:Member member = {};
     member.display = getUser.userName;
     member.value = getUser.id;
     gro.members = [member];
@@ -147,7 +147,7 @@ public function main (string[] args) {
     io:println("===================================get the Members of the Captain====================================");
     var response7 = scimEP -> getGroupByName(groupName);
     match response7 {
-        scimclient:Group grp => io:println(grp.members);
+        scim2:Group grp => io:println(grp.members);
         error er => io:println(er);
     }
     //==================================================================================================================
@@ -166,7 +166,7 @@ public function main (string[] args) {
     io:println("==================================members in Captain=================================================");
     var response9 = scimEP -> getGroupByName(groupName);
     match response9 {
-        scimclient:Group grp => io:println(grp.members);
+        scim2:Group grp => io:println(grp.members);
         error er => io:println(er);
     }
     //==================================================================================================================
@@ -186,7 +186,7 @@ public function main (string[] args) {
     io:println("====================================members in Captain===============================================");
     var response11 = scimEP -> getGroupByName(groupName);
     match response11 {
-        scimclient:Group grp => io:println(grp.members);
+        scim2:Group grp => io:println(grp.members);
         error er => io:println(er);
     }
     //==================================================================================================================
@@ -230,7 +230,7 @@ public function main (string[] args) {
     io:println("=======================================get the list of users=========================================");
     var response15 = scimEP -> getListOfUsers();
     match response15 {
-        scimclient:User[] lst => io:println(lst);
+        scim2:User[] lst => io:println(lst);
         error er => io:println(er);
     }
     //==================================================================================================================
@@ -240,7 +240,7 @@ public function main (string[] args) {
     io:println("=======================================get the list of Groups========================================");
     var response16 = scimEP -> getListOfGroups();
     match response16 {
-        scimclient:Group[] lst => io:println(lst);
+        scim2:Group[] lst => io:println(lst);
         error er => io:println(er);
     }
     //==================================================================================================================
