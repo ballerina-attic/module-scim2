@@ -296,7 +296,6 @@ function toEmails (json s) returns Email[] {
     return eEmail;
 }
 
-
 function toGroups (json s) returns Group[] {
     json[] jGroup =? <json[]>s.groups;
     Group[] gGroup;
@@ -307,10 +306,80 @@ function toGroups (json s) returns Group[] {
     return gGroup;
 }
 
-transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
+function toJsonCertificates (User u) returns json[] {
+    X509Certificate[] xClist = u.x509Certificates;
+    json[] jClist;
+    foreach i, node in xClist {
+        json x = <json, convertCertificateToJson()>node;
+        jClist[i] = x;
+    }
+    return jClist;
+}
+
+function toJsonGroups (User u) returns json[] {
+    Group[] gGroup = u.groups;
+    json[] jGroup;
+    foreach i, node in gGroup {
+        json x = <json, convertGroupToJsonUserRelated()>node;
+        jGroup[i] = x;
+    }
+    return jGroup;
+}
+
+function toJsonAddress (User u) returns json[] {
+    Address[] aAddress = u.addresses;
+    json[] jAddress;
+    foreach i, node in aAddress {
+        json x = <json, convertAddressToJson()>node;
+        jAddress[i] = x;
+    }
+    return jAddress;
+}
+
+function toJsonEmails (User u) returns json[] {
+    Email[] eEmail = u.emails;
+    json[] jEmail;
+    foreach i, node in eEmail {
+        json x = <json, convertEmailToJson()>node;
+        jEmail[i] = x;
+    }
+    return jEmail;
+}
+
+function toJsonPhoneNumbers (User u) returns json[] {
+    PhonePhotoIms[] pPhone = u.phoneNumbers;
+    json[] jPhone;
+    foreach i, node in pPhone {
+        json x = <json, convertPhonePhotoImsToJson()>node;
+        jPhone[i] = x;
+    }
+    return jPhone;
+}
+
+function toJsonPhotos (User u) returns json[] {
+    PhonePhotoIms[] pPhoto = u.photos;
+    json[] jPhoto;
+    foreach i, node in pPhoto {
+        json x = <json, convertPhonePhotoImsToJson()>node;
+        jPhoto[i] = x;
+    }
+    return jPhoto;
+}
+
+function toJsonIms (User u) returns json[] {
+    PhonePhotoIms[] iIms = u.ims;
+    json[] jIms;
+    foreach i, node in iIms {
+        json x = <json, convertPhonePhotoImsToJson()>node;
+        jIms[i] = x;
+    }
+    return jIms;
+}
+
+function convertUserToJson (User sourceUserStruct, string updateOrCreate) returns json {
+    json targetJson = {};
     targetJson.userName = sourceUserStruct.userName != null ? sourceUserStruct.userName : "";
     targetJson.id = sourceUserStruct.id != null ? sourceUserStruct.id : "";
-    targetJson.password = sourceUserStruct.password != null ? sourceUserStruct.password : "";
     targetJson.externalId = sourceUserStruct.externalId != null ? sourceUserStruct.externalId : "";
     targetJson.displayName = sourceUserStruct.displayName != null ? sourceUserStruct.displayName : "";
     targetJson.nickName = sourceUserStruct.nickName != null ? sourceUserStruct.nickName : "";
@@ -357,78 +426,11 @@ transformer <User sourceUserStruct, json targetJson> convertUserToJson() {
                                                                                <json,
                                                                                convertEnterpriseExtensionToJson()>
                                                                                sourceUserStruct.EnterpriseUser : {};
-}
 
-
-function toJsonCertificates (User u) returns json[] {
-    X509Certificate[] xClist = u.x509Certificates;
-    json[] jClist;
-    foreach i, node in xClist {
-        json x = <json, convertCertificateToJson()>node;
-        jClist[i] = x;
+    if (updateOrCreate.equalsIgnoreCase("create")) {
+        targetJson.password = sourceUserStruct.password != null ? sourceUserStruct.password : "";
     }
-    return jClist;
+
+
+    return targetJson;
 }
-
-function toJsonGroups (User u) returns json[] {
-    Group[] gGroup = u.groups;
-    json[] jGroup;
-    foreach i, node in gGroup {
-        json x = <json, convertGroupToJsonUserRelated()>node;
-        jGroup[i] = x;
-    }
-    return jGroup;
-}
-
-function toJsonAddress (User u) returns json[] {
-    Address[] aAddress = u.addresses;
-    json[] jAddress;
-    foreach i, node in aAddress {
-        json x = <json, convertAddressToJson()>node;
-        jAddress[i] = x;
-    }
-    return jAddress;
-}
-
-function toJsonEmails (User u) returns json[] {
-    Email[] eEmail = u.emails;
-    json[] jEmail;
-    foreach i, node in eEmail {
-        json x = <json, convertEmailToJson()>node;
-        jEmail[i] = x;
-    }
-    return jEmail;
-}
-
-
-function toJsonPhoneNumbers (User u) returns json[] {
-    PhonePhotoIms[] pPhone = u.phoneNumbers;
-    json[] jPhone;
-    foreach i, node in pPhone {
-        json x = <json, convertPhonePhotoImsToJson()>node;
-        jPhone[i] = x;
-    }
-    return jPhone;
-}
-
-function toJsonPhotos (User u) returns json[] {
-    PhonePhotoIms[] pPhoto = u.photos;
-    json[] jPhoto;
-    foreach i, node in pPhoto {
-        json x = <json, convertPhonePhotoImsToJson()>node;
-        jPhoto[i] = x;
-    }
-    return jPhoto;
-}
-
-function toJsonIms (User u) returns json[] {
-    PhonePhotoIms[] iIms = u.ims;
-    json[] jIms;
-    foreach i, node in iIms {
-        json x = <json, convertPhonePhotoImsToJson()>node;
-        jIms[i] = x;
-    }
-    return jIms;
-}
-
-//=================================================================================================================

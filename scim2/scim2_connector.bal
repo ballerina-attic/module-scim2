@@ -315,7 +315,7 @@ public function <ScimConnector scimCon> createUser (User user) returns string|er
         }
     }
 
-    json jsonPayload = <json, convertUserToJson()>user;
+    json jsonPayload = convertUserToJson(user, "create");
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(jsonPayload);
@@ -819,4 +819,16 @@ public function <ScimConnector scimCon> updateAddresses (string id, Address[] ad
             return Error;
         }
     }
+}
+
+public function <ScimConnector scimCon> updateUser (User user) returns http:Response|error {
+    endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
+    error Error = {};
+    http:Request request = {};
+
+    json body = convertUserToJson(user,"update");
+    request = createRequest(body);
+    string url = SCIM_USER_END_POINT + "/" + user.id;
+    var res = oauthEP -> put(url,request);
+    return res;
 }
