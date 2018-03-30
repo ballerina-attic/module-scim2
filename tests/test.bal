@@ -4,7 +4,6 @@ package tests;
 import ballerina/io;
 import scim2;
 
-
 public function main (string[] args) {
 
     endpoint scim2:Scim2Endpoint scimEP {

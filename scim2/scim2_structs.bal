@@ -17,9 +17,6 @@
 
 package scim2;
 
-
-import ballerina/net.http;
-import ballerina/util;
 import oauth2;
 
 //All the Struct objects that are used

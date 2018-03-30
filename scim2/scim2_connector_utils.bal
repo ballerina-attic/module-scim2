@@ -103,7 +103,7 @@ function createRequest (json body) returns http:Request {
 }
 
 function createUpdateBody (string valueType, string newValue) returns json|error {
-    json body =? util:parseJson(SCIM_PATCH_ADD_BODY);
+    json body = SCIM_PATCH_ADD_BODY;
     error Error = {};
 
     if (valueType.equalsIgnoreCase("nickName")) {

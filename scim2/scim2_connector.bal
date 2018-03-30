@@ -21,8 +21,6 @@ package scim2;
 import ballerina/net.http;
 import ballerina/mime;
 import oauth2;
-import ballerina/util;
-import ballerina/io;
 
 public struct ScimConnector {
     string baseUrl;
@@ -416,7 +414,7 @@ public function <ScimConnector scimCon> addUserToGroup (string userName, string 
     string ref = scimCon.baseUrl + SCIM_USER_END_POINT + "/" + value;
     string url = SCIM_GROUP_END_POINT + "/" + gro.id;
 
-    var body =? util:parseJson(SCIM_GROUP_PATCH_ADD_BODY);
+    json body = SCIM_GROUP_PATCH_ADD_BODY;
     body.Operations[0].value.members[0].display = userName;
     body.Operations[0].value.members[0]["$ref"] = ref;
     body.Operations[0].value.members[0].value = value;
@@ -517,7 +515,7 @@ public function <ScimConnector scimCon> removeUserFromGroup (string userName, st
         }
     }
     //create request body
-    var body =? util:parseJson(SCIM_GROUP_PATCH_REMOVE_BODY);
+    json body = SCIM_GROUP_PATCH_REMOVE_BODY;
     string path = "members[display eq " + userName + "]";
     body.Operations[0].path = path;
     string url = SCIM_GROUP_END_POINT + "/" + gro.id;
@@ -760,7 +758,7 @@ public function <ScimConnector scimCon> updateUserEmails (string id, Email[] ema
         emailList[i] = email;
         i = i + 1;
     }
-    json body =? util:parseJson(SCIM_PATCH_ADD_BODY);
+    json body = SCIM_PATCH_ADD_BODY;
     body.Operations[0].value = {"emails":emailList};
 
     request = createRequest(body);
@@ -808,7 +806,7 @@ public function <ScimConnector scimCon> updateAddresses (string id, Address[] ad
         addressList[i] = element;
         i = i + 1;
     }
-    json body =? util:parseJson(SCIM_PATCH_ADD_BODY);
+    json body = SCIM_PATCH_ADD_BODY;
     body.Operations[0].value = {"addresses":addressList};
 
     request = createRequest(body);
