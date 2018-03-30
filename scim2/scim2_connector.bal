@@ -16,7 +16,7 @@
 // under the License.
 //
 
-package scimclient;
+package scim2;
 
 import ballerina/net.http;
 import ballerina/mime;
