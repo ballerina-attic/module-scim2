@@ -7,24 +7,26 @@ import scimclient;
 
 public function main (string[] args) {
 
-
     endpoint scimclient:Scim2Endpoint scimEP {
-        accessToken: "b5b7aa96-ad43-316f-a912-094d2622561",
-        baseUrl: "https://localhost:9443",
-        clientId: "QZdeB7jgs2ulcDM2a70YlWEAzcAa",
-        clientSecret: "3V6V1_xLUmHNSGJ7_q7um6AvJMka",
-        refreshToken: "c4ea1d20-342d-3440-803a-f6f932f09a79",
-        refreshTokenEP: "https://localhost:9443",
-        refreshTokenPath: "/oauth2/token",
-        clientConfig: { targets:[{uri:"https://localhost:9443",
-                                     secureSocket:{
-                                                      trustStore:{
-                                                                     filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
-                                                                     password:"wso2carbon"
-                                                                 }
-                                                  }
-                                 }
-                                ]}
+        oauthClientConfig: {
+                               accessToken: "b5b7aa96-ad43-316f-a912-094d2622561",
+                               baseUrl: "https://localhost:9443",
+                               clientId: "QZdeB7jgs2ulcDM2a70YlWEAzcAa",
+                               clientSecret: "3V6V1_xLUmHNSGJ7_q7um6AvJMka",
+                               refreshToken: "c4ea1d20-342d-3440-803a-f6f932f09a79",
+                               refreshTokenEP: "https://localhost:9443",
+                               refreshTokenPath: "/oauth2/token",
+                               useUriParams: false,
+                               clientConfig: { targets:[{uri:"https://localhost:9443",
+                                                            secureSocket:{
+                                                                             trustStore:{
+                                                                                            filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
+                                                                                            password:"wso2carbon"
+                                                                                        }
+                                                                         }
+                                                        }
+                                                       ]}
+                           }
     };
 
 

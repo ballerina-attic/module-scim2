@@ -22,38 +22,20 @@ import oauth2;
 
 @Description {value:"Struct to define the OAuth2 configuration."}
 public struct Scim2Configuration {
-    string accessToken;
-    string baseUrl;
-    string clientId;
-    string clientSecret;
-    string refreshToken;
-    string refreshTokenEP;
-    string refreshTokenPath;
-    http:ClientEndpointConfiguration clientConfig;
+    oauth2:OAuth2Configuration oauthClientConfig;
 }
 
 @Description {value:"OAuth2 Endpoint struct."}
 public struct Scim2Endpoint {
+    oauth2:OAuth2Endpoint oauthEP;
     Scim2Configuration scim2Config;
     ScimConnector scim2Connector;
 }
 
 public function <Scim2Endpoint scimEP> init (Scim2Configuration scim2Config) {
-    endpoint oauth2:OAuth2Endpoint oauthEP {
-        accessToken:scim2Config.accessToken,
-        refreshToken:scim2Config.refreshToken,
-        clientId:scim2Config.clientId,
-        clientSecret:scim2Config.clientSecret,
-        refreshTokenEP:scim2Config.refreshTokenEP,
-        refreshTokenPath:scim2Config.refreshTokenPath,
-        baseUrl:scim2Config.baseUrl,
-        clientConfig: scim2Config.clientConfig,
-        useUriParams: true
-    };
-
-    scimEP.scim2Connector.oauthEP = oauthEP;
-    scimEP.scim2Connector.baseUrl = scim2Config.baseUrl;
-
+    scimEP.oauthEP.init(scim2Config.oauthClientConfig);
+    scimEP.scim2Connector.oauthEP = scimEP.oauthEP;
+    scimEP.scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
 public function <Scim2Endpoint scimEP> register(typedesc serviceType) {
