@@ -38,7 +38,7 @@ function resolveUser (string userName, http:Response response) returns User|erro
         var received = response.getJsonPayload();
         match received {
             json payload => {
-                user = <User, convertReceivedPayloadToUser()>payload;
+                user = convertReceivedPayloadToUser(payload);
                 if (user.id.equalsIgnoreCase("")) {
                     Error = {message:failedMessage + "No User with user name " + userName};
                     return Error;
@@ -74,7 +74,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
         var received = response.getJsonPayload();
         match received {
             json payload => {
-                receivedGroup = <Group, convertReceivedPayloadToGroup()>payload;
+                receivedGroup = convertReceivedPayloadToGroup(payload);
                 if (receivedGroup.id.equalsIgnoreCase("")) {
                     Error = {message:failedMessage + "No Group named " + groupName};
                     return Error;

@@ -60,7 +60,7 @@ public function <ScimConnector scimCon> getListOfUsers () returns User[]|error {
                             int k = 0;
                             foreach element in payload {
                                 User user = {};
-                                user = <User, convertJsonToUser()>element;
+                                user = convertJsonToUser(element);
                                 userList[k] = user;
                                 k = k + 1;
                             }
@@ -111,7 +111,7 @@ public function <ScimConnector scimCon> getListOfGroups () returns Group[]|error
                             int k = 0;
                             foreach element in payload {
                                 Group group1 = {};
-                                group1 = <Group, convertJsonToGroup()>element;
+                                group1 = convertJsonToGroup(element);
                                 groupList[k] = group1;
                                 k = k + 1;
                             }
@@ -154,7 +154,7 @@ public function <ScimConnector scimCon> getMe () returns User|error {
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        user = <User, convertJsonToUser()>payload;
+                        user = convertJsonToUser(payload);
                         return user;
                     }
                     mime:EntityError e => {
@@ -231,7 +231,7 @@ public function <ScimConnector scimCon> createGroup (Group crtGroup) returns str
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
 
-    json jsonPayload = <json, convertGroupToJson()>crtGroup;
+    json jsonPayload = convertGroupToJson(crtGroup);
     request.setJsonPayload(jsonPayload);
     var res = oauthEP -> post(SCIM_GROUP_END_POINT, request);
     match res {
@@ -754,7 +754,7 @@ public function <ScimConnector scimCon> updateUserEmails (string id, Email[] ema
             Error = {message:"Email type should be defiend as either home or work"};
             return Error;
         }
-        email = <json, convertEmailToJson()>emailAddress;
+        email = convertEmailToJson(emailAddress);
         emailList[i] = email;
         i = i + 1;
     }
@@ -802,7 +802,7 @@ public function <ScimConnector scimCon> updateAddresses (string id, Address[] ad
             Error = {message:"Address type is required and it should either be work or home"};
             return Error;
         }
-        element = <json, convertAddressToJson()>address;
+        element = convertAddressToJson(address);
         addressList[i] = element;
         i = i + 1;
     }
