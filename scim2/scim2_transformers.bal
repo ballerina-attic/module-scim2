@@ -16,7 +16,7 @@
 // under the License.
 //
 
-package scimclient;
+package scim2;
 
 //Here are all the transformers that transform required json to structs and vice versa
 
