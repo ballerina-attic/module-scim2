@@ -2,7 +2,6 @@ package tests;
 
 import ballerina/test;
 import scim2;
-import ballerina/io;
 
 endpoint scim2:Scim2Endpoint scimEP {
     oauthClientConfig:{
