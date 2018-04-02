@@ -18,7 +18,7 @@
 
 package scim2;
 
-function convertJsonToGroup(json sourceJsonObject) returns Group {
+function convertJsonToGroup (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct.displayName = sourceJsonObject.displayName.toString();
     targetGroupStruct.id = sourceJsonObject.id.toString();
@@ -28,7 +28,7 @@ function convertJsonToGroup(json sourceJsonObject) returns Group {
 }
 
 
-function convertJsonToMeta(json sourceJsonObject) returns Meta {
+function convertJsonToMeta (json sourceJsonObject) returns Meta {
     Meta targetMetaStruct = {};
     targetMetaStruct.created = sourceJsonObject.created != null ? sourceJsonObject.created.toString() : "";
     targetMetaStruct.location = sourceJsonObject.location != null ? sourceJsonObject.location.toString() : "";
@@ -37,7 +37,7 @@ function convertJsonToMeta(json sourceJsonObject) returns Meta {
     return targetMetaStruct;
 }
 
-function convertJsonToMember(json sourceJsonObject) returns Member {
+function convertJsonToMember (json sourceJsonObject) returns Member {
     Member targetMemberStruct = {};
     targetMemberStruct.display = sourceJsonObject.display.toString();
     targetMemberStruct.value = sourceJsonObject.value.toString();
@@ -54,7 +54,7 @@ function toMembers (json s) returns Member[] {
     return memlist;
 }
 
-function convertGroupToJson(Group sourceGroupStruct) returns json {
+function convertGroupToJson (Group sourceGroupStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.displayName = sourceGroupStruct.displayName;
     targetJsonObject.id = sourceGroupStruct.id;
@@ -73,21 +73,21 @@ function toListMem (Group g) returns json[] {
     return jlist;
 }
 
-function convertMembertoJson(Member sourceMemberStruct) returns json {
+function convertMembertoJson (Member sourceMemberStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.display = sourceMemberStruct.display;
     targetJsonObject.value = sourceMemberStruct.value;
     return targetJsonObject;
 }
 
-function convertReceivedPayloadToGroup(json sourceJsonObject) returns Group {
+function convertReceivedPayloadToGroup (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct = sourceJsonObject.Resources != null ? convertJsonToGroup(sourceJsonObject.Resources[0])
                         : {};
     return targetGroupStruct;
 }
 
-function convertJsonToAddress(json sourceJsonObject) returns Address {
+function convertJsonToAddress (json sourceJsonObject) returns Address {
     Address targetAddressStruct = {};
     targetAddressStruct.streetAddress = sourceJsonObject.streetAddress != null ?
                                         sourceJsonObject.streetAddress.toString() : "";
@@ -101,7 +101,7 @@ function convertJsonToAddress(json sourceJsonObject) returns Address {
     return targetAddressStruct;
 }
 
-function convertAddressToJson(Address sourceAddressStruct) returns json {
+function convertAddressToJson (Address sourceAddressStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.streetAddress = sourceAddressStruct.streetAddress != null ? sourceAddressStruct.streetAddress : "";
     targetJsonObject.formatted = sourceAddressStruct.formatted != null ? sourceAddressStruct.formatted : "";
@@ -114,7 +114,7 @@ function convertAddressToJson(Address sourceAddressStruct) returns json {
     return targetJsonObject;
 }
 
-function convertJsonToName(json sourceJsonObject) returns Name {
+function convertJsonToName (json sourceJsonObject) returns Name {
     Name targetNameStruct = {};
     targetNameStruct.givenName = sourceJsonObject.givenName != null ? sourceJsonObject.givenName.toString() : "";
     targetNameStruct.familyName = sourceJsonObject.familyName.toString();
@@ -127,7 +127,7 @@ function convertJsonToName(json sourceJsonObject) returns Name {
     return targetNameStruct;
 }
 
-function convertNameToJson(Name sourceNameStruct) returns json {
+function convertNameToJson (Name sourceNameStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.givenName = sourceNameStruct.givenName != null ? sourceNameStruct.givenName : "";
     targetJsonObject.familyName = sourceNameStruct.familyName != null ? sourceNameStruct.familyName : "";
@@ -138,7 +138,7 @@ function convertNameToJson(Name sourceNameStruct) returns json {
     return targetJsonObject;
 }
 
-function convertJsonToEmail(json sourceJsonObject) returns Email {
+function convertJsonToEmail (json sourceJsonObject) returns Email {
     Email targetEmailStruct = {};
     targetEmailStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : " ";
     targetEmailStruct.value = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
@@ -146,7 +146,7 @@ function convertJsonToEmail(json sourceJsonObject) returns Email {
     return targetEmailStruct;
 }
 
-function convertEmailToJson(Email sourceEmailStruct) returns json {
+function convertEmailToJson (Email sourceEmailStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.^"type" = sourceEmailStruct.^"type";
     targetJsonObject.value = sourceEmailStruct.value != null ? sourceEmailStruct.value : "";
@@ -154,27 +154,27 @@ function convertEmailToJson(Email sourceEmailStruct) returns json {
     return targetJsonObject;
 }
 
-function convertPhonePhotoImsToJson(PhonePhotoIms sourcePhonePhotoIms) returns json {
+function convertPhonePhotoImsToJson (PhonePhotoIms sourcePhonePhotoIms) returns json {
     json targetJsonObject = {};
     targetJsonObject.value = sourcePhonePhotoIms.value != null ? sourcePhonePhotoIms.value : "";
     targetJsonObject.^"type" = sourcePhonePhotoIms.^"type" != null ? sourcePhonePhotoIms.^"type" : "";
     return targetJsonObject;
 }
 
-function convertJsonToPhoneNumbers(json sourceJsonObject) returns PhonePhotoIms {
+function convertJsonToPhoneNumbers (json sourceJsonObject) returns PhonePhotoIms {
     PhonePhotoIms targetPhonePhotoIms = {};
     targetPhonePhotoIms.value = sourceJsonObject.value.toString();
     targetPhonePhotoIms.^"type" = sourceJsonObject.^"type".toString();
     return targetPhonePhotoIms;
 }
 
-function convertJsonToCertificate(json sourceJsonObject) returns X509Certificate {
+function convertJsonToCertificate (json sourceJsonObject) returns X509Certificate {
     X509Certificate targetCertificate = {};
     targetCertificate.value = sourceJsonObject.value.toString();
     return targetCertificate;
 }
 
-function convertJsonToEnterpriseExtension(json sourceJsonObject) returns EnterpriseUserExtension {
+function convertJsonToEnterpriseExtension (json sourceJsonObject) returns EnterpriseUserExtension {
     EnterpriseUserExtension targetEnterpriseUser = {};
     targetEnterpriseUser.costCenter = sourceJsonObject.costCenter != null ?
                                       sourceJsonObject.costCenter.toString() : " ";
@@ -190,7 +190,7 @@ function convertJsonToEnterpriseExtension(json sourceJsonObject) returns Enterpr
     return targetEnterpriseUser;
 }
 
-function convertJsonToManager(json sourceJsonObject) returns Manager {
+function convertJsonToManager (json sourceJsonObject) returns Manager {
     Manager targetManagerStruct = {};
     targetManagerStruct.displayName = sourceJsonObject.displayName != null ?
                                       sourceJsonObject.displayName.toString() : " ";
@@ -198,13 +198,13 @@ function convertJsonToManager(json sourceJsonObject) returns Manager {
     return targetManagerStruct;
 }
 
-function convertCertificateToJson(X509Certificate sourceCertificate) returns json{
+function convertCertificateToJson (X509Certificate sourceCertificate) returns json {
     json targetJsonObject = {};
     targetJsonObject.value = sourceCertificate.value != null ? sourceCertificate.value : "";
     return targetJsonObject;
 }
 
-function convertEnterpriseExtensionToJson(EnterpriseUserExtension sourceEnterpriseUser) returns json {
+function convertEnterpriseExtensionToJson (EnterpriseUserExtension sourceEnterpriseUser) returns json {
     json targetJsonObject = {};
     targetJsonObject.employeeNumber = sourceEnterpriseUser.employeeNumber != null ?
                                       sourceEnterpriseUser.employeeNumber : "";
@@ -217,28 +217,28 @@ function convertEnterpriseExtensionToJson(EnterpriseUserExtension sourceEnterpri
     return targetJsonObject;
 }
 
-function convertManagerToJson(Manager sourceManagerStruct) returns json {
+function convertManagerToJson (Manager sourceManagerStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.managerId = sourceManagerStruct.managerId != null ? sourceManagerStruct.managerId : "";
     targetJsonObject.displayName = sourceManagerStruct.displayName != null ? sourceManagerStruct.displayName : "";
     return targetJsonObject;
 }
 
-function convertGroupToJsonUserRelated(Group sourceGroupStruct) returns json{
+function convertGroupToJsonUserRelated (Group sourceGroupStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.display = sourceGroupStruct.displayName != null ? sourceGroupStruct.displayName : "";
     targetJsonObject.value = sourceGroupStruct.id != null ? sourceGroupStruct.id : "";
     return targetJsonObject;
 }
 
-function convertReceivedPayloadToUser(json sourceJsonObject) returns User {
+function convertReceivedPayloadToUser (json sourceJsonObject) returns User {
     User targetUserStruct = {};
     targetUserStruct = sourceJsonObject.Resources != null ?
                        convertJsonToUser(sourceJsonObject.Resources[0]) : {};
     return targetUserStruct;
 }
 
-function convertJsonToGroupRelatedToUser(json sourceJsonObject) returns Group{
+function convertJsonToGroupRelatedToUser (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : " ";
     targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
@@ -248,7 +248,7 @@ function convertJsonToGroupRelatedToUser(json sourceJsonObject) returns Group{
 }
 
 
-function convertJsonToUser(json sourceJsonObject) returns User {
+function convertJsonToUser (json sourceJsonObject) returns User {
     User targetUserStruct = {};
     targetUserStruct.id = sourceJsonObject.id.toString();
     targetUserStruct.userName = sourceJsonObject.userName.toString();

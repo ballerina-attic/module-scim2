@@ -469,7 +469,7 @@ public function <ScimConnector scimCon> removeUserFromGroup (string userName, st
     http:Request requestUser = {};
     User user = {};
     var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-                               userName, requestUser);
+                                 userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -494,7 +494,7 @@ public function <ScimConnector scimCon> removeUserFromGroup (string userName, st
     Group gro = {};
     http:Request groupRequest = {};
     var resGroup = oauthEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-                                groupName, groupRequest);
+                                  groupName, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -701,7 +701,7 @@ public function <ScimConnector scimCon> deleteGroupByName (string groupName) ret
 @Param {value:"nickName: New nick name"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> updateSimpleUserValue (string id, string valueType, string newValue) returns
-                                                                                                   string|error {
+                                                                                                             string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
     error Error = {};
 
@@ -833,10 +833,10 @@ public function <ScimConnector scimCon> updateUser (User user) returns string|er
     error Error = {};
     http:Request request = {};
 
-    json body = convertUserToJson(user,"update");
+    json body = convertUserToJson(user, "update");
     request = createRequest(body);
     string url = SCIM_USER_END_POINT + "/" + user.id;
-    var res = oauthEP -> put(url,request);
+    var res = oauthEP -> put(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:connectorError.message};
