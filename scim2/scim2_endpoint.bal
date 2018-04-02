@@ -20,12 +20,13 @@ package scim2;
 import ballerina/net.http;
 import oauth2;
 
-@Description {value:"Struct to define the OAuth2 configuration."}
+@Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
+provide the necessary OAuth2 credentials."}
 public struct Scim2Configuration {
     oauth2:OAuth2Configuration oauthClientConfig;
 }
 
-@Description {value:"OAuth2 Endpoint struct."}
+@Description {value:"SCIM2 Endpoint struct."}
 public struct Scim2Endpoint {
     oauth2:OAuth2Endpoint oauthEP;
     Scim2Configuration scim2Config;

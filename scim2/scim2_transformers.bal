@@ -140,9 +140,9 @@ function convertNameToJson (Name sourceNameStruct) returns json {
 
 function convertJsonToEmail (json sourceJsonObject) returns Email {
     Email targetEmailStruct = {};
-    targetEmailStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : " ";
+    targetEmailStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : "";
     targetEmailStruct.value = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
-    targetEmailStruct.primary = sourceJsonObject.primary != null ? sourceJsonObject.primary.toString() : " ";
+    targetEmailStruct.primary = sourceJsonObject.primary != null ? sourceJsonObject.primary.toString() : "";
     return targetEmailStruct;
 }
 
@@ -177,14 +177,14 @@ function convertJsonToCertificate (json sourceJsonObject) returns X509Certificat
 function convertJsonToEnterpriseExtension (json sourceJsonObject) returns EnterpriseUserExtension {
     EnterpriseUserExtension targetEnterpriseUser = {};
     targetEnterpriseUser.costCenter = sourceJsonObject.costCenter != null ?
-                                      sourceJsonObject.costCenter.toString() : " ";
+                                      sourceJsonObject.costCenter.toString() : "";
     targetEnterpriseUser.department = sourceJsonObject.department != null ?
-                                      sourceJsonObject.department.toString() : " ";
-    targetEnterpriseUser.division = sourceJsonObject.division != null ? sourceJsonObject.division.toString() : " ";
+                                      sourceJsonObject.department.toString() : "";
+    targetEnterpriseUser.division = sourceJsonObject.division != null ? sourceJsonObject.division.toString() : "";
     targetEnterpriseUser.employeeNumber = sourceJsonObject.employeeNumber != null ?
-                                          sourceJsonObject.employeeNumber.toString() : " ";
+                                          sourceJsonObject.employeeNumber.toString() : "";
     targetEnterpriseUser.organization = sourceJsonObject.organization != null ?
-                                        sourceJsonObject.organization.toString() : " ";
+                                        sourceJsonObject.organization.toString() : "";
     targetEnterpriseUser.manager = sourceJsonObject.manager != null ?
                                    convertJsonToManager(sourceJsonObject.manager) : {};
     return targetEnterpriseUser;
@@ -193,8 +193,8 @@ function convertJsonToEnterpriseExtension (json sourceJsonObject) returns Enterp
 function convertJsonToManager (json sourceJsonObject) returns Manager {
     Manager targetManagerStruct = {};
     targetManagerStruct.displayName = sourceJsonObject.displayName != null ?
-                                      sourceJsonObject.displayName.toString() : " ";
-    targetManagerStruct.managerId = sourceJsonObject.managerId != null ? sourceJsonObject.managerId.toString() : " ";
+                                      sourceJsonObject.displayName.toString() : "";
+    targetManagerStruct.managerId = sourceJsonObject.managerId != null ? sourceJsonObject.managerId.toString() : "";
     return targetManagerStruct;
 }
 
@@ -240,8 +240,8 @@ function convertReceivedPayloadToUser (json sourceJsonObject) returns User {
 
 function convertJsonToGroupRelatedToUser (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
-    targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : " ";
-    targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
+    targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : "";
+    targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : "";
     targetGroupStruct.members = sourceJsonObject.members != null ? toMembers(sourceJsonObject) : [];
     targetGroupStruct.meta = sourceJsonObject.meta != null ? convertJsonToMeta(sourceJsonObject) : {};
     return targetGroupStruct;

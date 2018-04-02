@@ -218,8 +218,8 @@ public function <ScimConnector scimCon> getUserByUsername (string userName) retu
 }
 
 @Description {value:"Create a group in the user store"}
-@Param {value:"group: Group struct with group details"}
-@Param {value:"Group: Group struct"}
+@Param {value:"crtGroup: Group struct with group details"}
+@Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> createGroup (Group crtGroup) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
@@ -353,7 +353,7 @@ public function <ScimConnector scimCon> createUser (User user) returns string|er
 @Description {value:"Add an user in the user store to a existing group"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"Group: Group struct"}
+@Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> addUserToGroup (string userName, string groupName) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
@@ -455,7 +455,7 @@ public function <ScimConnector scimCon> addUserToGroup (string userName, string 
 @Description {value:"Remove an user from a group"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"Group: Group struct"}
+@Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> removeUserFromGroup (string userName, string groupName) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
@@ -698,7 +698,10 @@ public function <ScimConnector scimCon> deleteGroupByName (string groupName) ret
 }
 
 @Description {value:"Update the nick name of the user"}
-@Param {value:"nickName: New nick name"}
+@Param {value:"id: ID of the user"}
+@Param {value:"valueType: Type of the field that you want to update"}
+@Param {value:"newValue: The new value of the the relevent field"}
+@Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> updateSimpleUserValue (string id, string valueType, string newValue) returns
                                                                                                              string|error {
@@ -733,9 +736,11 @@ public function <ScimConnector scimCon> updateSimpleUserValue (string id, string
 
 
 @Description {value:"Update the email addresses of the user"}
+@Param {value:"id: ID of the user"}
 @Param {value:"emails: List of new email address structs"}
+@Param {value:"string: string literal"}
 @Param {value:"error: Error"}
-public function <ScimConnector scimCon> updateUserEmails (string id, Email[] emails) returns string|error {
+public function <ScimConnector scimCon> updateEmails (string id, Email[] emails) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
     error Error = {};
 
@@ -781,7 +786,9 @@ public function <ScimConnector scimCon> updateUserEmails (string id, Email[] ema
 }
 
 @Description {value:"Update the addresses of the user"}
+@Param {value:"id: ID of the User"}
 @Param {value:"addresses: List of new Address structs"}
+@Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function <ScimConnector scimCon> updateAddresses (string id, Address[] addresses) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
@@ -828,6 +835,11 @@ public function <ScimConnector scimCon> updateAddresses (string id, Address[] ad
     }
 }
 
+
+@Description {value:"Update the user"}
+@Param {value:"user: User struct with the new user attributes"}
+@Param {value:"string: string literal"}
+@Param {value:"error: Error"}
 public function <ScimConnector scimCon> updateUser (User user) returns string|error {
     endpoint oauth2:OAuth2Endpoint oauthEP = scimCon.oauthEP;
     error Error = {};
