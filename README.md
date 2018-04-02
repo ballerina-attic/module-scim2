@@ -91,7 +91,7 @@ endpoint scim2:Scim2Endpoint scimEP {
                           clientId:"",
                           clientSecret:"",
                           refreshToken:"",
-                          refreshTokenEP:"h",
+                          refreshTokenEP:"",
                           refreshTokenPath:"",
                           useUriParams:false,
                           clientConfig:{targets:[{uri:"",
@@ -118,57 +118,6 @@ Create a user in the user store.
 
 - `error` - error struct with the status message.
 
-#### Example
-
-```ballerina
-        scimclient:User user = {};
-    
-        scimclient:PhonePhotoIms phone = {};
-        phone.^"type" = "work";
-        phone.value = "0777777777";
-        user.phoneNumbers = [phone];
-    
-        scimclient:Name name = {};
-        name.givenName = "Leo";
-        name.familyName = "Messi";
-        name.formatted = "Lionel Messi";
-        user.name = name;
-    
-        scimclient:Address address = {};
-        address.postalCode = "23433";
-        address.streetAddress = "no/2";
-        address.region = "Catalunia";
-        address.locality = "Barcelona";
-        address.country = "Spain";
-        address.formatted = "no/2,Barcelona/Catalunia/Spain";
-        address.primary = "true";
-        address.^"type" = "work";
-    
-        user.addresses = [address];
-    
-        user.userName = "leoMessi";
-        user.password = "greatest";
-    
-        scimclient:Email email1 = {};
-        email1.value = "messi@barca.com";
-        email1.^"type" = "work";
-    
-        scimclient:Email email2 = {};
-        email2.value = "messi@gg.com";
-        email2.^"type" = "home";
-    
-        user.emails = [email1, email2];
-        var response1 = scimCon.createUser(user);
-        match response1 {
-            string message => io:println(message);
-            error er => io:println(er);
-        }
-
-```
-
-`creating user leoMessi
- {message:"Created", cause:null}
-`
 
 ## createGroup
 
@@ -182,21 +131,6 @@ Create a group in the user store.
 
 - `error` struct with the status message.
 
-#### Example
-
-```ballerina
-scimclient:Group gro = {};
-    gro.displayName = "Captain";
-
-    var response = scimCon.createGroup(gro);
-    match response {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-```
-
-if successfull `{message:"Created", cause:null}`
-
 ## getUser 
 
 Get an user from the user store using the userName.
@@ -207,20 +141,6 @@ Get an user from the user store using the userName.
 #### Returns
 - `User` struct with the resolved user
 - `error` struct with the status message. Null if valid user found.
-
-#### Example
-
-
-````ballerina
-        string userName = "iniesta";
-        var response = scimCon.getUserByUsername(userName);
-        match response {
-            scimclient:User usr => {
-                io:println(usr);
-            }
-            error er => io:println(er);
-        }         
-`````
 
 ## getGroup
 
@@ -235,16 +155,6 @@ Get a group from the user store using groupName.
 
 #### Example
 
-````ballerina
-    string groupName = "Captain";
-    var response = scimCon.getGroupByName(groupName);
-    match response {
-        scimclient:Group grp => io:println(grp.members);
-        error er => io:println(er);
-    }
-   
-````
-
 ## addUserToGroup
 
 Add a user specified by user name to a group specified by group name. 
@@ -256,16 +166,6 @@ Add a user specified by user name to a group specified by group name.
 #### Returns
 - `error` struct with status message.
 
-#### Example
-
-````ballerina
-        var response = scimCon.addUserToGroup(userName, groupName);
-        match response {
-            string msg => io:println(msg);
-            error er => io:println(er);
-        }
-````
- 
 ## removeUserFromGroup
 
 Remove an user specifed by user name from a group specified by group name.
@@ -276,16 +176,6 @@ Remove an user specifed by user name from a group specified by group name.
  
 #### Returns
 - `error` struct with status message.
-
-#### Example
-
-````ballerina
-    var response = scimCon.removeUserFromGroup(userName, groupName);
-    match response {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-````
 
 ## isUserInGroup
 
@@ -299,16 +189,6 @@ Check whether the specified user is in the specified group.
 - `boolean` value indicating whether the user is in the group or not.
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-        var response = scimCon.isUserInGroup(userName, groupName);
-        match response {
-            boolean x => io:println(x);
-            error er => io:println(er);
-        }
-````
-
 ## deleteUserByUserName
 
 Delete an user in the user store using his user name.
@@ -319,15 +199,6 @@ Delete an user in the user store using his user name.
 #### Returns
 - `error` struct with the status message.
 
-#### Example
-
-````ballerina
-        var response = scimCon.deleteUserByUsername(userName);
-        match response {
-            string msg => io:println(msg);
-            error er => io:println(er);
-        }
-````
 
 ## deleteGroupByName
 
@@ -339,16 +210,6 @@ Delete an group using its group name
 #### Returns
 - `error` struct with the status message.
 
-#### Examples
-
-````ballerina
-    var response = scimCon.deleteGroupByName(groupName);
-    match response {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-````
-
 ## getListOfUsers
 
 Get the list of users in the user store.
@@ -357,15 +218,6 @@ Get the list of users in the user store.
 - `User[]` struct list
 - `error` struct with status message
 
-#### Examples
-
-````ballerina
-    var response = scimCon.getListOfUsers();
-    match response {
-        scimclient:User[] lst => io:println(lst);
-        error er => io:println(er);
-    }
-````
 
 ## getListOfGroups
 
@@ -375,15 +227,6 @@ Get the list of groups.
 - `Group[]` struct list
 - `error` struct with status message
 
-#### Examples
-
-````ballerina
-        var response = scimCon.getListOfGroups();
-        match response {
-            scimclient:Group[] lst => io:println(lst);
-            error er => io:println(er);
-        }
-````
 
 ## getMe
 
@@ -393,12 +236,3 @@ Get the currently authenticated user.
 - `User` struct with the response.
 - `error` struct with status message.
 
-#### Example
-
-````ballerina
-    var response = scimCon.getMe();
-    match response {
-        scimclient:User usr => io:println(usr);
-        error er => io:println(er);
-    }
-````
