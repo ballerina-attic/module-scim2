@@ -34,3 +34,6 @@ target
 
 #Ignore doc files
 docs/
+
+#Ignore oauth2 package
+oauth2/

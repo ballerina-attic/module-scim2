@@ -1,41 +1,68 @@
 package tests;
 
-
+import ballerina/test;
+import scim2;
 import ballerina/io;
-import scimclient;
 
-string truststoreLocation = "/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12";
-string trustStorePassword = "wso2carbon";
-string BaseUrl = "https://localhost:9443";
-string AccessToken = "51b303ad-3ed7-3af3-96f4-23312b64469f";
-string ClientId = "QZdeB7jgs2ulcDM2a70YlWEAzcAa";
-string ClientSecret = "3V6V1_xLUmHNSGJ7_q7um6AvJMka";
-string RefreshToken = "656d0fa2-8745-3d80-9b6d-105b2af6d780";
-string RefreshTokenEndpoint = "https://localhost:9443";
-string RefreshTokenPath = "/oauth2/token";
+endpoint scim2:Scim2Endpoint scimEP {
+    oauthClientConfig:{
+                          accessToken:"60e49e81-8a70-340e-b017-ab6fc71ec2cb",
+                          baseUrl:"https://localhost:9443",
+                          clientId:"QZdeB7jgs2ulcDM2a70YlWEAzcAa",
+                          clientSecret:"3V6V1_xLUmHNSGJ7_q7um6AvJMka",
+                          refreshToken:"93bb7d60-c370-35a1-9cca-91f959906fbd",
+                          refreshTokenEP:"https://localhost:9443",
+                          refreshTokenPath:"/oauth2/token",
+                          sendRefreshParamsInBody:true,
+                          clientConfig:{targets:[{uri:"https://localhost:9443",
+                                                     secureSocket:{
+                                                                      trustStore:{
+                                                                                     filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
+                                                                                     password:"wso2carbon"
+                                                                                 }
+                                                                  }
+                                                 }
+                                                ]}
+                      }
+};
 
+@test:BeforeEach
+function createFewUsersAndGroup () {
+    scim2:User user1 = {};
+    //create user iniesta
+    user1.userName = "iniesta";
+    user1.password = "iniesta123";
+    var response1 = scimEP -> createUser(user1);
 
-public function main (string[] args) {
+    //create user tnm
+    user1.userName = "tnm";
+    user1.password = "tnm123";
+    var response2 = scimEP -> createUser(user1);
 
-    scimclient:ScimConnector scimCon = {};
-    scimCon.init(BaseUrl, AccessToken, ClientId, ClientSecret, RefreshToken, RefreshTokenEndpoint, RefreshTokenPath,
-                 truststoreLocation, trustStorePassword);
+    //create Group BOSS
+    scim2:Group gro = {};
+    gro.displayName = "BOSS";
+    var response3 = scimEP -> createGroup(gro);
+}
 
+@test:Config
+function testCreateUser () {
+    string message;
     //create user=======================================================================================================
-    scimclient:User user = {};
+    scim2:User user = {};
 
-    scimclient:PhonePhotoIms phone = {};
+    scim2:PhonePhotoIms phone = {};
     phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
-    scimclient:Name name = {};
+    scim2:Name name = {};
     name.givenName = "Leo";
     name.familyName = "Messi";
     name.formatted = "Lionel Messi";
     user.name = name;
 
-    scimclient:Address address = {};
+    scim2:Address address = {};
     address.postalCode = "23433";
     address.streetAddress = "no/2";
     address.region = "Catalunia";
@@ -50,303 +77,205 @@ public function main (string[] args) {
     user.userName = "leoMessi";
     user.password = "greatest";
 
-    scimclient:Email email1 = {};
+    scim2:Email email1 = {};
     email1.value = "messi@barca.com";
     email1.^"type" = "work";
 
-    scimclient:Email email2 = {};
+    scim2:Email email2 = {};
     email2.value = "messi@gg.com";
     email2.^"type" = "home";
 
     user.emails = [email1, email2];
-    io:println("");
-    io:println("=======================================creating user " +
-               user.userName + "========================================");
-    var response1 = scimCon.createUser(user);
-    match response1 {
-        string message => io:println(message);
-        error er => io:println(er);
+    var response = scimEP -> createUser(user);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
     }
+    test:assertEquals(message, "User Created", msg = "createUser function failed");
+}
 
-    //create user iniesta
-    user.userName = "iniesta";
-    io:println("");
-    io:println("=======================================creating user " +
-               user.userName + "=========================================");
-    var response2 = scimCon.createUser(user);
-    match response2 {
-        string message => io:println(message);
-        error er => io:println(er);
-    }
-
-    //create user tnm
-    user.userName = "tnm";
-    io:println("");
-    io:println("=======================================creating user " +
-               user.userName + "=============================================");
-    var response3 = scimCon.createUser(user);
-    match response3 {
-        string message => io:println(message);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //Get an user in the IS user store using getUserbyUserName action===================================================
-    scimclient:User getUser = {};
+@test:Config
+function testGetUserByUserName () {
+    string message;
     string userName = "iniesta";
-    io:println("");
-    io:println("======================================get user iniesta===============================================");
-    var response4 = scimCon.getUserByUsername(userName);
-    match response4 {
-        scimclient:User usr => {
-            io:println(usr);
-            getUser = usr;
-        }
-        error er => io:println(er);
+    var response = scimEP -> getUserByUsername(userName);
+    match response {
+        scim2:User usr => message = usr.userName;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
+}
 
-    //Create a Group in the IS user store using createUser action=======================================================
-    scimclient:Group gro = {};
+@test:Config
+function testCreateGroup () {
+    string message;
+    scim2:User getUser = {};
+    string userName = "iniesta";
+    var res = scimEP -> getUserByUsername(userName);
+    match res {
+        scim2:User usr => getUser = usr;
+        error er => test:assertFail(msg = er.message);
+    }
+
+    scim2:Group gro = {};
     gro.displayName = "Captain";
 
-    scimclient:Member member = {};
+    scim2:Member member = {};
     member.display = getUser.userName;
     member.value = getUser.id;
     gro.members = [member];
 
-    io:println("");
-    io:println("==================================create group Captain with iniesta in it============================");
-    var response5 = scimCon.createGroup(gro);
-    match response5 {
-        string msg => io:println(msg);
-        error er => io:println(er);
+    var response = scimEP -> createGroup(gro);
+    match response {
+        string msg => message = msg;
+        error er => test:assertFail(msg = er.message);
     }
-    //create group BOSS
-    gro.displayName = "BOSS";
-    io:println("==================================create group BOSS==================================================");
-    var response6 = scimCon.createGroup(gro);
-    match response6 {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
+    test:assertEquals(message, "Group Created", msg = "createGroup function failed");
+}
 
-    //Get a Group from the IS user store by it's name using getGroupByName aciton=======================================
-    io:println("");
+@test:Config {
+    dependsOn:["testCreateGroup"]
+}
+function testGetGroupByName () {
+    string message;
     string groupName = "Captain";
-    io:println("===================================get the Members of the Captain====================================");
-    var response7 = scimCon.getGroupByName(groupName);
-    match response7 {
-        scimclient:Group grp => io:println(grp.members);
-        error er => io:println(er);
+    var response = scimEP -> getGroupByName(groupName);
+    match response {
+        scim2:Group grp => message = grp.members[0].display;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "iniesta", msg = "getGroupByName function failed");
+}
 
-    //Add an existing user to a existing group==========================================================================
-    userName = "leoMessi";
-
-    io:println("");
-    io:println("================================Adding user leoMessi to group Captain================================");
-    var response8 = scimCon.addUserToGroup(userName, groupName);
-    match response8 {
-        string msg => io:println(msg);
-        error er => io:println(er);
+@test:Config {
+    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUser"]
+}
+function testAddUserToGroup () {
+    string message;
+    string userName = "leoMessi";
+    string groupName = "Captain";
+    var response = scimEP -> addUserToGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => test:assertFail(msg = er.message);
     }
+    test:assertEquals(message, "User Added", msg = "addUserToGroup function Failed");
+}
 
-    io:println("==================================members in Captain=================================================");
-    var response9 = scimCon.getGroupByName(groupName);
-    match response9 {
-        scimclient:Group grp => io:println(grp.members);
-        error er => io:println(er);
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUser", "testGetGroupByName"]
+}
+function testRemoveUserFromGroup () {
+    string message;
+    string userName = "iniesta";
+    string groupName = "Captain";
+    var response = scimEP -> removeUserFromGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "User Removed", msg = "removeUserFromGroup function failed");
+}
 
-    //Remove an user from a given group=================================================================================
-    userName = "iniesta";
-    groupName = "Captain";
-
-    io:println("");
-    io:println("=============================Removing iniesta from Captain===========================================");
-    var response10 = scimCon.removeUserFromGroup(userName, groupName);
-    match response10 {
-        string msg => io:println(msg);
-        error er => io:println(er);
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
+}
+function testIsUserInGroup () {
+    boolean message;
+    string userName = "leoMessi";
+    string groupName = "Captain";
+    var response = scimEP -> isUserInGroup(userName, groupName);
+    match response {
+        boolean x => message = x;
+        error er => test:assertFail(msg = er.message);
     }
+    test:assertTrue(message, msg = "isUserInGroup function failed");
+}
 
-    io:println("====================================members in Captain===============================================");
-    var response11 = scimCon.getGroupByName(groupName);
-    match response11 {
-        scimclient:Group grp => io:println(grp.members);
-        error er => io:println(er);
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testIsUserInGroup", "testRemoveUserFromGroup"]
+}
+function testDeleteUser () {
+    string message;
+    string userName = "leoMessi";
+    var response = scimEP -> deleteUserByUsername(userName);
+    match response {
+        string msg => message = msg;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "deleted", msg = "deleteUser function failed");
+}
 
-    //Check whether a user with certain user name is in a certain group=================================================
-    userName = "leoMessi";
-    groupName = "Captain";
-    io:println("");
-    io:println("============================Check if leoMessi is the Captain=========================================");
-    var response12 = scimCon.isUserInGroup(userName, groupName);
-    match response12 {
-        boolean x => io:println(x);
-        error er => io:println(er);
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testIsUserInGroup",
+               "testRemoveUserFromGroup"]
+}
+function testDeleteGroup () {
+    string message;
+    string groupName = "Captain";
+    var response = scimEP -> deleteGroupByName(groupName);
+    match response {
+        string msg => message = msg;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "deleted", msg = "deleteGroup function failed");
+}
 
-    //Delete an user from the user store================================================================================
-    userName = "leoMessi";
-    io:println("");
-    io:println("=========================================delete leoMessi=============================================");
-    var response13 = scimCon.deleteUserByUsername(userName);
-    match response13 {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //Delete a group====================================================================================================
-    groupName = "Captain";
-    io:println("");
-    io:println("==========================================deleting group Captain=====================================");
-    var response14 = scimCon.deleteGroupByName(groupName);
-    match response14 {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //Get the list of users in the user store===========================================================================
-    io:println("");
-    io:println("=======================================get the list of users=========================================");
-    var response15 = scimCon.getListOfUsers();
-    match response15 {
-        scimclient:User[] lst => io:println(lst);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //Get the list of groups============================================================================================
-    io:println("");
-    io:println("=======================================get the list of Groups========================================");
-    var response16 = scimCon.getListOfGroups();
-    match response16 {
-        scimclient:Group[] lst => io:println(lst);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //add user to group using struct bound function=====================================================================
-    userName = "tnm";
-    var response17 = scimCon.getUserByUsername(userName);
-    match response17 {
-        scimclient:User usr => user = usr;
-        error er => io:println(er);
-    }
-    io:println("");
-    io:println("==================adding user " + userName + " to " + groupName +
-               " using struct bind functions ============================");
-    groupName = "BOSS";
-    var response18 = user.addToGroup(groupName);
-    match response18 {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-    //================================================================================================================
-
-    //remove an user from a group using strut bound function============================================================
-    io:println("");
-    io:println("============================remove a user by struct bound functions==================================");
-    var response19 = user.removeFromGroup(groupName);
-    match response19 {
-        string msg => io:println(msg);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //get the user that is currently authenticated======================================================================
-    io:println("");
-    io:println("=========================================get the currently " +
-               "authenticateduser=========================");
-    var response20 = scimCon.getMe();
-    match response20 {
-        scimclient:User usr => io:println(usr);
-        error er => io:println(er);
-    }
-    //==================================================================================================================
-
-    //Test the Update functions=========================================================================================
-    scimclient:PhonePhotoIms phone2 = {};
-    phone2.^"type" = "work";
-    phone2.value = "0777777777";
-    user.phoneNumbers = [phone2];
-
-    scimclient:Name name2 = {};
-    name2.givenName = "Tharindu";
-    name2.familyName = "Malawaraarachchi";
-    name2.formatted = "Tharindu Nuwan";
-    user.name = name2;
-
-    scimclient:Address address2 = {};
-    address2.postalCode = "23433";
-    address2.streetAddress = "no/2";
-    address2.region = "Southern";
-    address2.locality = "Matara";
-    address2.country = "Sri Lanka";
-    address2.formatted = "Mehesha/Makandura East,Matara";
-    address2.primary = "true";
-    address2.^"type" = "work";
-
-    user.addresses = [address2];
-
-    user.userName = "tnm93";
-    user.password = "tharindunuwan";
-
-    scimclient:Email email3 = {};
-    email3.value = "tharinduma@wso2.com";
-    email3.^"type" = "work";
-
-    scimclient:Email email4 = {};
-    email4.value = "tharindunm93@gmail.com";
-    email4.^"type" = "home";
-
-    user.emails = [email3, email4];
-    io:println("");
-    io:println("=======================================creating user " +
-               user.userName + "========================================");
-    var response21 = scimCon.createUser(user);
-    match response21 {
-        string message => io:println(message);
-        error er => io:println(er);
+@test:Config
+function testUpdateUser () {
+    string message;
+    scim2:User getUser = {};
+    string userName = "iniesta";
+    var response = scimEP -> getUserByUsername(userName);
+    match response {
+        scim2:User usr => getUser = usr;
+        error er => test:assertFail(msg = er.message);
     }
 
-    //update Nickname===================================================================================================
-    var response22 = scimCon.getUserByUsername("tnm93");
-    match response22 {
-        scimclient:User usr => {
-            io:println("");
-            io:println("=========================================update the nickname of the "
-                       + "user========================================");
-            var response23 = usr.updateNickname("kotta");
-            match response23 {
-                string message => io:println(message);
-                error er => io:println(er);
-            }
+    scim2:Email email1 = {};
+    email1.value = "iniesta@barca.com";
+    email1.^"type" = "work";
 
-            io:println("");
-            io:println("=========================================update the password of the "
-                       + "user========================================");
-            var response24 = usr.updatePassword("wso2carbon");
-            match response24 {
-                string message => io:println(message);
-                error er => io:println(er);
-            }
-        }
-        error er => {
-            io:println("getting the user failed. Therefore testing updating functions failed");
-            io:println(er);
-        }
+    scim2:Email email2 = {};
+    email2.value = "iniesta@spain.com";
+    email2.^"type" = "home";
+    getUser.emails = [email1, email2];
+
+    getUser.nickName = "legend of spain";
+    getUser.title = "hero";
+    var res = scimEP -> updateUser(getUser);
+    var response2 = scimEP -> getUserByUsername(userName);
+    match response2 {
+        scim2:User usr => message = usr.nickName;
+        error er => test:assertFail(msg = er.message);
     }
-    //==================================================================================================================
+    test:assertEquals(message, "legend of spain", msg = "updateUser function failed");
+}
+
+@test:Config {
+    dependsOn:["testDeleteUser"]
+}
+function testGetListOfUsers () {
+    int length = 0;
+    var response = scimEP -> getListOfUsers();
+    match response {
+        scim2:User[] lst => length = lengthof lst;
+        error er => test:assertFail(msg = er.message);
+    }
+    test:assertEquals(length, 3, msg = "getListOfUsers function failed");
+}
+
+@test:Config {
+    dependsOn:["testDeleteGroup"]
+}
+function testGetListOfGroups () {
+    int length = 0;
+    var response = scimEP -> getListOfGroups();
+    match response {
+        scim2:Group[] lst => length = lengthof lst;
+        error er => test:assertFail(msg = er.message);
+    }
+    test:assertEquals(length, 2, msg = "getListOfGroups function failed");
 }
 
