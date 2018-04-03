@@ -2,15 +2,14 @@ package tests;
 
 import ballerina/test;
 import scim2;
-import ballerina/io;
 
-endpoint scim2:Scim2Endpoint scimEP {
+endpoint scim2:SCIM2Endpoint scimEP {
     oauthClientConfig:{
-                          accessToken:"60e49e81-8a70-340e-b017-ab6fc71ec2cb",
+                          accessToken:"9827c52e-0695-3c46-8c55-a89d51b36a9e",
                           baseUrl:"https://localhost:9443",
-                          clientId:"QZdeB7jgs2ulcDM2a70YlWEAzcAa",
-                          clientSecret:"3V6V1_xLUmHNSGJ7_q7um6AvJMka",
-                          refreshToken:"93bb7d60-c370-35a1-9cca-91f959906fbd",
+                          clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
+                          clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
+                          refreshToken:"c1e6e249-85ba-369c-a5a2-8515ba4cef6d",
                           refreshTokenEP:"https://localhost:9443",
                           refreshTokenPath:"/oauth2/token",
                           sendRefreshParamsInBody:true,
@@ -226,7 +225,7 @@ function testDeleteGroup () {
 function testUpdateUser () {
     string message;
     scim2:User getUser = {};
-    string userName = "iniesta";
+    string userName = "tnm";
     var response = scimEP -> getUserByUsername(userName);
     match response {
         scim2:User usr => getUser = usr;
@@ -278,4 +277,3 @@ function testGetListOfGroups () {
     }
     test:assertEquals(length, 2, msg = "getListOfGroups function failed");
 }
-
