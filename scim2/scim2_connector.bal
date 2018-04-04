@@ -18,9 +18,9 @@
 
 package scim2;
 
-import ballerina/net.http;
+import ballerina/http;
 import ballerina/mime;
-import oauth2;
+import wso2/oauth2;
 
 public struct ScimConnector {
     string baseUrl;
