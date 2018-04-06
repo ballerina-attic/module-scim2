@@ -18,7 +18,7 @@
 
 package scim2;
 
-import ballerina/net.http;
+import ballerina/http;
 
 @Description {value:"Obtain User from the received http response"}
 @Param {value:"userName: User name of the user"}

@@ -17,8 +17,8 @@
 
 package scim2;
 
-import ballerina/net.http;
-import oauth2;
+import ballerina/http;
+import wso2/oauth2;
 
 @Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
 provide the necessary OAuth2 credentials."}
@@ -27,34 +27,34 @@ public struct Scim2Configuration {
 }
 
 @Description {value:"SCIM2 Endpoint struct."}
-public struct Scim2Endpoint {
+public struct SCIM2Endpoint {
     oauth2:OAuth2Endpoint oauthEP;
     Scim2Configuration scim2Config;
     ScimConnector scim2Connector;
 }
 
-public function <Scim2Endpoint scimEP> init (Scim2Configuration scim2Config) {
+public function <SCIM2Endpoint scimEP> init (Scim2Configuration scim2Config) {
     scimEP.oauthEP.init(scim2Config.oauthClientConfig);
     scimEP.scim2Connector.oauthEP = scimEP.oauthEP;
     scimEP.scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
-public function <Scim2Endpoint scimEP> register(typedesc serviceType) {
+public function <SCIM2Endpoint scimEP> register (typedesc serviceType) {
 
 }
 
-public function <Scim2Endpoint scimEP> start() {
+public function <SCIM2Endpoint scimEP> start () {
 
 }
 
 @Description { value:"Returns the connector that client code uses"}
 @Return { value:"The connector that client code uses" }
-public function <Scim2Endpoint scimEP> getClient() returns ScimConnector {
+public function <SCIM2Endpoint scimEP> getClient () returns ScimConnector {
     return scimEP.scim2Connector;
 }
 
 @Description { value:"Stops the registered service"}
 @Return { value:"Error occured during registration" }
-public function <Scim2Endpoint scimEP> stop() {
+public function <SCIM2Endpoint scimEP> stop () {
 
 }
