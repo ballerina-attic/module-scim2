@@ -18,7 +18,7 @@
 
 package scim2;
 
-import ballerina/net.http;
+import ballerina/http;
 
 @Description {value:"Obtain User from the received http response"}
 @Param {value:"userName: User name of the user"}
@@ -96,7 +96,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 @Param {value:"body: the json payload to be sent"}
 @Param {value:"OutRequest: http:OutRequest"}
 function createRequest (json body) returns http:Request {
-    http:Request request = {};
+    http:Request request =new();
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(body);
     return request;

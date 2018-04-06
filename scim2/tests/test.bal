@@ -1,19 +1,18 @@
 package tests;
 
 import ballerina/test;
-import scim2;
 
-endpoint scim2:SCIM2Endpoint scimEP {
+endpoint SCIM2Endpoint scimEP {
     oauthClientConfig:{
-                          accessToken:"9827c52e-0695-3c46-8c55-a89d51b36a9e",
+                          accessToken:"43bf08d9-bb63-3507-913e-5927dafb95e6",
                           baseUrl:"https://localhost:9443",
                           clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
                           clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-                          refreshToken:"c1e6e249-85ba-369c-a5a2-8515ba4cef6d",
+                          refreshToken:"de4c3823-5ea4-354e-ab0d-a5376dcde288",
                           refreshTokenEP:"https://localhost:9443",
                           refreshTokenPath:"/oauth2/token",
-                          sendRefreshParamsInBody:true,
-                          clientConfig:{targets:[{uri:"https://localhost:9443",
+                          setCredentialsInHeader:true,
+                          clientConfig:{targets:[{url:"https://localhost:9443",
                                                      secureSocket:{
                                                                       trustStore:{
                                                                                      filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
@@ -27,7 +26,7 @@ endpoint scim2:SCIM2Endpoint scimEP {
 
 @test:BeforeEach
 function createFewUsersAndGroup () {
-    scim2:User user1 = {};
+    User user1 = {};
     //create user iniesta
     user1.userName = "iniesta";
     user1.password = "iniesta123";
@@ -39,7 +38,7 @@ function createFewUsersAndGroup () {
     var response2 = scimEP -> createUser(user1);
 
     //create Group BOSS
-    scim2:Group gro = {};
+    Group gro = {};
     gro.displayName = "BOSS";
     var response3 = scimEP -> createGroup(gro);
 }
@@ -48,20 +47,20 @@ function createFewUsersAndGroup () {
 function testCreateUser () {
     string message;
     //create user=======================================================================================================
-    scim2:User user = {};
+    User user = {};
 
-    scim2:PhonePhotoIms phone = {};
+    PhonePhotoIms phone = {};
     phone.^"type" = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
-    scim2:Name name = {};
+    Name name = {};
     name.givenName = "Leo";
     name.familyName = "Messi";
     name.formatted = "Lionel Messi";
     user.name = name;
 
-    scim2:Address address = {};
+    Address address = {};
     address.postalCode = "23433";
     address.streetAddress = "no/2";
     address.region = "Catalunia";
@@ -76,11 +75,11 @@ function testCreateUser () {
     user.userName = "leoMessi";
     user.password = "greatest";
 
-    scim2:Email email1 = {};
+    Email email1 = {};
     email1.value = "messi@barca.com";
     email1.^"type" = "work";
 
-    scim2:Email email2 = {};
+    Email email2 = {};
     email2.value = "messi@gg.com";
     email2.^"type" = "home";
 
@@ -99,7 +98,7 @@ function testGetUserByUserName () {
     string userName = "iniesta";
     var response = scimEP -> getUserByUsername(userName);
     match response {
-        scim2:User usr => message = usr.userName;
+        User usr => message = usr.userName;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
@@ -108,18 +107,18 @@ function testGetUserByUserName () {
 @test:Config
 function testCreateGroup () {
     string message;
-    scim2:User getUser = {};
+    User getUser = {};
     string userName = "iniesta";
     var res = scimEP -> getUserByUsername(userName);
     match res {
-        scim2:User usr => getUser = usr;
+        User usr => getUser = usr;
         error er => test:assertFail(msg = er.message);
     }
 
-    scim2:Group gro = {};
+    Group gro = {};
     gro.displayName = "Captain";
 
-    scim2:Member member = {};
+    Member member = {};
     member.display = getUser.userName;
     member.value = getUser.id;
     gro.members = [member];
@@ -140,7 +139,7 @@ function testGetGroupByName () {
     string groupName = "Captain";
     var response = scimEP -> getGroupByName(groupName);
     match response {
-        scim2:Group grp => message = grp.members[0].display;
+        Group grp => message = grp.members[0].display;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "iniesta", msg = "getGroupByName function failed");
@@ -224,19 +223,19 @@ function testDeleteGroup () {
 @test:Config
 function testUpdateUser () {
     string message;
-    scim2:User getUser = {};
+    User getUser = {};
     string userName = "tnm";
     var response = scimEP -> getUserByUsername(userName);
     match response {
-        scim2:User usr => getUser = usr;
+        User usr => getUser = usr;
         error er => test:assertFail(msg = er.message);
     }
 
-    scim2:Email email1 = {};
+    Email email1 = {};
     email1.value = "iniesta@barca.com";
     email1.^"type" = "work";
 
-    scim2:Email email2 = {};
+    Email email2 = {};
     email2.value = "iniesta@spain.com";
     email2.^"type" = "home";
     getUser.emails = [email1, email2];
@@ -246,7 +245,7 @@ function testUpdateUser () {
     var res = scimEP -> updateUser(getUser);
     var response2 = scimEP -> getUserByUsername(userName);
     match response2 {
-        scim2:User usr => message = usr.nickName;
+        User usr => message = usr.nickName;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "legend of spain", msg = "updateUser function failed");
@@ -259,7 +258,7 @@ function testGetListOfUsers () {
     int length = 0;
     var response = scimEP -> getListOfUsers();
     match response {
-        scim2:User[] lst => length = lengthof lst;
+        User[] lst => length = lengthof lst;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(length, 3, msg = "getListOfUsers function failed");
@@ -272,7 +271,7 @@ function testGetListOfGroups () {
     int length = 0;
     var response = scimEP -> getListOfGroups();
     match response {
-        scim2:Group[] lst => length = lengthof lst;
+        Group[] lst => length = lengthof lst;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(length, 2, msg = "getListOfGroups function failed");

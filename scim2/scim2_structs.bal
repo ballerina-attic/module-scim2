@@ -21,20 +21,20 @@ import oauth2;
 
 //All the Struct objects that are used
 
-public struct Group {
+public type Group {
     string displayName;
     string id;
     Member[] members;
     Meta meta;
-}
+};
 
-public struct Member {
+public type Member {
     string display;
     string value;
-}
+};
 
 
-public struct User {
+public type User {
     string userName;
     string id;
     string password;
@@ -59,9 +59,9 @@ public struct User {
     PhonePhotoIms[] ims;
     PhonePhotoIms[] photos;
     EnterpriseUserExtension EnterpriseUser;
-}
+};
 
-public struct Address {
+public type Address {
     string streetAddress;
     string locality;
     string postalCode;
@@ -70,48 +70,48 @@ public struct Address {
     string primary;
     string region;
     string ^"type";
-}
+};
 
-public struct Name {
+public type Name {
     string formatted;
     string givenName;
     string familyName;
     string middleName;
     string honorificPrefix;
     string honorificSuffix;
-}
+};
 
-public struct Meta {
+public type Meta {
     string created;
     string location;
     string lastModified;
-}
+};
 
-public struct PhonePhotoIms {
+public type PhonePhotoIms {
     string value;
     string ^"type";
-}
+};
 
-public struct Email {
+public type Email {
     string value;
     string ^"type";
     string primary;
-}
+};
 
-public struct X509Certificate {
+public type X509Certificate {
     string value;
-}
+};
 
-public struct EnterpriseUserExtension {
+public type EnterpriseUserExtension {
     string employeeNumber;
     string costCenter;
     string organization;
     string division;
     string department;
     Manager manager;
-}
+};
 
-public struct Manager {
+public type Manager {
     string managerId;
     string displayName;
-}
+};
