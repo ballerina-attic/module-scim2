@@ -29,7 +29,7 @@ public type Scim2Configuration {
 @Field {value:"scim2Connector: SCIM2 connector object"}
 public type SCIM2Client object {
     public {
-        oauth2:OAuth2Client oauthEP;
+        oauth2:Client oauthEP;
         Scim2Configuration scim2Config;
         ScimConnector scim2Connector;
     }
