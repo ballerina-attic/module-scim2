@@ -17,7 +17,7 @@
 
 import wso2/oauth2;
 
-//All the Struct objects that are used
+//All the Records that are used
 
 @Description {value:"Represents a SCIM2 group"}
 @Field {value:"displayName: Display Name of the Group"}

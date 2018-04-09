@@ -22,16 +22,17 @@ In order for you to use the SCIM connector, first you need to create a ScimConne
 endpoint.
 
 ```ballerina
-endpoint scim2:Client scimEP {
+endpoint scim2:Scim2Endpoint scimEP {
     oauthClientConfig:{
-                          accessToken:"",
-                          baseUrl:"",
-                          clientId:"",
-                          clientSecret:"",
-                          refreshToken:"",
-                          refreshTokenEP:"",
-                          refreshTokenPath:"",
-                          setCredentialsInHeader:true
-
+                          accessToken:"<...>",
+                          baseUrl:"<...>",
+                          clientId:"<...>",
+                          clientSecret:"<...>",
+                          refreshToken:"<...>",
+                          refreshTokenEP:"<...>",
+                          refreshTokenPath:"<...>",
+                          setCredentialsInHeader:true,
+                          clientConfig:{<...>}
+                      }
 };
 ```

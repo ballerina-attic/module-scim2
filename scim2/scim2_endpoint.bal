@@ -29,7 +29,7 @@ public type Scim2Configuration {
 @Field {value:"oauthEP: OAuth2 client endpoint"}
 @Field {value:"scim2Config: SCIM2 Configuration record"}
 @Field {value:"scim2Connector: SCIM2 connector object"}
-public type SCIM2Client object {
+public type Client object {
     public {
         oauth2:Client oauthEP;
         Scim2Configuration scim2Config;
@@ -45,29 +45,29 @@ public type SCIM2Client object {
 
 @Description {value: "SCIM2 client endpoint initialization function"}
 @Param {value: "scim2Config: SCIM2 connector configuration"}
-public function SCIM2Client::init (Scim2Configuration scim2Config) {
+public function Client::init (Scim2Configuration scim2Config) {
     oauthEP.init(scim2Config.oauthClientConfig);
     scim2Connector.oauthEP = oauthEP;
     scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
 @Description {value: "Register SCIM2 client endpoint"}
-public function SCIM2Client::register (typedesc serviceType) {
+public function Client::register (typedesc serviceType) {
 
 }
 
-public function SCIM2Client::start () {
+public function Client::start () {
 
 }
 
 @Description {value:"Returns the connector that client code uses"}
 @Return {value:"The connector that client code uses"}
-public function SCIM2Client::getClient () returns ScimConnector {
+public function Client::getClient () returns ScimConnector {
     return scim2Connector;
 }
 
 @Description {value:"Stops the registered service"}
 @Return {value:"Error occured during registration"}
-public function SCIM2Client::stop () {
+public function Client::stop () {
 
 }
