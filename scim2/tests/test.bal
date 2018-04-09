@@ -1,7 +1,7 @@
 import ballerina/test;
 import ballerina/io;
 
-endpoint SCIM2Client scimEP {
+endpoint Client scimEP {
     oauthClientConfig:{
                           accessToken:"52fe39c1-4860-3bfe-aa62-945be1d7a299",
                           baseUrl:"https://localhost:9443",
