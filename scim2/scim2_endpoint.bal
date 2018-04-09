@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-
 package scim2;
 
 import ballerina/http;
@@ -22,39 +21,53 @@ import wso2/oauth2;
 
 @Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
 provide the necessary OAuth2 credentials."}
-public struct Scim2Configuration {
-    oauth2:OAuth2Configuration oauthClientConfig;
+public type Scim2Configuration {
+    oauth2:OAuth2ClientEndpointConfiguration oauthClientConfig;
+};
+
+@Description {value:"SCIM2 client endpoint object"}
+@Field {value:"oauthEP: OAuth2 client endpoint"}
+@Field {value:"scim2Config: SCIM2 Configuration record"}
+@Field {value:"scim2Connector: SCIM2 connector object"}
+public type SCIM2Client object {
+    public {
+        oauth2:Client oauthEP;
+        Scim2Configuration scim2Config;
+        ScimConnector scim2Connector;
+    }
+
+    public function init (Scim2Configuration scim2Config);
+    public function register (typedesc serviceType);
+    public function start ();
+    public function getClient () returns ScimConnector;
+    public function stop ();
+};
+
+@Description {value: "SCIM2 client endpoint initialization function"}
+@Param {value: "scim2Config: SCIM2 connector configuration"}
+public function SCIM2Client::init (Scim2Configuration scim2Config) {
+    oauthEP.init(scim2Config.oauthClientConfig);
+    scim2Connector.oauthEP = oauthEP;
+    scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
-@Description {value:"SCIM2 Endpoint struct."}
-public struct SCIM2Endpoint {
-    oauth2:OAuth2Endpoint oauthEP;
-    Scim2Configuration scim2Config;
-    ScimConnector scim2Connector;
-}
-
-public function <SCIM2Endpoint scimEP> init (Scim2Configuration scim2Config) {
-    scimEP.oauthEP.init(scim2Config.oauthClientConfig);
-    scimEP.scim2Connector.oauthEP = scimEP.oauthEP;
-    scimEP.scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
-}
-
-public function <SCIM2Endpoint scimEP> register (typedesc serviceType) {
+@Description {value: "Register SCIM2 client endpoint"}
+public function SCIM2Client::register (typedesc serviceType) {
 
 }
 
-public function <SCIM2Endpoint scimEP> start () {
+public function SCIM2Client::start () {
 
 }
 
-@Description { value:"Returns the connector that client code uses"}
-@Return { value:"The connector that client code uses" }
-public function <SCIM2Endpoint scimEP> getClient () returns ScimConnector {
-    return scimEP.scim2Connector;
+@Description {value:"Returns the connector that client code uses"}
+@Return {value:"The connector that client code uses"}
+public function SCIM2Client::getClient () returns ScimConnector {
+    return scim2Connector;
 }
 
-@Description { value:"Stops the registered service"}
-@Return { value:"Error occured during registration" }
-public function <SCIM2Endpoint scimEP> stop () {
+@Description {value:"Stops the registered service"}
+@Return {value:"Error occured during registration"}
+public function SCIM2Client::stop () {
 
 }
