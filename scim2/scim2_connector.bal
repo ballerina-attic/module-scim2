@@ -49,14 +49,14 @@ public type ScimConnector object {
 @Param {value:"User[]: Array of User structs"}
 @Param {value:"error: Error"}
 public function ScimConnector::getListOfUsers () returns (User[]|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
     string failedMessage;
     failedMessage = "Listing users failed. ";
 
-    var res = oauthEP -> get(SCIM_USER_END_POINT, request);
+    var res = oauthEP_temp -> get(SCIM_USER_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message,
@@ -102,13 +102,13 @@ public function ScimConnector::getListOfUsers () returns (User[]|error) {
 @Param {value:"Group[]: Array of Group structs"}
 @Param {value:"error: Error"}
 public function ScimConnector::getListOfGroups () returns (Group[]|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
     string failedMessage = "Listing groups failed. ";
 
-    var res = oauthEP -> get(SCIM_GROUP_END_POINT, request);
+    var res = oauthEP_temp -> get(SCIM_GROUP_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -153,7 +153,7 @@ public function ScimConnector::getListOfGroups () returns (Group[]|error) {
 @Param {value:"User: User struct"}
 @Param {value:"error: Error"}
 public function ScimConnector::getMe () returns (User|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -161,7 +161,7 @@ public function ScimConnector::getMe () returns (User|error) {
 
     string failedMessage = "Getting currently authenticated user failed. ";
 
-    var res = oauthEP -> get(SCIM_ME_ENDPOINT, request);
+    var res = oauthEP_temp -> get(SCIM_ME_ENDPOINT, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -193,12 +193,12 @@ public function ScimConnector::getMe () returns (User|error) {
 @Param {value:"Group: Group struct"}
 @Param {value:"error: Error"}
 public function ScimConnector::getGroupByName (string groupName) returns (Group|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-    var res = oauthEP -> get(s, request);
+    var res = oauthEP_temp -> get(s, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -217,11 +217,11 @@ public function ScimConnector::getGroupByName (string groupName) returns (Group|
 @Param {value:"User: User struct"}
 @Param {value:"error: Error"}
 public function ScimConnector::getUserByUsername (string userName) returns (User|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
-    var res = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
+    var res = oauthEP_temp -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -240,7 +240,7 @@ public function ScimConnector::getUserByUsername (string userName) returns (User
 @Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::createGroup (Group crtGroup) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -251,7 +251,7 @@ public function ScimConnector::createGroup (Group crtGroup) returns (string|erro
 
     json jsonPayload = convertGroupToJson(crtGroup);
     request.setJsonPayload(jsonPayload);
-    var res = oauthEP -> post(SCIM_GROUP_END_POINT, request);
+    var res = oauthEP_temp -> post(SCIM_GROUP_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -287,7 +287,7 @@ public function ScimConnector::createGroup (Group crtGroup) returns (string|erro
 @Param {value:"string: string indicating whether user creation was successful or failed"}
 @Param {value:"error: Error"}
 public function ScimConnector::createUser (User user) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -337,7 +337,7 @@ public function ScimConnector::createUser (User user) returns (string|error) {
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(jsonPayload);
-    var res = oauthEP -> post(SCIM_USER_END_POINT, request);
+    var res = oauthEP_temp -> post(SCIM_USER_END_POINT, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -374,7 +374,7 @@ public function ScimConnector::createUser (User user) returns (string|error) {
 @Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::addUserToGroup (string userName, string groupName) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -384,7 +384,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
     //check if user valid
     http:Request requestUser = new();
     User user = {};
-    var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, requestUser);
+    var resUser = oauthEP_temp -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -407,7 +407,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
     //check if group valid
     http:Request requestGroup = new();
     Group gro = {};
-    var resGroup = oauthEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
+    var resGroup = oauthEP_temp -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -439,7 +439,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(body);
-    var res = oauthEP -> patch(url, request);
+    var res = oauthEP_temp -> patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -476,7 +476,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
 @Param {value:"string: String literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::removeUserFromGroup (string userName, string groupName) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -486,7 +486,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
     //check if user valid
     http:Request requestUser = new();
     User user = {};
-    var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
+    var resUser = oauthEP_temp -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
                                  userName, requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
@@ -511,7 +511,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
     //check if group valid
     Group gro = {};
     http:Request groupRequest = new();
-    var resGroup = oauthEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
+    var resGroup = oauthEP_temp -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
                                   groupName, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
@@ -540,7 +540,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
 
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
     request.setJsonPayload(body);
-    var res = oauthEP -> patch(url, request);
+    var res = oauthEP_temp -> patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -577,12 +577,12 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
 @Param {value:"boolean: true/false"}
 @Param {value:"error: Error"}
 public function ScimConnector::isUserInGroup (string userName, string groupName) returns (boolean|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
     User user = {};
 
-    var res = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
+    var res = oauthEP_temp -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -615,7 +615,7 @@ public function ScimConnector::isUserInGroup (string userName, string groupName)
 @Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::deleteUserByUsername (string userName) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
 
     string failedMessage;
@@ -625,7 +625,7 @@ public function ScimConnector::deleteUserByUsername (string userName) returns (s
     http:Request userRequest = new();
     User user = {};
     error Error = {};
-    var resUser = oauthEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, userRequest);
+    var resUser = oauthEP_temp -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, userRequest);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -638,7 +638,7 @@ public function ScimConnector::deleteUserByUsername (string userName) returns (s
                 User usr => {
                     user = usr;
                     string userId = user.id;
-                    var res = oauthEP -> delete(SCIM_USER_END_POINT + "/" + userId, request);
+                    var res = oauthEP_temp -> delete(SCIM_USER_END_POINT + "/" + userId, request);
                     match res {
                         http:HttpConnectorError connectorError => {
                             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -667,7 +667,7 @@ public function ScimConnector::deleteUserByUsername (string userName) returns (s
 @Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::deleteGroupByName (string groupName) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
     error Error = {};
 
@@ -678,7 +678,7 @@ public function ScimConnector::deleteGroupByName (string groupName) returns (str
     http:Request groupRequest = new();
     Group gro = {};
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-    var resGroup = oauthEP -> get(s, groupRequest);
+    var resGroup = oauthEP_temp -> get(s, groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -691,7 +691,7 @@ public function ScimConnector::deleteGroupByName (string groupName) returns (str
                 Group grp => {
                     gro = grp;
                     string groupId = gro.id;
-                    var res = oauthEP -> delete(SCIM_GROUP_END_POINT + "/" + groupId, request);
+                    var res = oauthEP_temp -> delete(SCIM_GROUP_END_POINT + "/" + groupId, request);
                     match res {
                         http:HttpConnectorError connectorError => {
                             Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
@@ -723,7 +723,7 @@ public function ScimConnector::deleteGroupByName (string groupName) returns (str
 @Param {value:"error: Error"}
 public function ScimConnector::updateSimpleUserValue (string id, string valueType, string newValue) returns
     (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
 
     if (id.equalsIgnoreCase("") || newValue == "") {
@@ -736,7 +736,7 @@ public function ScimConnector::updateSimpleUserValue (string id, string valueTyp
     request = createRequest(body);
 
     string url = SCIM_USER_END_POINT + "/" + id;
-    var res = oauthEP -> patch(url, request);
+    var res = oauthEP_temp -> patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:connectorError.message};
@@ -759,7 +759,7 @@ public function ScimConnector::updateSimpleUserValue (string id, string valueTyp
 @Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::updateEmails (string id, Email[] emails) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
 
     if (id.equalsIgnoreCase("")) {
@@ -787,7 +787,7 @@ public function ScimConnector::updateEmails (string id, Email[] emails) returns 
     request = createRequest(body);
 
     string url = SCIM_USER_END_POINT + "/" + id;
-    var res = oauthEP -> patch(url, request);
+    var res = oauthEP_temp -> patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:connectorError.message};
@@ -809,7 +809,7 @@ public function ScimConnector::updateEmails (string id, Email[] emails) returns 
 @Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::updateAddresses (string id, Address[] addresses) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
 
     if (id.equalsIgnoreCase("")) {
@@ -837,7 +837,7 @@ public function ScimConnector::updateAddresses (string id, Address[] addresses) 
     request = createRequest(body);
 
     string url = SCIM_USER_END_POINT + "/" + id;
-    var res = oauthEP -> patch(url, request);
+    var res = oauthEP_temp -> patch(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:connectorError.message};
@@ -859,14 +859,14 @@ public function ScimConnector::updateAddresses (string id, Address[] addresses) 
 @Param {value:"string: string literal"}
 @Param {value:"error: Error"}
 public function ScimConnector::updateUser (User user) returns (string|error) {
-    endpoint oauth2:OAuth2Client oauthEP = oauthEP;
+    endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
     http:Request request = new();
 
     json body = convertUserToJson(user, "update");
     request = createRequest(body);
     string url = SCIM_USER_END_POINT + "/" + user.id;
-    var res = oauthEP -> put(url, request);
+    var res = oauthEP_temp -> put(url, request);
     match res {
         http:HttpConnectorError connectorError => {
             Error = {message:connectorError.message};

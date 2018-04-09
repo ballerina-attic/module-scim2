@@ -1,12 +1,13 @@
 import ballerina/test;
+import ballerina/io;
 
-endpoint SCIM2Endpoint scimEP {
+endpoint SCIM2Client scimEP {
     oauthClientConfig:{
-                          accessToken:"43bf08d9-bb63-3507-913e-5927dafb95e6",
+                          accessToken:"52fe39c1-4860-3bfe-aa62-945be1d7a299",
                           baseUrl:"https://localhost:9443",
                           clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
                           clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-                          refreshToken:"de4c3823-5ea4-354e-ab0d-a5376dcde288",
+                          refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
                           refreshTokenEP:"https://localhost:9443",
                           refreshTokenPath:"/oauth2/token",
                           setCredentialsInHeader:true,
@@ -96,7 +97,7 @@ function testGetUserByUserName () {
     string userName = "iniesta";
     var response = scimEP -> getUserByUsername(userName);
     match response {
-        User usr => message = usr.userName;
+        User usr => {message = usr.userName;}
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
@@ -173,24 +174,24 @@ function testRemoveUserFromGroup () {
     test:assertEquals(message, "User Removed", msg = "removeUserFromGroup function failed");
 }
 
-@test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
-}
-function testIsUserInGroup () {
-    boolean message;
-    string userName = "leoMessi";
-    string groupName = "Captain";
-    var response = scimEP -> isUserInGroup(userName, groupName);
-    match response {
-        boolean x => message = x;
-        error er => test:assertFail(msg = er.message);
-    }
-    test:assertTrue(message, msg = "isUserInGroup function failed");
-}
+//@test:Config {
+//    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
+//}
+//function testIsUserInGroup () {
+//    boolean message;
+//    string userName = "leoMessi";
+//    string groupName = "Captain";
+//    var response = scimEP -> isUserInGroup(userName, groupName);
+//    match response {
+//        boolean x => message = x;
+//        error er => test:assertFail(msg = er.message);
+//    }
+//    test:assertTrue(message, msg = "isUserInGroup function failed");
+//}
 
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testIsUserInGroup", "testRemoveUserFromGroup"]
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testRemoveUserFromGroup"]
 }
 function testDeleteUser () {
     string message;
@@ -204,7 +205,7 @@ function testDeleteUser () {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testIsUserInGroup",
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup",
                "testRemoveUserFromGroup"]
 }
 function testDeleteGroup () {
@@ -216,37 +217,6 @@ function testDeleteGroup () {
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "deleted", msg = "deleteGroup function failed");
-}
-
-@test:Config
-function testUpdateUser () {
-    string message;
-    User getUser = {};
-    string userName = "tnm";
-    var response = scimEP -> getUserByUsername(userName);
-    match response {
-        User usr => getUser = usr;
-        error er => test:assertFail(msg = er.message);
-    }
-
-    Email email1 = {};
-    email1.value = "iniesta@barca.com";
-    email1.^"type" = "work";
-
-    Email email2 = {};
-    email2.value = "iniesta@spain.com";
-    email2.^"type" = "home";
-    getUser.emails = [email1, email2];
-
-    getUser.nickName = "legend of spain";
-    getUser.title = "hero";
-    var res = scimEP -> updateUser(getUser);
-    var response2 = scimEP -> getUserByUsername(userName);
-    match response2 {
-        User usr => message = usr.nickName;
-        error er => test:assertFail(msg = er.message);
-    }
-    test:assertEquals(message, "legend of spain", msg = "updateUser function failed");
 }
 
 @test:Config {

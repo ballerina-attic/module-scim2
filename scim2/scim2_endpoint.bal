@@ -20,10 +20,13 @@ import oauth2;
 @Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
 provide the necessary OAuth2 credentials."}
 public type Scim2Configuration {
-    oauth2:OAuth2ClientEndpointConfig oauthClientConfig;
+    oauth2:OAuth2ClientEndpointConfiguration oauthClientConfig;
 };
 
-@Description {value:"SCIM2 Endpoint struct."}
+@Description {value:"SCIM2 client endpoint object"}
+@Field {value:"oauthEP: OAuth2 client endpoint"}
+@Field {value:"scim2Config: SCIM2 Configuration record"}
+@Field {value:"scim2Connector: SCIM2 connector object"}
 public type SCIM2Client object {
     public {
         oauth2:OAuth2Client oauthEP;
@@ -38,28 +41,29 @@ public type SCIM2Client object {
     public function stop ();
 };
 
-public function SCIM2Endpoint::init (Scim2Configuration scim2Config) {
+
+public function SCIM2Client::init (Scim2Configuration scim2Config) {
     oauthEP.init(scim2Config.oauthClientConfig);
     scim2Connector.oauthEP = oauthEP;
     scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
-public function SCIM2Endpoint::register (typedesc serviceType) {
+public function SCIM2Client::register (typedesc serviceType) {
 
 }
 
-public function SCIM2Endpoint::start () {
+public function SCIM2Client::start () {
 
 }
 
-@Description { value:"Returns the connector that client code uses"}
-@Return { value:"The connector that client code uses" }
-public function SCIM2Endpoint::getClient () returns ScimConnector {
+@Description {value:"Returns the connector that client code uses"}
+@Return {value:"The connector that client code uses"}
+public function SCIM2Client::getClient () returns ScimConnector {
     return scim2Connector;
 }
 
-@Description { value:"Stops the registered service"}
-@Return { value:"Error occured during registration" }
-public function SCIM2Endpoint::stop () {
+@Description {value:"Stops the registered service"}
+@Return {value:"Error occured during registration"}
+public function SCIM2Client::stop () {
 
 }

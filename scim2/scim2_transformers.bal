@@ -80,7 +80,8 @@ function convertMembertoJson (Member sourceMemberStruct) returns json {
 
 function convertReceivedPayloadToGroup (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
-    targetGroupStruct = sourceJsonObject.Resources != null ? convertJsonToGroup(sourceJsonObject.Resources[0])
+    json[] resources = check <json[]> sourceJsonObject.Resources;
+    targetGroupStruct = sourceJsonObject.Resources != null ? convertJsonToGroup(resources[0])
                         : {};
     return targetGroupStruct;
 }
@@ -231,8 +232,9 @@ function convertGroupToJsonUserRelated (Group sourceGroupStruct) returns json {
 
 function convertReceivedPayloadToUser (json sourceJsonObject) returns User {
     User targetUserStruct = {};
+    json[] resources = check <json[]>sourceJsonObject.Resources;
     targetUserStruct = sourceJsonObject.Resources != null ?
-                       convertJsonToUser(sourceJsonObject.Resources[0]) : {};
+                       convertJsonToUser(resources[0]) : {};
     return targetUserStruct;
 }
 
