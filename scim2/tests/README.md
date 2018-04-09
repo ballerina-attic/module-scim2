@@ -1,28 +1,8 @@
-# Ballerina SCIM Connector
+# Ballerina SCIM Connector - Tests
 
 *The system for Cross-domain Identity Management (SCIM) specification
  is designed to make managing user identities in cloud-based applications 
  and services easier.*
-
-### Why do you need SCIM
-
-The SCIM protocol is an application-level HTTP-based protocol for provisioning and managing 
-identity data on the web and in cross-domain environments such as enterprise-to-cloud 
-service providers or inter-cloud scenarios.  The protocol provides RESTful APIs for easier
-creation, modification, retrieval, and discovery of core identity resources such as Users
-and Groups, as well as custom resources and resource extensions. 
-
-### Why would you use a Ballerina connector for SCIM
-
-Ballerina makes integration with data sources, services, or network-connect APIs much easier than
-ever before. Ballerina can be used to easily integrate the SCIM REST API with other endpoints.
-The SCIM connector enables you to access the SCIM REST API through Ballerina. The actions of the
-SCIM connector are invoked using a Ballerina main function. 
-
-WSO2 Identity Server uses SCIM for identity provisioning and therefore you can deploay the wso2 
-Identity Server and use it to run the samples. 
-
-![alt_text](../SCIM2.png)
 
 The following sections provide you with information on how to use the Ballerina SCIM connector.
 
@@ -44,7 +24,7 @@ file at
  `distribution/zip/ballerina/target/ballerina-<version>-SNAPSHOT.zip` and set the 
  PATH environment variable to the bin directory.
 
-#### Prerequisites
+#### Prerequisites for tests
 To test this connector with WSO2 Identity Server you need to have the following resources.
 
 1. Download and deploy the wso2 Identity Server by following the installation guide 
@@ -68,41 +48,15 @@ https://localhost:9443/oauth2/token
 3. Click on Inbound Authentication Configuration.
 4. Configure OAuth/OpenId connect configuration by giving a call back url.
 5. The Client ID and Client Secret would be given to you.
-2. You can obtain the access_token and the refresh_token through terminal by using the curl
+6. You can obtain the access_token and the refresh_token through terminal by using the curl
 command 
 `curl -X POST --basic -u <client_id>:<client_secret> -H 'Content-Type: application/x-www-form-urlencoded;
 charset=UTF-8' -k -d 'grant_type=password&username=admin&password=admin' https://localhost:9443/oauth2/token
 ` 
 ## Running Samples
 
+Before testing you have to edit those above client credentials in the test.bal file at 
+`package-scim2/scim2/tests/`
+ 
 You can easily test the SCIM2 connector endpoint functions by executing the command 
-`ballerina test tests`.
-
-## Working with SCIM connector actions
-
-In order for you to use the SCIM connector, first you need to create a ScimConnector 
-endpoint.
-
-```ballerina
-endpoint scim2:Scim2Endpoint scimEP {
-    oauthClientConfig:{
-                          accessToken:"",
-                          baseUrl:"",
-                          clientId:"",
-                          clientSecret:"",
-                          refreshToken:"",
-                          refreshTokenEP:"",
-                          refreshTokenPath:"",
-                          useUriParams:false,
-                          clientConfig:{targets:[{uri:"",
-                                                     secureSocket:{
-                                                                      trustStore:{
-                                                                                     filePath:"",
-                                                                                     password:""
-                                                                                 }
-                                                                  }
-                                                 }
-                                                ]}
-                      }
-};
-```
+`ballerina test scim2`.
