@@ -46,8 +46,8 @@ public type ScimConnector object {
 };
 
 @Description {value:"Get the whole list of users in the user store"}
-@Param {value:"User[]: Array of User structs"}
-@Param {value:"error: Error"}
+@Return {value:"User[]: Array of User structs"}
+@Return {value:"error: Error"}
 public function ScimConnector::getListOfUsers () returns (User[]|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -99,8 +99,8 @@ public function ScimConnector::getListOfUsers () returns (User[]|error) {
 }
 
 @Description {value:"Get the whole list of groups"}
-@Param {value:"Group[]: Array of Group structs"}
-@Param {value:"error: Error"}
+@Return {value:"Group[]: Array of Group structs"}
+@Return {value:"error: Error"}
 public function ScimConnector::getListOfGroups () returns (Group[]|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -150,8 +150,8 @@ public function ScimConnector::getListOfGroups () returns (Group[]|error) {
 }
 
 @Description {value:"Get the user that is currently authenticated"}
-@Param {value:"User: User struct"}
-@Param {value:"error: Error"}
+@Return {value:"User: User struct"}
+@Return {value:"error: Error"}
 public function ScimConnector::getMe () returns (User|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -190,8 +190,8 @@ public function ScimConnector::getMe () returns (User|error) {
 
 @Description {value:"Get a group in the user store by name"}
 @Param {value:"groupName: The display Name of the group"}
-@Param {value:"Group: Group struct"}
-@Param {value:"error: Error"}
+@Return {value:"Group: Group struct"}
+@Return {value:"error: Error"}
 public function ScimConnector::getGroupByName (string groupName) returns (Group|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -214,8 +214,8 @@ public function ScimConnector::getGroupByName (string groupName) returns (Group|
 
 @Description {value:"Get a user in the user store by his user name"}
 @Param {value:"userName: User name of the user"}
-@Param {value:"User: User struct"}
-@Param {value:"error: Error"}
+@Return {value:"User: User struct"}
+@Return {value:"error: Error"}
 public function ScimConnector::getUserByUsername (string userName) returns (User|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -237,8 +237,8 @@ public function ScimConnector::getUserByUsername (string userName) returns (User
 
 @Description {value:"Create a group in the user store"}
 @Param {value:"crtGroup: Group struct with group details"}
-@Param {value:"string: String literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: String literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::createGroup (Group crtGroup) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -284,8 +284,8 @@ public function ScimConnector::createGroup (Group crtGroup) returns (string|erro
 
 @Description {value:"Create a user in the user store"}
 @Param {value:"user: user struct with user details"}
-@Param {value:"string: string indicating whether user creation was successful or failed"}
-@Param {value:"error: Error"}
+@Return {value:"string: string indicating whether user creation was successful or failed"}
+@Return {value:"error: Error"}
 public function ScimConnector::createUser (User user) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -371,8 +371,8 @@ public function ScimConnector::createUser (User user) returns (string|error) {
 @Description {value:"Add an user in the user store to a existing group"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"string: String literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: String literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::addUserToGroup (string userName, string groupName) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -473,8 +473,8 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
 @Description {value:"Remove an user from a group"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"string: String literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: String literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::removeUserFromGroup (string userName, string groupName) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -574,8 +574,8 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
 @Description {value:"Check whether an user is in a certain group"}
 @Param {value:"userName: User name of the user"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"boolean: true/false"}
-@Param {value:"error: Error"}
+@Return {value:"boolean: true/false"}
+@Return {value:"error: Error"}
 public function ScimConnector::isUserInGroup (string userName, string groupName) returns (boolean|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -612,8 +612,8 @@ public function ScimConnector::isUserInGroup (string userName, string groupName)
 
 @Description {value:"Delete an user from user store using his user name"}
 @Param {value:"userName: User name of the user"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::deleteUserByUsername (string userName) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -664,8 +664,8 @@ public function ScimConnector::deleteUserByUsername (string userName) returns (s
 
 @Description {value:"Delete group using its name"}
 @Param {value:"groupName: Display name of the group"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::deleteGroupByName (string groupName) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     http:Request request = new();
@@ -719,8 +719,8 @@ public function ScimConnector::deleteGroupByName (string groupName) returns (str
 @Param {value:"id: ID of the user"}
 @Param {value:"valueType: Type of the field that you want to update"}
 @Param {value:"newValue: The new value of the the relevent field"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::updateSimpleUserValue (string id, string valueType, string newValue) returns
     (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
@@ -756,8 +756,8 @@ public function ScimConnector::updateSimpleUserValue (string id, string valueTyp
 @Description {value:"Update the email addresses of the user"}
 @Param {value:"id: ID of the user"}
 @Param {value:"emails: List of new email address structs"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::updateEmails (string id, Email[] emails) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
@@ -806,8 +806,8 @@ public function ScimConnector::updateEmails (string id, Email[] emails) returns 
 @Description {value:"Update the addresses of the user"}
 @Param {value:"id: ID of the User"}
 @Param {value:"addresses: List of new Address structs"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::updateAddresses (string id, Address[] addresses) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
@@ -856,8 +856,8 @@ public function ScimConnector::updateAddresses (string id, Address[] addresses) 
 
 @Description {value:"Update the user"}
 @Param {value:"user: User struct with the new user attributes"}
-@Param {value:"string: string literal"}
-@Param {value:"error: Error"}
+@Return {value:"string: string literal"}
+@Return {value:"error: Error"}
 public function ScimConnector::updateUser (User user) returns (string|error) {
     endpoint oauth2:OAuth2Client oauthEP_temp = oauthEP;
     error Error = {};
