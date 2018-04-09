@@ -61,7 +61,7 @@ public type Member {
 @Field {value:"groups: List of groups that the user is assigned to"}
 @Field {value:"addresses: Addresses of the user"}
 @Field {value:"emails: Emails of the user"}
-@Field {value:"phoneNumbers: Phone numbers of the user"
+@Field {value:"phoneNumbers: Phone numbers of the user"}
 @Field {value:"ims: List of IMS of the user"}
 @Field {value:"photos: Photos of the user"}
 @Field {value:"EnterpriseUser: Enterprise User extention fiels of the user"}
@@ -92,7 +92,7 @@ public type User {
     EnterpriseUserExtension EnterpriseUser;
 };
 
-@Description {"Represents the address of a SCIM2 user"}
+@Description {value:"Represents the address of a SCIM2 user"}
 public type Address {
     string streetAddress;
     string locality;
@@ -104,7 +104,7 @@ public type Address {
     string ^"type";
 };
 
-@Description {"Represents the Name of a SCIM2 user"}
+@Description {value:"Represents the Name of a SCIM2 user"}
 public type Name {
     string formatted;
     string givenName;
@@ -114,32 +114,32 @@ public type Name {
     string honorificSuffix;
 };
 
-@Description {"Meta data"}
+@Description {value:"Meta data"}
 public type Meta {
     string created;
     string location;
     string lastModified;
 };
 
-@Description {"Represents either a phone number, photo and IMS of a SCIM2 user"}
+@Description {value:"Represents either a phone number, photo and IMS of a SCIM2 user"}
 public type PhonePhotoIms {
     string value;
     string ^"type";
 };
 
-@Description {"Represents Email address of a SCIM2 user"}
+@Description {value:"Represents Email address of a SCIM2 user"}
 public type Email {
     string value;
     string ^"type";
     string primary;
 };
 
-@Description {"Represents a x509Certificate"}
+@Description {value:"Represents a x509Certificate"}
 public type X509Certificate {
     string value;
 };
 
-@Description {"Represents fields related to Enterprise User Extention for a SCIM2 user"}
+@Description {value:"Represents fields related to Enterprise User Extention for a SCIM2 user"}
 public type EnterpriseUserExtension {
     string employeeNumber;
     string costCenter;
@@ -149,7 +149,7 @@ public type EnterpriseUserExtension {
     Manager manager;
 };
 
-@Description {"Represents Manager fields of Enterprise User Extention"}
+@Description {value:"Represents Manager fields of Enterprise User Extention"}
 public type Manager {
     string managerId;
     string displayName;
