@@ -21,8 +21,8 @@ import ballerina/http;
 @Param {value:"userName: User name of the user"}
 @Param {value:"response: The received http response"}
 @Param {value:"connectorError: Received httpConnectorError object"}
-@Param {value:"User: User struct"}
-@Param {value:"error: Error"}
+@Return {value:"User: User struct"}
+@Return {value:"error: Error"}
 function resolveUser (string userName, http:Response response) returns User|error {
     User user = {};
     error Error = {};
@@ -57,8 +57,8 @@ function resolveUser (string userName, http:Response response) returns User|erro
 @Param {value:"groupName: Name of the group"}
 @Param {value:"response: The received http response"}
 @Param {value:"connectorError: Received httpConnectorError object"}
-@Param {value:"User: Group struct"}
-@Param {value:"error: Error"}
+@Return {value:"Group: Group struct"}
+@Return {value:"error: Error"}
 function resolveGroup (string groupName, http:Response response) returns Group|error {
     Group receivedGroup = {};
     error Error = {};
@@ -92,6 +92,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 @Description {value:"Add the necessary headers and body to the request"}
 @Param {value:"body: the json payload to be sent"}
 @Param {value:"OutRequest: http:OutRequest"}
+@Return {value:"Request: HTTP Request"}
 function createRequest (json body) returns http:Request {
     http:Request request =new();
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
@@ -99,6 +100,11 @@ function createRequest (json body) returns http:Request {
     return request;
 }
 
+@Description {value:"Create the body of the Update request"}
+@Param {value:"valueType: Type of the value to be updated"}
+@Param {value:"newValue: New value of the parameter"}
+@Return {value:"json: Json object"}
+@Return {value:"error: Error object"}
 function createUpdateBody (string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
     error Error = {};
