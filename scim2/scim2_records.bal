@@ -15,7 +15,7 @@
 // under the License.
 //
 
-import oauth2;
+import wso2/oauth2;
 
 //All the Struct objects that are used
 

@@ -17,7 +17,7 @@
 //
 import ballerina/http;
 import ballerina/mime;
-import oauth2;
+import wso2/oauth2;
 
 @Description {value:"SCIM2 Client Connector"}
 public type ScimConnector object {

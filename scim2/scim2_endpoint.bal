@@ -15,7 +15,7 @@
 // under the License.
 
 import ballerina/http;
-import oauth2;
+import wso2/oauth2;
 
 @Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
 provide the necessary OAuth2 credentials."}
