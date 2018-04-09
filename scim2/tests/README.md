@@ -9,20 +9,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Connector Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970-alpha-1-SNAPSHOT     | 0.2 | SCIM2.0 |
-
-- [Getting started](#getting-started)
-- [Running Samples](#running-samples)
-- [Working with SCIM connector actions](#working-with-SCIM-connector-actions)
-
-## Getting started
-
-1. Clone and build Ballerina from the source by following the steps given in the README.md 
-file at
- https://github.com/ballerina-lang/ballerina
-2. Extract the Ballerina distribution created at
- `distribution/zip/ballerina/target/ballerina-<version>-SNAPSHOT.zip` and set the 
- PATH environment variable to the bin directory.
+| ballerina-0.970.0-alpha1-SNAPSHOT     | 0.9 | SCIM2.0 |
 
 #### Prerequisites for tests
 To test this connector with WSO2 Identity Server you need to have the following resources.
@@ -53,7 +40,7 @@ command
 `curl -X POST --basic -u <client_id>:<client_secret> -H 'Content-Type: application/x-www-form-urlencoded;
 charset=UTF-8' -k -d 'grant_type=password&username=admin&password=admin' https://localhost:9443/oauth2/token
 ` 
-## Running Samples
+## Running Tests
 
 Before testing you have to edit those above client credentials in the test.bal file at 
 `package-scim2/scim2/tests/`
