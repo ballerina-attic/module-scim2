@@ -1,5 +1,3 @@
-package tests;
-
 import ballerina/test;
 
 endpoint SCIM2Endpoint scimEP {

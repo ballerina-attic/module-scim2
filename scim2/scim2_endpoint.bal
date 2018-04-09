@@ -14,9 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-
-package scim2;
-
 import ballerina/http;
 import oauth2;
 
@@ -27,7 +24,7 @@ public type Scim2Configuration {
 };
 
 @Description {value:"SCIM2 Endpoint struct."}
-public type SCIM2Endpoint object {
+public type SCIM2Client object {
     public {
         oauth2:OAuth2Client oauthEP;
         Scim2Configuration scim2Config;

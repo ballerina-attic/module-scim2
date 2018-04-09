@@ -16,8 +16,6 @@
 // under the License.
 //
 
-package scim2;
-
 //These are the constants that are used
 
 //String constants

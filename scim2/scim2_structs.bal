@@ -15,8 +15,6 @@
 // under the License.
 //
 
-package scim2;
-
 import oauth2;
 
 //All the Struct objects that are used

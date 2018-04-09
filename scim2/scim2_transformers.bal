@@ -16,8 +16,6 @@
 // under the License.
 //
 
-package scim2;
-
 function convertJsonToGroup (json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct.displayName = sourceJsonObject.displayName.toString() ?: "";
