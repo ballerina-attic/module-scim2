@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+package scim2;
+
 import ballerina/http;
 import wso2/oauth2;
 

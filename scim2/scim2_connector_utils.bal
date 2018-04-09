@@ -15,6 +15,9 @@
 // specific language governing permissions and limitations
 // under the License.
 //
+
+package scim2;
+
 import ballerina/http;
 
 @Description {value:"Obtain User from the received http response"}
