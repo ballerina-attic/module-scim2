@@ -19,6 +19,11 @@ import oauth2;
 
 //All the Struct objects that are used
 
+@Description {value:"Represents a SCIM2 group"}
+@Field {value:"displayName: Display Name of the Group"}
+@Field {value:"id: The ID of the group"}
+@Field {value:"members: The list of members that the group has"}
+@Field {value:"meta: Meta data"}
 public type Group {
     string displayName;
     string id;
@@ -26,12 +31,40 @@ public type Group {
     Meta meta;
 };
 
+@Description {value:"Represents a member in a group"}
+@Field {value:"display: Display Name of the user"}
+@Field {value:"value: ID of the user"}
 public type Member {
     string display;
     string value;
 };
 
 
+@Description {value:"Represents a SCIM2 User"}
+@Field {value:"userName: Username of the user"}
+@Field {value:"id: The ID of the user"}
+@Field {value:"password: Password of the user"}
+@Field {value:"externalId: External ID of the user"}
+@Field {value:"displayName: Display Name of the User"}
+@Field {value:"nickName: Nick name of the user"}
+@Field {value:"profileUrl: Profile URL of the user"}
+@Field {value:"userType: The type of the user"}
+@Field {value:"title: Title of the user"}
+@Field {value:"prefferedLanguage: Preffered language of the user"}
+@Field {value:"timezone: Timezone of the user"}
+@Field {value:"active: Active or not"}
+@Field {value:"locale: Location of the user"}
+@Field {value:"schemas: The schemas enabled"}
+@Field {value:"name: Name of the user"}
+@Field {value:"meta: Meta data"}
+@Field {value:"x509Certificates: x509Certificates of the user"}
+@Field {value:"groups: List of groups that the user is assigned to"}
+@Field {value:"addresses: Addresses of the user"}
+@Field {value:"emails: Emails of the user"}
+@Field {value:"phoneNumbers: Phone numbers of the user"
+@Field {value:"ims: List of IMS of the user"}
+@Field {value:"photos: Photos of the user"}
+@Field {value:"EnterpriseUser: Enterprise User extention fiels of the user"}
 public type User {
     string userName;
     string id;
@@ -59,6 +92,7 @@ public type User {
     EnterpriseUserExtension EnterpriseUser;
 };
 
+@Description {"Represents the address of a SCIM2 user"}
 public type Address {
     string streetAddress;
     string locality;
@@ -70,6 +104,7 @@ public type Address {
     string ^"type";
 };
 
+@Description {"Represents the Name of a SCIM2 user"}
 public type Name {
     string formatted;
     string givenName;
@@ -79,27 +114,32 @@ public type Name {
     string honorificSuffix;
 };
 
+@Description {"Meta data"}
 public type Meta {
     string created;
     string location;
     string lastModified;
 };
 
+@Description {"Represents either a phone number, photo and IMS of a SCIM2 user"}
 public type PhonePhotoIms {
     string value;
     string ^"type";
 };
 
+@Description {"Represents Email address of a SCIM2 user"}
 public type Email {
     string value;
     string ^"type";
     string primary;
 };
 
+@Description {"Represents a x509Certificate"}
 public type X509Certificate {
     string value;
 };
 
+@Description {"Represents fields related to Enterprise User Extention for a SCIM2 user"}
 public type EnterpriseUserExtension {
     string employeeNumber;
     string costCenter;
@@ -109,6 +149,7 @@ public type EnterpriseUserExtension {
     Manager manager;
 };
 
+@Description {"Represents Manager fields of Enterprise User Extention"}
 public type Manager {
     string managerId;
     string displayName;
