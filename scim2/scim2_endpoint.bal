@@ -41,13 +41,15 @@ public type SCIM2Client object {
     public function stop ();
 };
 
-
+@Description {value: "SCIM2 client endpoint initialization function"}
+@Param {value: "scim2Config: SCIM2 connector configuration"}
 public function SCIM2Client::init (Scim2Configuration scim2Config) {
     oauthEP.init(scim2Config.oauthClientConfig);
     scim2Connector.oauthEP = oauthEP;
     scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
+@Description {value: "Register SCIM2 client endpoint"}
 public function SCIM2Client::register (typedesc serviceType) {
 
 }
