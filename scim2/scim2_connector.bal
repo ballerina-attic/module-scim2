@@ -82,7 +82,7 @@ public type ScimConnector object {
     public function deleteUserByUsername (string userName) returns (string|error);
 
     documentation {Delete a group from user store
-        P{{userName}} User name of the user
+        P{{groupName}} User name of the user
     }
     public function deleteGroupByName (string groupName) returns (string|error);
 
@@ -96,7 +96,7 @@ public type ScimConnector object {
 
     documentation {Update emails addresses of a user
         P{{id}} ID of the user
-        P{{emaila}} List of new emails of the user
+        P{{emails}} List of new emails of the user
     }
     public function updateEmails (string id, Email[] emails) returns (string|error);
 

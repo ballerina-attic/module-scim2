@@ -51,7 +51,7 @@ documentation {Represents a User in SCIM2
     F{{profileUrl}} Profile URL of the user
     F{{userType}} The type of the user
     F{{title}} Title of the user
-    F{{prefferedLanguage}} Preffered language of the user
+    F{{preferredLanguage}} Preffered language of the user
     F{{timezone}} Timezone of the user
     F{{active}} Active or not
     F{{locale}} Location of the user

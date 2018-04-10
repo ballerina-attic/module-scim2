@@ -18,8 +18,8 @@
 import ballerina/http;
 
 documentation {Returns a user record if the input http:Response contains a user
-    F{{userName}} User name of the user
-    F{{response}} http:Response with the received response from the SCIM2 API
+    P{{userName}} User name of the user
+    P{{response}} http:Response with the received response from the SCIM2 API
 }
 function resolveUser (string userName, http:Response response) returns User|error {
     User user = {};
@@ -52,8 +52,8 @@ function resolveUser (string userName, http:Response response) returns User|erro
 }
 
 documentation {Returns a group record if the input http:Response contains a group
-    F{{groupName}} Name of the group
-    F{{response}} http:Response with the received response from the SCIM2 API
+    P{{groupName}} Name of the group
+    P{{response}} http:Response with the received response from the SCIM2 API
 }
 function resolveGroup (string groupName, http:Response response) returns Group|error {
     Group receivedGroup = {};
@@ -86,7 +86,7 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 }
 
 documentation {Returns a http:Request with the json attached to its body
-    F{{body}} Json Object which should be attached to the body of the request
+    P{{body}} Json Object which should be attached to the body of the request
 }
 function createRequest (json body) returns http:Request {
     http:Request request =new();
@@ -96,8 +96,8 @@ function createRequest (json body) returns http:Request {
 }
 
 documentation {Returns a json object that should be attached to the http:Request to update a user
-    F{{valueType}} The name of the user attribute
-    F{{newValue}} The new value of the attribute
+    P{{valueType}} The name of the user attribute
+    P{{newValue}} The new value of the attribute
 }
 function createUpdateBody (string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
