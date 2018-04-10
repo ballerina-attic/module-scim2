@@ -14,7 +14,7 @@
  | ------------- |:-------------:| -----:|
  | ballerina-0.970.0-alpha1-SNAPSHOT     | 0.9 | SCIM2.0 |
  
-![alt text](../SCIM2.png)
+![alt text](SCIM2.png)
 
 ## Working with SCIM connector actions
 
