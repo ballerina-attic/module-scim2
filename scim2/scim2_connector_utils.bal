@@ -17,12 +17,10 @@
 //
 import ballerina/http;
 
-@Description {value:"Obtain User from the received http response"}
-@Param {value:"userName: User name of the user"}
-@Param {value:"response: The received http response"}
-@Param {value:"connectorError: Received httpConnectorError object"}
-@Return {value:"User: User struct"}
-@Return {value:"error: Error"}
+documentation {Returns a user record if the input http:Response contains a user
+    P{{userName}} User name of the user
+    P{{response}} http:Response with the received response from the SCIM2 API
+}
 function resolveUser (string userName, http:Response response) returns User|error {
     User user = {};
     error Error = {};
@@ -53,12 +51,10 @@ function resolveUser (string userName, http:Response response) returns User|erro
     return Error;
 }
 
-@Description {value:"Obtain Group from the received http response"}
-@Param {value:"groupName: Name of the group"}
-@Param {value:"response: The received http response"}
-@Param {value:"connectorError: Received httpConnectorError object"}
-@Return {value:"Group: Group struct"}
-@Return {value:"error: Error"}
+documentation {Returns a group record if the input http:Response contains a group
+    P{{groupName}} Name of the group
+    P{{response}} http:Response with the received response from the SCIM2 API
+}
 function resolveGroup (string groupName, http:Response response) returns Group|error {
     Group receivedGroup = {};
     error Error = {};
@@ -89,10 +85,9 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
     return Error;
 }
 
-@Description {value:"Add the necessary headers and body to the request"}
-@Param {value:"body: the json payload to be sent"}
-@Param {value:"OutRequest: http:OutRequest"}
-@Return {value:"Request: HTTP Request"}
+documentation {Returns a http:Request with the json attached to its body
+    P{{body}} Json Object which should be attached to the body of the request
+}
 function createRequest (json body) returns http:Request {
     http:Request request =new();
     request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
@@ -100,11 +95,10 @@ function createRequest (json body) returns http:Request {
     return request;
 }
 
-@Description {value:"Create the body of the Update request"}
-@Param {value:"valueType: Type of the value to be updated"}
-@Param {value:"newValue: New value of the parameter"}
-@Return {value:"json: Json object"}
-@Return {value:"error: Error object"}
+documentation {Returns a json object that should be attached to the http:Request to update a user
+    P{{valueType}} The name of the user attribute
+    P{{newValue}} The new value of the attribute
+}
 function createUpdateBody (string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
     error Error = {};
