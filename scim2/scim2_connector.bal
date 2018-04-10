@@ -39,75 +39,75 @@ public type ScimConnector object {
     public function getMe() returns (User|error);
 
     documentation {Returns a group record with the specified group name if found
-        F{{groupName}} Name of the group
+        P{{groupName}} Name of the group
     }
     public function getGroupByName (string groupName) returns (Group|error);
 
     documentation {Returns a user record with the specified username if found
-        F{{userName}} User name of the user
+        P{{userName}} User name of the user
     }
     public function getUserByUsername (string userName) returns (User|error);
 
     documentation {Create a group in the user store
-        F{{crtGroup}} Group record with the group details
+        P{{crtGroup}} Group record with the group details
     }
     public function createGroup (Group crtGroup) returns (string|error);
 
     documentation {Create a user in the user store
-        F{{user}} User record with the user details
+        P{{user}} User record with the user details
     }
     public function createUser (User user) returns (string|error);
 
     documentation {Add a user specified by username to the group specified by group name
-        F{{userName}} User name of the user
-        F{{groupName}} Name of the group
+        P{{userName}} User name of the user
+        P{{groupName}} Name of the group
     }
     public function addUserToGroup (string userName, string groupName) returns (string|error);
 
     documentation {Remove a user specified by username from the group specified by group name
-        F{{userName}} User name of the user
-        F{{groupName}} Name of the group
+        P{{userName}} User name of the user
+        P{{groupName}} Name of the group
     }
     public function removeUserFromGroup (string userName, string groupName) returns (string|error);
 
     documentation {Returns whether the user specified by username belongs to the group specified by groupname
-        F{{userName}} User name of the user
-        F{{groupName}} Name of the group
+        P{{userName}} User name of the user
+        P{{groupName}} Name of the group
     }
     public function isUserInGroup (string userName, string groupName) returns (string|error);
 
     documentation {Delete a user from user store
-        F{{userName}} User name of the user
+        P{{userName}} User name of the user
     }
     public function deleteUserByUsername (string userName) returns (string|error);
 
     documentation {Delete a group from user store
-        F{{userName}} User name of the user
+        P{{userName}} User name of the user
     }
     public function deleteGroupByName (string groupName) returns (string|error);
 
     documentation {Update a simple attribute of user
-        F{{id}} ID of the user
-        F{{valueType}} The attribute name to be updated
-        F{{newValue}} The new value of the attribute
+        P{{id}} ID of the user
+        P{{valueType}} The attribute name to be updated
+        P{{newValue}} The new value of the attribute
     }
     public function updateSimpleUserValue (string id, string valueType, string newValue) returns
                                                                                         (string|error);
 
     documentation {Update emails addresses of a user
-        F{{id}} ID of the user
-        F{{emaila}} List of new emails of the user
+        P{{id}} ID of the user
+        P{{emaila}} List of new emails of the user
     }
     public function updateEmails (string id, Email[] emails) returns (string|error);
 
     documentation {Update addresses of a user
-        F{{id}} ID of the user
-        F{{addresses}} List of new addresses of the user
+        P{{id}} ID of the user
+        P{{addresses}} List of new addresses of the user
     }
     public function updateAddresses (string id, Address[] addresses) returns (string|error);
 
     documentation {Update a user
-        F{{user}} User record with new user values
+        P{{user}} User record with new user values
     }
     public function updateUser (User user) returns (string|error);
 };
