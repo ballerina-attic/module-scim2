@@ -19,16 +19,18 @@ package scim2;
 import ballerina/http;
 import wso2/oauth2;
 
-@Description {value:"SCIM2 connector configuration should be setup when initializing the endpoint. The User needs to
-provide the necessary OAuth2 credentials."}
+documentation {SCIM2 Client Endpoint configuration object
+    F{{oauthClientConfig}} OAuth2 client endpoint configuration object
+}
 public type Scim2Configuration {
     oauth2:OAuth2ClientEndpointConfiguration oauthClientConfig;
 };
 
-@Description {value:"SCIM2 client endpoint object"}
-@Field {value:"oauthEP: OAuth2 client endpoint"}
-@Field {value:"scim2Config: SCIM2 Configuration record"}
-@Field {value:"scim2Connector: SCIM2 connector object"}
+documentation {SCIM2 Client Endpoint
+    F{{oauthEP}} OAuth2 client endpoint
+    F{{scim2Config}} SCIM2 client endpoint configuration object
+    F{{scim2Connector}} SCIM2 connector object
+}
 public type Client object {
     public {
         oauth2:Client oauthEP;
@@ -36,22 +38,30 @@ public type Client object {
         ScimConnector scim2Connector;
     }
 
+    documentation {Initialize the SCiM2 endpoint
+        P{{scim2Config}} SCIM2 configuration object
+    }
     public function init (Scim2Configuration scim2Config);
+
+    documentation {Register SCIM2 client endpoint}
     public function register (typedesc serviceType);
+
+    documentation {Start the registered service}
     public function start ();
+
+    documentation {Returns the connector that client code uses}
     public function getClient () returns ScimConnector;
+
+    documentation {Stops the registered service}
     public function stop ();
 };
 
-@Description {value: "SCIM2 client endpoint initialization function"}
-@Param {value: "scim2Config: SCIM2 connector configuration"}
 public function Client::init (Scim2Configuration scim2Config) {
     oauthEP.init(scim2Config.oauthClientConfig);
     scim2Connector.oauthEP = oauthEP;
     scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
 }
 
-@Description {value: "Register SCIM2 client endpoint"}
 public function Client::register (typedesc serviceType) {
 
 }
@@ -60,14 +70,10 @@ public function Client::start () {
 
 }
 
-@Description {value:"Returns the connector that client code uses"}
-@Return {value:"The connector that client code uses"}
 public function Client::getClient () returns ScimConnector {
     return scim2Connector;
 }
 
-@Description {value:"Stops the registered service"}
-@Return {value:"Error occured during registration"}
 public function Client::stop () {
 
 }
