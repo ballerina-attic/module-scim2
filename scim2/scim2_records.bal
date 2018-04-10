@@ -19,11 +19,12 @@ import wso2/oauth2;
 
 //All the Records that are used
 
-@Description {value:"Represents a SCIM2 group"}
-@Field {value:"displayName: Display Name of the Group"}
-@Field {value:"id: The ID of the group"}
-@Field {value:"members: The list of members that the group has"}
-@Field {value:"meta: Meta data"}
+documentation {Represents a Group in SCIM2
+    F{{displayName}} Display Name of the Group
+    F{{id}} The ID of the group
+    F{{members}} The list of members that the group has
+    F{{meta}} Meta data
+}
 public type Group {
     string displayName;
     string id;
@@ -31,40 +32,41 @@ public type Group {
     Meta meta;
 };
 
-@Description {value:"Represents a member in a group"}
-@Field {value:"display: Display Name of the user"}
-@Field {value:"value: ID of the user"}
+documentation {Represents a Member in SCIM2-Group
+    F{{display}} Display Name of the user
+    F{{value}} ID of the group
+}
 public type Member {
     string display;
     string value;
 };
 
-
-@Description {value:"Represents a SCIM2 User"}
-@Field {value:"userName: Username of the user"}
-@Field {value:"id: The ID of the user"}
-@Field {value:"password: Password of the user"}
-@Field {value:"externalId: External ID of the user"}
-@Field {value:"displayName: Display Name of the User"}
-@Field {value:"nickName: Nick name of the user"}
-@Field {value:"profileUrl: Profile URL of the user"}
-@Field {value:"userType: The type of the user"}
-@Field {value:"title: Title of the user"}
-@Field {value:"prefferedLanguage: Preffered language of the user"}
-@Field {value:"timezone: Timezone of the user"}
-@Field {value:"active: Active or not"}
-@Field {value:"locale: Location of the user"}
-@Field {value:"schemas: The schemas enabled"}
-@Field {value:"name: Name of the user"}
-@Field {value:"meta: Meta data"}
-@Field {value:"x509Certificates: x509Certificates of the user"}
-@Field {value:"groups: List of groups that the user is assigned to"}
-@Field {value:"addresses: Addresses of the user"}
-@Field {value:"emails: Emails of the user"}
-@Field {value:"phoneNumbers: Phone numbers of the user"}
-@Field {value:"ims: List of IMS of the user"}
-@Field {value:"photos: Photos of the user"}
-@Field {value:"EnterpriseUser: Enterprise User extention fiels of the user"}
+documentation {Represents a User in SCIM2
+    F{{userName}} Username of the user
+    F{{id}} The ID of the user
+    F{{password}} Password of the user
+    F{{externalId}} External ID of the user
+    F{{displayName}} Display Name of the user
+    F{{nickName}} Nick name of the user"
+    F{{profileUrl}} Profile URL of the user
+    F{{userType}} The type of the user
+    F{{title}} Title of the user
+    F{{prefferedLanguage}} Preffered language of the user
+    F{{timezone}} Timezone of the user
+    F{{active}} Active or not
+    F{{locale}} Location of the user
+    F{{schemas}} The schemas enabled
+    F{{name}} Name of the user
+    F{{meta}} Meta data
+    F{{x509Certificates}} x509Certificates of the user
+    F{{groups}} List of groups that the user is assigned to
+    F{{addresses}} Addresses of the user
+    F{{emails}} Emails of the user
+    F{{phoneNumbers}} Phone numbers of the user
+    F{{ims}} List of IMS of the user
+    F{{photos}} Photos of the user
+    F{{EnterpriseUser}}  Enterprise User extention fiels of the user
+}
 public type User {
     string userName;
     string id;
@@ -92,7 +94,7 @@ public type User {
     EnterpriseUserExtension EnterpriseUser;
 };
 
-@Description {value:"Represents the address of a SCIM2 user"}
+documentation {Represents a address in a SCIM2-User}
 public type Address {
     string streetAddress;
     string locality;
@@ -104,7 +106,7 @@ public type Address {
     string ^"type";
 };
 
-@Description {value:"Represents the Name of a SCIM2 user"}
+documentation {Represents a Name in a SCIM2-User}
 public type Name {
     string formatted;
     string givenName;
@@ -114,32 +116,32 @@ public type Name {
     string honorificSuffix;
 };
 
-@Description {value:"Meta data"}
+documentation {Represents meta data}
 public type Meta {
     string created;
     string location;
     string lastModified;
 };
 
-@Description {value:"Represents either a phone number, photo and IMS of a SCIM2 user"}
+documentation {Represents one of phone numbers, photos or IMS in SCIM2-User}
 public type PhonePhotoIms {
     string value;
     string ^"type";
 };
 
-@Description {value:"Represents Email address of a SCIM2 user"}
+documentation {Represents a email in a SCIM2-User}
 public type Email {
     string value;
     string ^"type";
     string primary;
 };
 
-@Description {value:"Represents a x509Certificate"}
+documentation {Represents a x509Certificate in SCIM2-User}
 public type X509Certificate {
     string value;
 };
 
-@Description {value:"Represents fields related to Enterprise User Extention for a SCIM2 user"}
+documentation {Represents fields related to Enterprise User Extention for a SCIM2-User}
 public type EnterpriseUserExtension {
     string employeeNumber;
     string costCenter;
@@ -149,7 +151,7 @@ public type EnterpriseUserExtension {
     Manager manager;
 };
 
-@Description {value:"Represents Manager fields of Enterprise User Extention"}
+documentation {Represents Manager fields of Enterprise User Extention}
 public type Manager {
     string managerId;
     string displayName;
