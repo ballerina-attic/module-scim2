@@ -15,8 +15,6 @@
 // under the License.
 //
 
-import wso2/oauth2;
-
 //All the Records that are used
 
 documentation {Represents a Group in SCIM2

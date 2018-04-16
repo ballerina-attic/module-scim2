@@ -20,7 +20,7 @@ import ballerina/mime;
 
 documentation {SCIM2 Client Connector
     F{{baseUrl}} base url of the REST API
-    F{{oauthEP}} OAuth2 client endpoint
+    F{{httpClient}} HTTP client endpoint
 }
 public type ScimConnector object {
     public {
@@ -465,7 +465,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
     }
     //create request body
     string value = user.id;
-    string ref = baseUrl + SCIM_USER_END_POINT + "/" + value;
+    string ref = self.baseUrl + SCIM_USER_END_POINT + "/" + value;
     string url = SCIM_GROUP_END_POINT + "/" + gro.id;
 
     json body = SCIM_GROUP_PATCH_ADD_BODY;
