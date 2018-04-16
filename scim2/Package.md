@@ -12,7 +12,7 @@
  ## Compatibility
  | Language Version        | Connector Version          | API Versions  |
  | ------------- |:-------------:| -----:|
- | ballerina-0.970.0-alpha1-SNAPSHOT     | 0.9 | SCIM2.0 |
+ | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
  
 ![alt text](SCIM2.png)
 
@@ -22,17 +22,25 @@ In order for you to use the SCIM connector, first you need to create a ScimConne
 endpoint.
 
 ```ballerina
-endpoint scim2:Scim2Endpoint scimEP {
-    oauthClientConfig:{
-                          accessToken:"<...>",
-                          baseUrl:"<...>",
-                          clientId:"<...>",
-                          clientSecret:"<...>",
-                          refreshToken:"<...>",
-                          refreshTokenEP:"<...>",
-                          refreshTokenPath:"<...>",
-                          setCredentialsInHeader:true,
-                          clientConfig:{<...>}
-                      }
+endpoint Client scimEP {
+    baseUrl:"https://localhost:9443",
+    clientConfig:{
+                     auth:{
+                              scheme:"oauth",
+                              accessToken:"<......>",
+                              clientId:"<......>",
+                              clientSecret:"<......>",
+                              refreshToken:"<......>",
+                              refreshUrl:"<......>"
+                          },
+                     targets:[{url:"https://localhost:9443",
+                                  secureSocket:{
+                                                   trustStore:{
+                                                                  filePath:"<......>",
+                                                                  password:"<......>"
+                                                              }
+                                               }
+                              }]
+                 }
 };
 ```

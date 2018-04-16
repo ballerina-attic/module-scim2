@@ -2,25 +2,25 @@ import ballerina/test;
 import ballerina/io;
 
 endpoint Client scimEP {
-    oauthClientConfig:{
-                          accessToken:"52fe39c1-4860-3bfe-aa62-945be1d7a299",
-                          baseUrl:"https://localhost:9443",
-                          clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
-                          clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-                          refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
-                          refreshTokenEP:"https://localhost:9443",
-                          refreshTokenPath:"/oauth2/token",
-                          setCredentialsInHeader:true,
-                          clientConfig:{targets:[{url:"https://localhost:9443",
-                                                     secureSocket:{
-                                                                      trustStore:{
-                                                                                     filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
-                                                                                     password:"wso2carbon"
-                                                                                 }
-                                                                  }
-                                                 }
-                                                ]}
-                      }
+    baseUrl:"https://localhost:9443",
+    clientConfig:{
+                     auth:{
+                              scheme:"oauth",
+                              accessToken:"9897c4ca-f0fb-3367-8b7c-0b3dc9c23b7d",
+                              clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
+                              clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
+                              refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
+                              refreshUrl:"https://localhost:9443/oauth2/token"
+                          },
+                     targets:[{url:"https://localhost:9443",
+                                  secureSocket:{
+                                                   trustStore:{
+                                                                  filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
+                                                                  password:"wso2carbon"
+                                                              }
+                                               }
+                              }]
+                 }
 };
 
 @test:BeforeEach
@@ -174,24 +174,24 @@ function testRemoveUserFromGroup () {
     test:assertEquals(message, "User Removed", msg = "removeUserFromGroup function failed");
 }
 
-//@test:Config {
-//    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
-//}
-//function testIsUserInGroup () {
-//    boolean message;
-//    string userName = "leoMessi";
-//    string groupName = "Captain";
-//    var response = scimEP -> isUserInGroup(userName, groupName);
-//    match response {
-//        boolean x => message = x;
-//        error er => test:assertFail(msg = er.message);
-//    }
-//    test:assertTrue(message, msg = "isUserInGroup function failed");
-//}
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
+}
+function testIsUserInGroup () {
+    boolean message;
+    string userName = "leoMessi";
+    string groupName = "Captain";
+    var response = scimEP -> isUserInGroup(userName, groupName);
+    match response {
+        boolean x => message = x;
+        error er => test:assertFail(msg = er.message);
+    }
+    test:assertTrue(message, msg = "isUserInGroup function failed");
+}
 
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testRemoveUserFromGroup"]
+    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testRemoveUserFromGroup","testIsUserInGroup"]
 }
 function testDeleteUser () {
     string message;
@@ -206,7 +206,7 @@ function testDeleteUser () {
 
 @test:Config {
     dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup",
-               "testRemoveUserFromGroup"]
+               "testRemoveUserFromGroup","testIsUserInGroup"]
 }
 function testDeleteGroup () {
     string message;

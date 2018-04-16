@@ -14,28 +14,24 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package scim2;
-
 import ballerina/http;
-import wso2/oauth2;
 
 documentation {SCIM2 Client Endpoint configuration object
-    F{{oauthClientConfig}} OAuth2 client endpoint configuration object
+    F{{clientConfig}} HTTP client endpoint configuration object
 }
 public type Scim2Configuration {
-    oauth2:OAuth2ClientEndpointConfiguration oauthClientConfig;
+    string baseUrl;
+    http:ClientEndpointConfig clientConfig;
 };
 
 documentation {SCIM2 Client Endpoint
-    F{{oauthEP}} OAuth2 client endpoint
     F{{scim2Config}} SCIM2 client endpoint configuration object
     F{{scim2Connector}} SCIM2 connector object
 }
 public type Client object {
     public {
-        oauth2:Client oauthEP;
-        Scim2Configuration scim2Config;
-        ScimConnector scim2Connector;
+        Scim2Configuration scim2Config = {};
+        ScimConnector scim2Connector = new;
     }
 
     documentation {Initialize the SCiM2 endpoint
@@ -57,23 +53,19 @@ public type Client object {
 };
 
 public function Client::init (Scim2Configuration scim2Config) {
-    oauthEP.init(scim2Config.oauthClientConfig);
-    scim2Connector.oauthEP = oauthEP;
-    scim2Connector.baseUrl = scim2Config.oauthClientConfig.baseUrl;
+    self.scim2Connector.baseUrl = scim2Config.baseUrl;
+    self.scim2Connector.httpClient.init(scim2Config.clientConfig);
 }
 
 public function Client::register (typedesc serviceType) {
-
 }
 
 public function Client::start () {
-
 }
 
 public function Client::getClient () returns ScimConnector {
-    return scim2Connector;
+    return self.scim2Connector;
 }
 
 public function Client::stop () {
-
 }
