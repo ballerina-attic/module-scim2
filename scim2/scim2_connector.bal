@@ -73,7 +73,7 @@ public type ScimConnector object {
         P{{userName}} User name of the user
         P{{groupName}} Name of the group
     }
-    public function isUserInGroup (string userName, string groupName) returns (string|error);
+    public function isUserInGroup (string userName, string groupName) returns (boolean|error);
 
     documentation {Delete a user from user store
         P{{userName}} User name of the user
