@@ -6,17 +6,17 @@ endpoint Client scimEP {
     clientConfig:{
                      auth:{
                               scheme:"oauth",
-                              accessToken:"52fe39c1-4860-3bfe-aa62-945be1d7a299",
-                              clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
-                              clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-                              refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
-                              refreshUrl:"https://localhost:9443/oauth2/token"
+                              accessToken:"<......>",
+                              clientId:"<......>",
+                              clientSecret:"<......>",
+                              refreshToken:"<......>",
+                              refreshUrl:"<......>"
                           },
                      targets:[{url:"https://localhost:9443",
                                   secureSocket:{
                                                    trustStore:{
-                                                                  filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
-                                                                  password:"wso2carbon"
+                                                                  filePath:"<......>",
+                                                                  password:"<......>"
                                                               }
                                                }
                               }]
