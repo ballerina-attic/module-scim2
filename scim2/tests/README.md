@@ -9,7 +9,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Connector Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970.0-alpha1-SNAPSHOT     | 0.9 | SCIM2.0 |
+| ballerina-0.970.0-beta1-SNAPSHOT     | 0.92 | SCIM2.0 |
 
 #### Prerequisites for tests
 To test this connector with WSO2 Identity Server you need to have the following resources.
