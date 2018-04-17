@@ -4,23 +4,23 @@ import ballerina/io;
 endpoint Client scimEP {
     baseUrl:"https://localhost:9443",
     clientConfig:{
-                     auth:{
-                              scheme:"oauth",
-                              accessToken:"e6862b2c-e124-38c1-aea0-8bc2cbb1219b",
-                              clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
-                              clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-                              refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
-                              refreshUrl:"https://localhost:9443/oauth2/token"
-                          },
-                     targets:[{url:"https://localhost:9443",
-                                  secureSocket:{
-                                                   trustStore:{
-                                                                  filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
-                                                                  password:"wso2carbon"
-                                                              }
-                                               }
-                              }]
-                 }
+        auth:{
+            scheme:"oauth",
+            accessToken:"e6862b2c-e124-38c1-aea0-8bc2cbb1219b",
+            clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
+            clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
+            refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
+            refreshUrl:"https://localhost:9443/oauth2/token"
+        },
+        targets:[{url:"https://localhost:9443",
+            secureSocket:{
+                trustStore:{
+                    filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
+                    password:"wso2carbon"
+                }
+            }
+        }]
+    }
 };
 
 @test:BeforeEach
