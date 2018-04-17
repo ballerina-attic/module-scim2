@@ -1,13 +1,13 @@
-# Ballerina SCIM Connector - Tests
+# Ballerina SCIM Endpoint - Tests
 
 *The system for Cross-domain Identity Management (SCIM) specification
  is designed to make managing user identities in cloud-based applications 
  and services easier.*
 
-The following sections provide you with information on how to use the Ballerina SCIM connector.
+The following sections provide you with information on how to use the Ballerina SCIM Endpoint.
 
 ## Compatibility
-| Language Version        | Connector Version          | API Versions  |
+| Language Version        | Endpoint Version          | API Versions  |
 | ------------- |:-------------:| -----:|
 | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
 
@@ -45,5 +45,5 @@ charset=UTF-8' -k -d 'grant_type=password&username=admin&password=admin' https:/
 Before testing you have to edit those above client credentials in the test.bal file at 
 `package-scim2/scim2/tests/`
  
-You can easily test the SCIM2 connector endpoint functions by executing the command 
+You can easily test the SCIM2 endpoint functions by executing the command 
 `ballerina test scim2`.
