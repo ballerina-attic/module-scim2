@@ -50,22 +50,22 @@ import wso2/scim2;
 endpoint scim2:Client scimEP {
     baseUrl:"https://localhost:9443",
     clientConfig:{
-                     auth:{
-                              scheme:"oauth",
-                              accessToken:"<......>",
-                              clientId:"<......>",
-                              clientSecret:"<......>",
-                              refreshToken:"<......>",
-                              refreshUrl:"<......>"
-                          },
-                     targets:[{url:"https://localhost:9443",
-                                  secureSocket:{
-                                                   trustStore:{
-                                                                  filePath:"<......>",
-                                                                  password:"<......>"
-                                                              }
-                                               }
-                              }]
-                 }
+        auth:{
+            scheme:"oauth",
+            accessToken:"<......>",
+            clientId:"<......>",
+            clientSecret:"<......>",
+            refreshToken:"<......>",
+            refreshUrl:"<......>"
+        },
+        targets:[{url:"https://localhost:9443",
+            secureSocket:{
+                trustStore:{
+                    filePath:"<......>",
+                    password:"<......>"
+                }
+            }
+        }]
+    }
 };
 ```
