@@ -90,7 +90,7 @@ documentation {Returns a http:Request with the json attached to its body
 }
 function createRequest (json body) returns http:Request {
     http:Request request =new();
-    request.addHeader(SCIM_CONTENT_TYPE, SCIM_JSON);
+    request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(body);
     return request;
 }
@@ -103,41 +103,41 @@ function createUpdateBody (string valueType, string newValue) returns json|error
     json body = SCIM_PATCH_ADD_BODY;
     error Error = {};
 
-    if (valueType.equalsIgnoreCase("nickName")) {
-        body.Operations[0].value = {"nickName":newValue};
+    if (valueType.equalsIgnoreCase(SCIM_NICKNAME)) {
+        body.Operations[0].value = {SCIM_NICKNAME:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("preferredLanguage")) {
-        body.Operations[0].value = {"preferredLanguage":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_PREFERRED_LANGUAGE)) {
+        body.Operations[0].value = {SCIM_PREFERRED_LANGUAGE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("title")) {
-        body.Operations[0].value = {"title":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_TITLE)) {
+        body.Operations[0].value = {SCIM_TITLE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("password")) {
-        body.Operations[0].value = {"password":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_PASSWORD)) {
+        body.Operations[0].value = {SCIM_PASSWORD:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("profileUrl")) {
-        body.Operations[0].value = {"profileUrl":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_PROFILE_URL)) {
+        body.Operations[0].value = {SCIM_PROFILE_URL:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("locale")) {
-        body.Operations[0].value = {"locale":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_LOCALE)) {
+        body.Operations[0].value = {SCIM_LOCALE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("timezone")) {
-        body.Operations[0].value = {"timezone":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_TIMEZONE)) {
+        body.Operations[0].value = {SCIM_TIMEZONE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("active")) {
-        body.Operations[0].value = {"active":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_ACTIVE)) {
+        body.Operations[0].value = {SCIM_ACTIVE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("userType")) {
-        body.Operations[0].value = {"userType":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_USERTYPE)) {
+        body.Operations[0].value = {SCIM_USERTYPE:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("displayName")) {
-        body.Operations[0].value = {"displayName":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_DISPLAYNAME)) {
+        body.Operations[0].value = {SCIM_DISPLAYNAME:newValue};
         return body;
-    } if (valueType.equalsIgnoreCase("externalId")) {
-        body.Operations[0].value = {"externalId":newValue};
+    } if (valueType.equalsIgnoreCase(SCIM_EXTERNALID)) {
+        body.Operations[0].value = {SCIM_EXTERNALID:newValue};
         return body;
     } else {
-        Error = {message:"No matching value"};
+        Error = {message:"No matching value as " + valueType};
         return Error;
     }
 

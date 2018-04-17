@@ -6,7 +6,7 @@ endpoint Client scimEP {
     clientConfig:{
                      auth:{
                               scheme:"oauth",
-                              accessToken:"9897c4ca-f0fb-3367-8b7c-0b3dc9c23b7d",
+                              accessToken:"e6862b2c-e124-38c1-aea0-8bc2cbb1219b",
                               clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
                               clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
                               refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
