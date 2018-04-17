@@ -69,3 +69,8 @@ endpoint scim2:Client scimEP {
     }
 };
 ```
+Then use the following syntax to call endpoint functions
+
+```ballerina
+var response = scimEP -> <name_of_the_function>(arg...);
+```
