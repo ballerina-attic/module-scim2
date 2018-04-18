@@ -1,22 +1,33 @@
 import ballerina/test;
 import ballerina/io;
+import ballerina/config;
+import ballerina/log;
+
+string url = config:getAsString("ENDPOINT");
+string accessToken = config:getAsString("ACCESS_TOKEN");
+string clientId = config:getAsString("CLIENT_ID");
+string clientSecret = config:getAsString("CLIENT_SECRET");
+string refreshToken = config:getAsString("REFRESH_TOKEN");
+string refreshUrl = config:getAsString("REFRESH_URL");
+string keystore = config:getAsString("KEYSTORE");
+string password = config:getAsString("KEYSTORE_PASSWORD");
 
 endpoint Client scimEP {
-    baseUrl:"https://localhost:9443",
+    baseUrl:url,
     clientConfig:{
         auth:{
             scheme:"oauth",
-            accessToken:"d8adc620-06b0-319f-9028-ec62fc6a7870",
-            clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
-            clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
-            refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
-            refreshUrl:"https://localhost:9443/oauth2/token"
+            accessToken:accessToken,
+            clientId:clientId,
+            clientSecret:clientSecret,
+            refreshToken:refreshToken,
+            refreshUrl:refreshUrl
         },
-        targets:[{url:"https://localhost:9443",
+        targets:[{url:url,
             secureSocket:{
                 trustStore:{
-                    filePath:"/home/tharindu/Documents/IS_HOME/repository/resources/security/truststore.p12",
-                    password:"wso2carbon"
+                    filePath:keystore,
+                    password:password
                 }
             }
         }]
@@ -465,4 +476,16 @@ function testGetListOfGroups () {
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(length, 2, msg = "getListOfGroups function failed");
+}
+
+function setConfParams(string|() confParam) returns string {
+    match confParam {
+        string param => {
+            return param;
+        }
+        () => {
+            log:printInfo("Empty value, found nil!!");
+            return "";
+        }
+    }
 }
