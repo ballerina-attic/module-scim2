@@ -39,17 +39,8 @@ public type Client object {
     }
     public function init (Scim2Configuration scim2Config);
 
-    documentation {Register SCIM2 client endpoint}
-    public function register (typedesc serviceType);
-
-    documentation {Start the registered service}
-    public function start ();
-
     documentation {Returns the connector that client code uses}
     public function getClient () returns ScimConnector;
-
-    documentation {Stops the registered service}
-    public function stop ();
 };
 
 public function Client::init (Scim2Configuration scim2Config) {

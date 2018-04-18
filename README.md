@@ -28,7 +28,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Endpoint Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.5 | SCIM2.0 |
+| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.6 | SCIM2.0 |
 
 
 ## Getting started
