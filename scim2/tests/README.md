@@ -9,7 +9,9 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Endpoint Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
+| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.6** | SCIM2.0 |
+
+The source code of the SCIM2 endpoint can be found at [package-scim2](https://github.com/wso2-ballerina/package-scim2)
 
 #### Prerequisites for tests
 To test this connector with WSO2 Identity Server you need to have the following resources.
@@ -42,8 +44,24 @@ charset=UTF-8' -k -d 'grant_type=password&username=admin&password=admin' https:/
 ` 
 ## Running Tests
 
-Before testing you have to edit those above client credentials in the test.bal file at 
-`package-scim2/scim2/tests/`
- 
-You can easily test the SCIM2 endpoint functions by executing the command 
+Initialize a ballerina project 
+
+`ballerina init`
+
+Before testing you have create a `ballerina.conf` file with following details.
+```
+###HTTP:Client configurations###
+ENDPOINT = "<......>"
+ACCESS_TOKEN = "<......>"
+CLIENT_ID = "<......>"
+CLIENT_SECRET = "<......>"
+REFRESH_TOKEN = "<......>"
+REFRESH_URL = "<......>"
+
+###Keystore configurations###
+KEYSTORE = "<......>"
+KEYSTORE_PASSWORD = "<......>"
+``` 
+
+Then you can easily test the SCIM2 endpoint functions by executing the command 
 `ballerina test scim2`.

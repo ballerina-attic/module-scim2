@@ -28,16 +28,14 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Endpoint Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
+| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.6 | SCIM2.0 |
 
 
-## Getting started
+## Contribute To Develop
 
-1. Clone and build Ballerina from the source by following the steps given in the README.md 
-file at https://github.com/ballerina-lang/ballerina
-2. Extract the Ballerina distribution created at
- `distribution/zip/ballerina/target/ballerina-<version>-SNAPSHOT.zip` and set the 
- PATH environment variable to the bin directory.
+Clone the repository by running the following command
+
+`git clone http://github.com/wso2-ballerina/package-scim2`
 
 ## Working with SCIM Endpoint actions
 
@@ -50,22 +48,27 @@ import wso2/scim2;
 endpoint scim2:Client scimEP {
     baseUrl:"https://localhost:9443",
     clientConfig:{
-                     auth:{
-                              scheme:"oauth",
-                              accessToken:"<......>",
-                              clientId:"<......>",
-                              clientSecret:"<......>",
-                              refreshToken:"<......>",
-                              refreshUrl:"<......>"
-                          },
-                     targets:[{url:"https://localhost:9443",
-                                  secureSocket:{
-                                                   trustStore:{
-                                                                  filePath:"<......>",
-                                                                  password:"<......>"
-                                                              }
-                                               }
-                              }]
-                 }
+        auth:{
+            scheme:"oauth",
+            accessToken:"<......>",
+            clientId:"<......>",
+            clientSecret:"<......>",
+            refreshToken:"<......>",
+            refreshUrl:"<......>"
+        },
+        targets:[{url:"https://localhost:9443",
+            secureSocket:{
+                trustStore:{
+                    filePath:"<......>",
+                    password:"<......>"
+                }
+            }
+        }]
+    }
 };
+```
+Then use the following syntax to call endpoint functions
+
+```ballerina
+var response = scimEP -> <name_of_the_function>(arg...);
 ```

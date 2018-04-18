@@ -33,13 +33,12 @@ function resolveUser (string userName, http:Response response) returns User|erro
         var received = response.getJsonPayload();
         match received {
             json payload => {
-                user = convertReceivedPayloadToUser(payload);
-                if (user.id.equalsIgnoreCase("")) {
+                if (payload.Resources == null) {
                     Error = {message:failedMessage + "No User with user name " + userName};
                     return Error;
-                } else {
-                    return user;
                 }
+                user = convertReceivedPayloadToUser(payload);
+                return user;
             }
             mime:EntityError e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
@@ -67,13 +66,12 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
         var received = response.getJsonPayload();
         match received {
             json payload => {
-                receivedGroup = convertReceivedPayloadToGroup(payload);
-                if (receivedGroup.id.equalsIgnoreCase("")) {
+                if (payload.Resources == null) {
                     Error = {message:failedMessage + "No Group named " + groupName};
                     return Error;
-                } else {
-                    return receivedGroup;
                 }
+                receivedGroup = convertReceivedPayloadToGroup(payload);
+                return receivedGroup;
             }
             mime:EntityError e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
