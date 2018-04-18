@@ -12,10 +12,19 @@
  ## Compatibility
  | Language Version        | Endpoint Version          | API Versions  |
  | ------------- |:-------------:| -----:|
- | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
+ | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.5 | SCIM2.0 |
  
+
 ![alt text](resources/SCIM2.png)
 
+ ## Getting Started
+ 
+ - Import the package to your ballerina project.
+ 
+ `import wso2/scim2`
+ 
+ This will download the scim2 artifacts from the central repository to your local repository.
+ 
 ## Working with SCIM Endpoint actions
 
 In order for you to use the SCIM Endpoint, first you need to create a SCIM2 Client 
