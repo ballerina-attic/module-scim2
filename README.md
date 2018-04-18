@@ -28,16 +28,15 @@ The following sections provide you with information on how to use the Ballerina 
 ## Compatibility
 | Language Version        | Endpoint Version          | API Versions  |
 | ------------- |:-------------:| -----:|
-| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.3 | SCIM2.0 |
+| ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.5 | SCIM2.0 |
 
 
 ## Getting started
 
-1. Clone and build Ballerina from the source by following the steps given in the README.md 
-file at https://github.com/ballerina-lang/ballerina
-2. Extract the Ballerina distribution created at
- `distribution/zip/ballerina/target/ballerina-<version>-SNAPSHOT.zip` and set the 
- PATH environment variable to the bin directory.
+1. Clone the repository by running the following command
+
+`git clone http://github.com/wso2-ballerina/package-scim2`
+2. Import the package to your ballerina project
 
 ## Working with SCIM Endpoint actions
 
