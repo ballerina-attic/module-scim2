@@ -6,7 +6,7 @@ endpoint Client scimEP {
     clientConfig:{
         auth:{
             scheme:"oauth",
-            accessToken:"e6862b2c-e124-38c1-aea0-8bc2cbb1219b",
+            accessToken:"d8adc620-06b0-319f-9028-ec62fc6a7870",
             clientId:"hZiPwHli0AQSlN4bvbAyrs4CEaMa",
             clientSecret:"fRJ1CpYtuc147s4b1gc5CR6DdZoa",
             refreshToken:"50af0e08-b75c-3506-9e7e-f23dfa3e603b",
@@ -43,7 +43,7 @@ function createFewUsersAndGroup () {
 }
 
 @test:Config
-function testCreateUser () {
+function testCreateUserSuccess () {
     string message;
     //create user=======================================================================================================
     User user = {};
@@ -83,6 +83,7 @@ function testCreateUser () {
     email2.^"type" = "home";
 
     user.emails = [email1, email2];
+    var responseDelete = scimEP -> deleteUserByUsername("leoMessi");
     var response = scimEP -> createUser(user);
     match response {
         string msg => message = msg;
@@ -91,8 +92,28 @@ function testCreateUser () {
     test:assertEquals(message, "User Created", msg = "createUser function failed");
 }
 
+@test:Config {
+    dependsOn:["testCreateUserSuccess"]
+}
+function testCreateUserFail () {
+    string message;
+    User user = {};
+    string userName = "leoMessi";
+    user.userName = userName;
+    user.password = "greatestAllTime";
+    var response = scimEP -> createUser(user);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message,
+                      "Creating user:" + userName + " failed. User with the name: " + userName
+                      + " already exists in the system.",
+                      msg = "createUser function failed");
+}
+
 @test:Config
-function testGetUserByUserName () {
+function testGetUserByUserNameSuccess () {
     string message;
     string userName = "iniesta";
     var response = scimEP -> getUserByUsername(userName);
@@ -101,6 +122,19 @@ function testGetUserByUserName () {
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
+}
+
+@test:Config
+function testGetUserByUserNameFail () {
+    string message;
+    string userName = "dogDayAfternoon";
+    var response = scimEP -> getUserByUsername(userName);
+    match response {
+        User usr => {message = usr.userName;}
+        error er => message = er.message;
+    }
+    test:assertEquals(message, "Resolving user:" + userName + " failed. No User with user name " + userName,
+                      msg = "getUserByUserName function failed");
 }
 
 @test:Config
@@ -122,12 +156,33 @@ function testCreateGroup () {
     member.value = getUser.id;
     gro.members = [member];
 
+    var responseDelete = scimEP -> deleteGroupByName("Captain");
     var response = scimEP -> createGroup(gro);
     match response {
         string msg => message = msg;
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "Group Created", msg = "createGroup function failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup"]
+}
+function testCreateGroupFail () {
+    string message;
+    Group gro = {};
+    string groupName = "Captain";
+    gro.displayName = groupName;
+
+    var response = scimEP -> createGroup(gro);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message,
+                      "Creating group:" + groupName + " failed. Group with name: PRIMARY/" + groupName
+                      + " already exists in the system.",
+                      msg = "createGroup function failed");
 }
 
 @test:Config {
@@ -145,7 +200,22 @@ function testGetGroupByName () {
 }
 
 @test:Config {
-    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUser"]
+    dependsOn:["testCreateGroup"]
+}
+function testGetGroupByNameFail () {
+    string message;
+    string groupName = "Diamond";
+    var response = scimEP -> getGroupByName(groupName);
+    match response {
+        Group grp => message = grp.members[0].display;
+        error er => message = er.message;
+    }
+    test:assertEquals(message, "Resolving group:" + groupName + " failed. No Group named " + groupName,
+                      msg = "getGroupByName function failed");
+}
+
+@test:Config {
+    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
 }
 function testAddUserToGroup () {
     string message;
@@ -160,7 +230,43 @@ function testAddUserToGroup () {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testGetGroupByName"]
+    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
+}
+function testAddUserToGroupFailByUser () {
+    string message;
+    string userName = "leoMess";
+    string groupName = "Captain";
+    var response = scimEP -> addUserToGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message,
+            "Adding user:" + userName + " to group:" + groupName + " failed.Resolving user:" + userName
+            + " failed. No User with user name " + userName,
+            msg = "addUserToGroup function Failed");
+}
+
+@test:Config {
+    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
+}
+function testAddUserToGroupFailByGroup () {
+    string message;
+    string userName = "leoMessi";
+    string groupName = "Capitan";
+    var response = scimEP -> addUserToGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message,
+                      "Adding user:" + userName + " to group:" + groupName + " failed.Resolving group:"
+                      + groupName + " failed. No Group named " + groupName,
+                      msg = "addUserToGroup function Failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
 }
 function testRemoveUserFromGroup () {
     string message;
@@ -175,7 +281,41 @@ function testRemoveUserFromGroup () {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup"]
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
+}
+function testRemoveUserFromGroupFailByUser () {
+    string message;
+    string userName = "iniest";
+    string groupName = "Captain";
+    var response = scimEP -> removeUserFromGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message, "Removing user:" + userName + " from group:" + groupName
+                               + " failed.Resolving user:" + userName + " failed. No User with user name " + userName,
+                      msg = "removeUserFromGroup function failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
+}
+function testRemoveUserFromGroupFailByGroup () {
+    string message;
+    string userName = "iniesta";
+    string groupName = "Capitan";
+    var response = scimEP -> removeUserFromGroup(userName, groupName);
+    match response {
+        string msg => message = msg;
+        error er => message = er.message;
+    }
+    test:assertEquals(message, "Removing user:" + userName + " from group:" + groupName
+                               + " failed.Resolving group:" + groupName + " failed. No Group named " + groupName,
+                      msg = "removeUserFromGroup function failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroup () {
     boolean message;
@@ -189,9 +329,59 @@ function testIsUserInGroup () {
     test:assertTrue(message, msg = "isUserInGroup function failed");
 }
 
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+}
+function testIsUserInGroupFalse () {
+    boolean message;
+    string userName = "iniesta";
+    string groupName = "Captain";
+    var response = scimEP -> isUserInGroup(userName, groupName);
+    match response {
+        boolean x => message = x;
+        error er => test:assertFail(msg = er.message);
+    }
+    test:assertFalse(message, msg = "isUserInGroup function failed");
+}
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup", "testRemoveUserFromGroup","testIsUserInGroup"]
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+}
+function testIsUserInGroupFailByUser () {
+    string message;
+    boolean flag;
+    string userName = "iniesa";
+    string groupName = "Captain";
+    var responseDelete = scimEP -> deleteUserByUsername(userName);
+    var response = scimEP -> isUserInGroup(userName, groupName);
+    match response {
+        boolean x => test:assertFail(msg = "Flag returned when error expected");
+        error er => message = er.message;
+    }
+    test:assertEquals(message, "failed to resolve user Resolving user:" + userName + " failed. No User with user name "
+    + userName,
+                      msg = "isUserInGroup function failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+}
+function testIsUserInGroupFalseNoGroup () {
+    string message;
+    boolean flag;
+    string userName = "iniesta";
+    string groupName = "Captan";
+    var responseDelete = scimEP -> deleteGroupByName(groupName);
+    var response = scimEP -> isUserInGroup(userName, groupName);
+    match response {
+        boolean x => test:assertFalse(x, msg = "isUserInGroup function failed");
+        error er => test:assertFail(msg = er.message);
+    }
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
+"testIsUserInGroup", "testCreateUserFail", "testAddUserToGroupFailByGroup"]
 }
 function testDeleteUser () {
     string message;
@@ -205,8 +395,24 @@ function testDeleteUser () {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUser", "testAddUserToGroup",
-               "testRemoveUserFromGroup","testIsUserInGroup"]
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
+               "testIsUserInGroup", "testCreateUserFail", "testAddUserToGroupFailByGroup"]
+}
+function testDeleteUserFail () {
+    string userName = "leoMess";
+    var responseDelete = scimEP -> deleteUserByUsername(userName);
+    var response = scimEP -> deleteUserByUsername(userName);
+    match response {
+        string msg => test:assertFail(msg = "Message returned when error expected");
+        error er => test:assertEquals(er.message, "Deleting user:" + userName + " failed. Resolving user:"
+                                                  + userName + " failed. No User with user name " + userName,
+                                      msg = "deleteUser function failed");
+    }
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
+               "testRemoveUserFromGroup","testIsUserInGroup", "testCreateGroupFail"]
 }
 function testDeleteGroup () {
     string message;
@@ -217,6 +423,22 @@ function testDeleteGroup () {
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "deleted", msg = "deleteGroup function failed");
+}
+
+@test:Config {
+    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
+               "testRemoveUserFromGroup","testIsUserInGroup", "testCreateGroupFail"]
+}
+function testDeleteGroupFail () {
+    string groupName = "Captan";
+    var responseDelete = scimEP -> deleteGroupByName(groupName);
+    var response = scimEP -> deleteGroupByName(groupName);
+    match response {
+        string msg => test:assertFail(msg = "Message returned when error expected");
+        error er => test:assertEquals(er.message, "Deleting group:" + groupName + " failed. Resolving group:"
+                                                  + groupName + " failed. No Group named " + groupName,
+                                      msg = "deleteUser function failed");
+    }
 }
 
 @test:Config {
