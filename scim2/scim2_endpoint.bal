@@ -57,15 +57,6 @@ public function Client::init (Scim2Configuration scim2Config) {
     self.scim2Connector.httpClient.init(scim2Config.clientConfig);
 }
 
-public function Client::register (typedesc serviceType) {
-}
-
-public function Client::start () {
-}
-
 public function Client::getClient () returns ScimConnector {
     return self.scim2Connector;
-}
-
-public function Client::stop () {
 }
