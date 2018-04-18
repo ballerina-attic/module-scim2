@@ -37,3 +37,6 @@ docs/
 
 #Ignore oauth2 package
 oauth2/
+
+#ignore conf
+ballerina.conf
