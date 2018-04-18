@@ -31,12 +31,11 @@ The following sections provide you with information on how to use the Ballerina 
 | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.6 | SCIM2.0 |
 
 
-## Getting started
+## Contribute To Develop
 
-1. Clone the repository by running the following command
+Clone the repository by running the following command
 
 `git clone http://github.com/wso2-ballerina/package-scim2`
-2. Import the package to your ballerina project
 
 ## Working with SCIM Endpoint actions
 
