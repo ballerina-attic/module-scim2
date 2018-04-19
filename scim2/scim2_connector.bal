@@ -131,7 +131,7 @@ public function ScimConnector::getListOfUsers () returns (User[]|error) {
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString() ?: "";
+                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
                         User[] userList = [];
                         if (noOfResults.equalsIgnoreCase("0")) {
                             return userList;
@@ -178,7 +178,7 @@ public function ScimConnector::getListOfGroups () returns (Group[]|error) {
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString() ?: "";
+                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
                         Group[] groupList = [];
                         if (noOfResults.equalsIgnoreCase("0")) {
                             return groupList;
@@ -312,7 +312,7 @@ public function ScimConnector::createGroup (Group crtGroup) returns (string|erro
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        Error = {message:failedMessage + (payload.detail.toString() ?: "")};
+                        Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
                     mime:EntityError e => {
@@ -394,7 +394,7 @@ public function ScimConnector::createUser (User user) returns (string|error) {
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        Error = {message:failedMessage + (payload.detail.toString() ?: "")};
+                        Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
                     mime:EntityError e => {
@@ -491,7 +491,7 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        Error = {message:failedMessage + (payload.detail.toString() ?: "")};
+                        Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
                     mime:EntityError e => {
@@ -587,7 +587,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
                 var received = response.getJsonPayload();
                 match received {
                     json payload => {
-                        Error = {message:failedMessage + (payload.detail.toString() ?: "")};
+                        Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
                     mime:EntityError e => {
