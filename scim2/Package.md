@@ -12,7 +12,7 @@
  ## Compatibility
  | Language Version        | Endpoint Version          | API Versions  |
  | ------------- |:-------------:| -----:|
- | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.6 | SCIM2.0 |
+ | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.7 | SCIM2.0 |
  
 
 ![alt text](resources/SCIM2.png)
