@@ -477,15 +477,3 @@ function testGetListOfGroups () {
     }
     test:assertEquals(length, 2, msg = "getListOfGroups function failed");
 }
-
-function setConfParams(string|() confParam) returns string {
-    match confParam {
-        string param => {
-            return param;
-        }
-        () => {
-            log:printInfo("Empty value, found nil!!");
-            return "";
-        }
-    }
-}
