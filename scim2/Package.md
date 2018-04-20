@@ -7,7 +7,7 @@
  ## Compatibility
  | Ballerina Language Version| SCIM API Version  |
  | :------------------------:| :----------------:|
- | 0.970.0-beta1             | SCIM2.0           |
+ | 0.970.0-beta3            | SCIM2.0           |
 
  ## Getting Started
   1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
