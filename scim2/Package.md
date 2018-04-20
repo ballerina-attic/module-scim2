@@ -1,6 +1,6 @@
 # SCIM Connector
  
- SCIM2 Endpoint provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
+ SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
  It handles [OAuth2](https://tools.ietf.org/html/rfc6749).
  
  
