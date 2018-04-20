@@ -64,4 +64,4 @@ KEYSTORE_PASSWORD = "<......>"
 ``` 
 
 Then you can easily test the SCIM2 endpoint functions by executing the command 
-`ballerina test scim2`.
+`ballerina test scim2 --config ballerina.conf`.
