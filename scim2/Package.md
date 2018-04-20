@@ -1,12 +1,8 @@
-# Ballerina SCIM Endpoint
-
-*The system for Cross-domain Identity Management (SCIM) specification
- is designed to make managing user identities in cloud-based applications 
- and services easier.*
-
+# SCIM Connector
  
- The Ballerina SCIM2 Endpoint allows users to access Rest API of any service that implements 
- SCIM2 specification.  
+ SCIM Connector provides a Ballerina API to access the Rest API of any service that 
+ has implemented SCIM2 specification. It handles [OAuth2.0](https://tools.ietf.org/html/rfc6749)
+  
  
  
  ## Compatibility
