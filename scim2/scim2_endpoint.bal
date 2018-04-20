@@ -24,7 +24,8 @@ public type Scim2Configuration {
     http:ClientEndpointConfig clientConfig;
 };
 
-documentation {SCIM2 Client Endpoint
+documentation {SCIM2 Client
+    E{{}}
     F{{scim2Config}} SCIM2 client endpoint configuration object
     F{{scim2Connector}} SCIM2 connector object
 }
@@ -40,7 +41,7 @@ public type Client object {
     public function init (Scim2Configuration scim2Config);
 
     documentation {Returns the connector that client code uses}
-    public function getClient () returns ScimConnector;
+    public function getCallerActions () returns ScimConnector;
 };
 
 public function Client::init (Scim2Configuration scim2Config) {
@@ -48,6 +49,6 @@ public function Client::init (Scim2Configuration scim2Config) {
     self.scim2Connector.httpClient.init(scim2Config.clientConfig);
 }
 
-public function Client::getClient () returns ScimConnector {
+public function Client::getCallerActions () returns ScimConnector {
     return self.scim2Connector;
 }

@@ -23,14 +23,13 @@ endpoint Client scimEP {
             refreshToken:refreshToken,
             refreshUrl:refreshUrl
         },
-        targets:[{url:url,
-            secureSocket:{
-                trustStore:{
-                    filePath:keystore,
-                    password:password
-                }
+        url:url,
+        secureSocket:{
+            trustStore:{
+                filePath:keystore,
+                password:password
             }
-        }]
+        }
     }
 };
 
@@ -476,16 +475,4 @@ function testGetListOfGroups () {
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(length, 2, msg = "getListOfGroups function failed");
-}
-
-function setConfParams(string|() confParam) returns string {
-    match confParam {
-        string param => {
-            return param;
-        }
-        () => {
-            log:printInfo("Empty value, found nil!!");
-            return "";
-        }
-    }
 }
