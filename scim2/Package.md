@@ -45,13 +45,15 @@
             targets:[{url:"https://localhost:9443"}]
         }
     };
-    
-    string message;
-    string userName = "iniesta";
-    var response = scimEP -> getUserByUsername(userName);
-    match response {
-        User usr => message = usr.userName;
-        error er => message = er.message;
+
+    function main(string... args) {
+        string message;
+        string userName = "iniesta";
+        var response = scimEP -> getUserByUsername(userName);
+        match response {
+            User usr => message = usr.userName;
+            error er => message = er.message;
+        }
+        io:println(message);
     }
-    io:println(message);
     ```
