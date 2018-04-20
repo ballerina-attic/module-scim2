@@ -24,7 +24,8 @@ public type Scim2Configuration {
     http:ClientEndpointConfig clientConfig;
 };
 
-documentation {SCIM2 Client Endpoint
+documentation {SCIM2 Client
+    E{{}}
     F{{scim2Config}} SCIM2 client endpoint configuration object
     F{{scim2Connector}} SCIM2 connector object
 }
