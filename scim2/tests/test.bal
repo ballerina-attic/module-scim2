@@ -23,14 +23,13 @@ endpoint Client scimEP {
             refreshToken:refreshToken,
             refreshUrl:refreshUrl
         },
-        targets:[{url:url,
-            secureSocket:{
-                trustStore:{
-                    filePath:keystore,
-                    password:password
-                }
+        url:url,
+        secureSocket:{
+            trustStore:{
+                filePath:keystore,
+                password:password
             }
-        }]
+        }
     }
 };
 

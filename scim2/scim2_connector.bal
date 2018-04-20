@@ -18,7 +18,7 @@
 import ballerina/http;
 import ballerina/mime;
 
-documentation {SCIM2 Client Connector
+documentation {Object for SCIM2 endpoint.
     F{{baseUrl}} base url of the REST API
     F{{httpClient}} HTTP client endpoint
 }
