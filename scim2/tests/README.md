@@ -44,24 +44,24 @@ charset=UTF-8' -k -d 'grant_type=password&username=admin&password=admin' https:/
 ` 
 ## Running Tests
 
-Initialize a ballerina project 
+1. Initialize a ballerina project 
 
-`ballerina init`
+    `ballerina init`
 
-Before testing you have create a `ballerina.conf` file with following details.
-```
-###HTTP:Client configurations###
-ENDPOINT = "<......>"
-ACCESS_TOKEN = "<......>"
-CLIENT_ID = "<......>"
-CLIENT_SECRET = "<......>"
-REFRESH_TOKEN = "<......>"
-REFRESH_URL = "<......>"
+2. Create a ballerina config file (`.conf`) with following details.
+    ```
+    ###HTTP:Client configurations###
+    ENDPOINT = "<......>"
+    ACCESS_TOKEN = "<......>"
+    CLIENT_ID = "<......>"
+    CLIENT_SECRET = "<......>"
+    REFRESH_TOKEN = "<......>"
+    REFRESH_URL = "<......>"
+    
+    ###Keystore configurations###
+    KEYSTORE = "<......>"
+    KEYSTORE_PASSWORD = "<......>"
+    ``` 
 
-###Keystore configurations###
-KEYSTORE = "<......>"
-KEYSTORE_PASSWORD = "<......>"
-``` 
-
-Then you can easily test the SCIM2 endpoint functions by executing the command 
-`ballerina test scim2 --config ballerina.conf`.
+3. Test the SCIM2 endpoint functions by executing the command 
+    `ballerina test scim2 --config <path_of_.conf>/<file_name>.conf`.
