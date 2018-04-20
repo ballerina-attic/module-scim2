@@ -1,60 +1,57 @@
 # SCIM Connector
  
- SCIM Connector provides a Ballerina API to access the Rest API of any service that 
- has implemented SCIM2 specification. It handles [OAuth2.0](https://tools.ietf.org/html/rfc6749)
-  
+ SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
+ It handles [OAuth2](https://tools.ietf.org/html/rfc6749).
  
  
  ## Compatibility
- | Language Version        | Endpoint Version          | API Versions  |
- | ------------- |:-------------:| -----:|
- | ballerina-0.970.0-beta1-SNAPSHOT     | 0.9.7 | SCIM2.0 |
- 
-
-![alt text](resources/SCIM2.png)
-
-The source code of the SCIM2 endpoint can be found at [package-scim2](https://github.com/wso2-ballerina/package-scim2)
+ | Ballerina Language Version| SCIM API Version  |
+ | :------------------------:| :----------------:|
+ | 0.970.0-beta1             | SCIM2.0           |
 
  ## Getting Started
- 
- - Import the package to your ballerina project.
- 
- `import wso2/scim2`
- 
- This will download the scim2 artifacts from the central repository to your local repository.
- 
-## Working with SCIM Endpoint actions
-
-In order for you to use the SCIM Endpoint, first you need to create a SCIM2 Client 
-endpoint.
-
-```ballerina
-import wso2/scim2;
-
-endpoint scim2:Client scimEP {
-    baseUrl:"https://localhost:9443",
-    clientConfig:{
-        auth:{
-            scheme:"oauth",
-            accessToken:"<......>",
-            clientId:"<......>",
-            clientSecret:"<......>",
-            refreshToken:"<......>",
-            refreshUrl:"<......>"
-        },
-        targets:[{url:"https://localhost:9443",
-            secureSocket:{
-                trustStore:{
-                    filePath:"<......>",
-                    password:"<......>"
-                }
-            }
-        }]
+  1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
+  2. To use SCIM endpoint, you need to provide the following:
+      - Client Id
+      - Client Secret
+      - Access Token
+      - Refresh Token
+      - Refresh Url
+     
+     *Please note that, providing ClientId, Client Secret, Refresh Token are optional if you are only providing a valid 
+      Access Token vise versa.*
+      
+   3. Create a new Ballerina project by executing the following command.
+   
+        `<PROJECT_ROOT_DIRECTORY>$ ballerina init`
+   	
+ 4. Import the scim2 package to your Ballerina program as follows.
+    
+    ```ballerina
+    import ballerina/io;
+    import wso2/scim2;
+    
+    endpoint scim2:Client scimEP {
+        baseUrl:"https://localhost:9443",
+        clientConfig:{
+            auth:{
+                scheme:"oauth",
+                accessToken:"<access_token>",
+                clientId:"<client_id>",
+                clientSecret:"<client_secret>",
+                refreshToken:"<refresh_token>",
+                refreshUrl:"<refresh_url>"
+            },
+            targets:[{url:"https://localhost:9443"}]
+        }
+    };
+    
+    string message;
+    string userName = "iniesta";
+    var response = scimEP -> getUserByUsername(userName);
+    match response {
+        User usr => message = usr.userName;
+        error er => message = er.message;
     }
-};
-```
-Then use the following syntax to call endpoint functions
-
-```ballerina
-var response = scimEP -> <name_of_the_function>(arg...);
-```
+    io:println(message);
+    ```
