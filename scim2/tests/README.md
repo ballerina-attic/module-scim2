@@ -1,4 +1,4 @@
-# Ballerina SCIM Endpoint - Tests
+# Ballerina SCIM Connector - Tests
 
 *The system for Cross-domain Identity Management (SCIM) specification
  is designed to make managing user identities in cloud-based applications 
