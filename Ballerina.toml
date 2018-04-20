@@ -3,6 +3,5 @@ org-name = "wso2"
 version = "0.9.9"
 authors = ["WSO2"]
 keywords = ["ballerina", "scim2", "endpoint", "API"]
-description = "SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification."
 homepage = "https://ballerinalang.org/"
 repository = "https://github.com/wso2-ballerina/package-scim2"
