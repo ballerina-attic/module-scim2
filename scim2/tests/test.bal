@@ -26,7 +26,7 @@ endpoint Client scimEP {
         url:url,
         secureSocket:{
             trustStore:{
-                filePath:keystore,
+                path:keystore,
                 password:password
             }
         }

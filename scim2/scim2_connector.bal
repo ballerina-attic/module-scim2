@@ -418,7 +418,8 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
     //check if user valid
     http:Request requestUser = new();
     User user = {};
-    var resUser = httpEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, requestUser);
+    var resUser = httpEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
+                                request = requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -441,7 +442,8 @@ public function ScimConnector::addUserToGroup (string userName, string groupName
     //check if group valid
     http:Request requestGroup = new();
     Group gro = {};
-    var resGroup = httpEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName, requestGroup);
+    var resGroup = httpEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
+                                 request = requestGroup);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -516,7 +518,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
     http:Request requestUser = new();
     User user = {};
     var resUser = httpEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
-                                 userName, requestUser);
+                                 userName, request = requestUser);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -541,7 +543,7 @@ public function ScimConnector::removeUserFromGroup (string userName, string grou
     Group gro = {};
     http:Request groupRequest = new();
     var resGroup = httpEP -> get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
-                                  groupName, groupRequest);
+                                  groupName, request = groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
@@ -645,7 +647,8 @@ public function ScimConnector::deleteUserByUsername (string userName) returns (s
     http:Request userRequest = new();
     User user = {};
     error Error = {};
-    var resUser = httpEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, userRequest);
+    var resUser = httpEP -> get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
+                                request = userRequest);
     match resUser {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get User " + userName + "." +
@@ -694,7 +697,7 @@ public function ScimConnector::deleteGroupByName (string groupName) returns (str
     http:Request groupRequest = new();
     Group gro = {};
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-    var resGroup = httpEP -> get(s, groupRequest);
+    var resGroup = httpEP -> get(s, request = groupRequest);
     match resGroup {
         http:HttpConnectorError connectorError => {
             Error = {message:"Failed to get Group " + groupName + "." +
