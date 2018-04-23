@@ -40,7 +40,9 @@ public type Client object {
     }
     public function init (Scim2Configuration scim2Config);
 
-    documentation {Returns the connector that client code uses}
+    documentation {Returns the connector that client code uses
+        R{{}} - SCIM2 Client
+    }
     public function getCallerActions () returns ScimConnector;
 };
 
