@@ -754,9 +754,8 @@ public function ScimConnector::deleteGroupByName(string groupName) returns (stri
     }
 }
 
-public function ScimConnector::updateSimpleUserValue(string id, string valueType, string newValue) returns
-                                                                                                           (string|error
-                                                                                                           ) {
+public function ScimConnector::updateSimpleUserValue(string id, string valueType, string newValue)
+    returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     error Error = {};
 
