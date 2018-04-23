@@ -1,6 +1,6 @@
 [project]
 org-name = "wso2"
-version = "0.9.15"
+version = "0.9.16"
 authors = ["wso2"]
 keywords = ["ballerina", "scim2", "endpoint"]
 homepage = "https://ballerinalang.org/"
