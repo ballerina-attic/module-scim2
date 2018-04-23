@@ -1,6 +1,6 @@
 # SCIM2 Connector
  
- Allows connecting to SCIM2 REST APIs.
+ Connects to SCIM2 API from Ballerina.
  
  SCIM2 Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
  This Connector provides user management by allowing to create, delete, read, update users and groups and manage 
