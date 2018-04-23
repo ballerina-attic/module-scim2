@@ -1,16 +1,18 @@
-# SCIM Connector
+# SCIM2 Connector
  
- SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
+ SCIM2 Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
+ The SCIM protocol is an application-level HTTP-based protocol for provisioning and managing identity data on the web and
+ in cross-domain environments such as enterprise-to-cloud service providers or inter-cloud scenarios.
  
  
  ## Compatibility
- | Ballerina Language Version| SCIM API Version  |
- | :------------------------:| :----------------:|
- | 0.970.0-beta10            | SCIM2.0           |
+ | Ballerina Language Version| SCIM API Version                                          |
+ | :------------------------:| :--------------------------------------------------------:|
+ | 0.970.0-beta10            | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
  ## Getting Started
   1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
-  2. To use SCIM endpoint, you need to provide the following:
+  2. To use SCIM2 endpoint, you need to provide the following:
       - Client Id
       - Client Secret
       - Access Token
