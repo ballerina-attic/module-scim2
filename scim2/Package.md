@@ -1,7 +1,6 @@
 # SCIM Connector
  
  SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
- It handles OAuth2.
  
  
  ## Compatibility
