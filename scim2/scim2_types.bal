@@ -170,7 +170,7 @@ public type X509Certificate {
 
 documentation {Represents fields related to Enterprise User Extention for a SCIM2-User
     F{{employeeNumber}} - Number of the employee
-    F{{contCenter}} - Employee cost center
+    F{{costCenter}} - Employee cost center
     F{{organization}} - Organization of the employe
     F{{division}} - Division of the employe
     F{{department}} - Department of the employee
