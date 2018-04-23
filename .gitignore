@@ -32,9 +32,6 @@ target
 .idea
 .m2
 
-#Ignore doc files
-docs/
-
 #Ignore oauth2 package
 oauth2/
 
