@@ -1,17 +1,21 @@
-# SCIM Connector
+# SCIM2 Connector
  
- SCIM Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
- It handles [OAuth2](https://tools.ietf.org/html/rfc6749).
+ Allows connecting REST APIs that implement SCIM2 specification.
  
- 
+ SCIM2 Connector provides a Ballerina API to access the Rest API of any service that has implemented SCIM2 specification.
+ This Connector provides user management by allowing to create, delete, read, update users and groups and manage 
+ user's groups.
+
  ## Compatibility
- | Ballerina Language Version| SCIM API Version  |
- | :------------------------:| :----------------:|
- | 0.970.0-beta10             | SCIM2.0           |
+ | Ballerina Language Version| SCIM API Version                                          |
+ | :------------------------:| :--------------------------------------------------------:|
+ | 0.970.0-beta10            | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+
+ ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
  ## Getting Started
   1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
-  2. To use SCIM endpoint, you need to provide the following:
+  2. To use SCIM2 endpoint, you need to provide the following:
       - Client Id
       - Client Secret
       - Access Token
