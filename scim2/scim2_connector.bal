@@ -28,60 +28,75 @@ public type ScimConnector object {
         http:Client httpClient;
     }
 
-    documentation {Returns a list of user records if found or error if any error occured}
+    documentation {Returns a list of user records if found or error if any error occured
+        R{{}} - List of User records
+    }
     public function getListOfUsers () returns (User[]|error);
 
-    documentation {Returns a list of group records if found or error if any error occured}
+    documentation {Returns a list of group records if found or error if any error occured
+        R{{}} - List of Group records
+    }
     public function getListOfGroups () returns (Group[]|error);
 
-    documentation {Returns the user that is currently authenticated}
+    documentation {Returns the user that is currently authenticated
+        R{{}} - User Record
+    }
     public function getMe() returns (User|error);
 
     documentation {Returns a group record with the specified group name if found
         P{{groupName}} Name of the group
+        R{{}} - Group record
     }
     public function getGroupByName (string groupName) returns (Group|error);
 
     documentation {Returns a user record with the specified username if found
         P{{userName}} User name of the user
+        R{{}} - User record
     }
     public function getUserByUsername (string userName) returns (User|error);
 
     documentation {Create a group in the user store
         P{{crtGroup}} Group record with the group details
+        R{{}} - String message with status
     }
     public function createGroup (Group crtGroup) returns (string|error);
 
     documentation {Create a user in the user store
         P{{user}} User record with the user details
+        R{{}} - String message with status
     }
     public function createUser (User user) returns (string|error);
 
     documentation {Add a user specified by username to the group specified by group name
         P{{userName}} User name of the user
         P{{groupName}} Name of the group
+        R{{}} - String message with status
     }
     public function addUserToGroup (string userName, string groupName) returns (string|error);
 
     documentation {Remove a user specified by username from the group specified by group name
         P{{userName}} User name of the user
         P{{groupName}} Name of the group
+        R{{}} - String message with status
     }
     public function removeUserFromGroup (string userName, string groupName) returns (string|error);
 
     documentation {Returns whether the user specified by username belongs to the group specified by groupname
         P{{userName}} User name of the user
         P{{groupName}} Name of the group
+        R{{}} - True or False
     }
     public function isUserInGroup (string userName, string groupName) returns (boolean|error);
 
     documentation {Delete a user from user store
         P{{userName}} User name of the user
+        R{{}} - String message with status
     }
     public function deleteUserByUsername (string userName) returns (string|error);
 
     documentation {Delete a group from user store
         P{{groupName}} User name of the user
+        R{{}} - String message with status
     }
     public function deleteGroupByName (string groupName) returns (string|error);
 
@@ -89,6 +104,7 @@ public type ScimConnector object {
         P{{id}} ID of the user
         P{{valueType}} The attribute name to be updated
         P{{newValue}} The new value of the attribute
+        R{{}} - String message with status
     }
     public function updateSimpleUserValue (string id, string valueType, string newValue) returns
                                                                                         (string|error);
@@ -96,17 +112,21 @@ public type ScimConnector object {
     documentation {Update emails addresses of a user
         P{{id}} ID of the user
         P{{emails}} List of new emails of the user
+        R{{}} - String message with status
+        R{{}} - Error
     }
     public function updateEmails (string id, Email[] emails) returns (string|error);
 
     documentation {Update addresses of a user
         P{{id}} ID of the user
         P{{addresses}} List of new addresses of the user
+        R{{}} - String message with status
     }
     public function updateAddresses (string id, Address[] addresses) returns (string|error);
 
     documentation {Update a user
         P{{user}} User record with new user values
+        R{{}} - String message with status
     }
     public function updateUser (User user) returns (string|error);
 };
