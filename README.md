@@ -8,6 +8,8 @@
  | :------------------------:| :----------------:|
  | 0.970.0-beta10             | SCIM2.0           |
 
+ ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
+
  ## Getting Started
   1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
   2. To use SCIM endpoint, you need to provide the following:
