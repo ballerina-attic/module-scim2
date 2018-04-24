@@ -1,8 +1,10 @@
 # Ballerina SCIM Connector - Tests
 
-*The system for Cross-domain Identity Management (SCIM) specification
- is designed to make managing user identities in cloud-based applications 
- and services easier.*
+ Connects to SCIM2 API from Ballerina.
+ 
+ SCIM2 Connector provides an optimized way to use SCIM2 REST API from your Ballerina programs.
+ It provides user management by allowing to create, delete, read, update users and groups, and manage 
+ user's groups. It handles OAuth 2.0 and provides auto completion and type conversions.
 
 The following sections provide you with information on how to use the Ballerina SCIM Endpoint.
 
