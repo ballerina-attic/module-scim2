@@ -21,7 +21,7 @@ documentation {Returns a user record if the input http:Response contains a user
     P{{userName}} User name of the user
     P{{response}} http:Response with the received response from the SCIM2 API
 }
-function resolveUser (string userName, http:Response response) returns User|error {
+function resolveUser(string userName, http:Response response) returns User|error {
     User user = {};
     error Error = {};
 
@@ -54,7 +54,7 @@ documentation {Returns a group record if the input http:Response contains a grou
     P{{groupName}} Name of the group
     P{{response}} http:Response with the received response from the SCIM2 API
 }
-function resolveGroup (string groupName, http:Response response) returns Group|error {
+function resolveGroup(string groupName, http:Response response) returns Group|error {
     Group receivedGroup = {};
     error Error = {};
 
@@ -86,8 +86,8 @@ function resolveGroup (string groupName, http:Response response) returns Group|e
 documentation {Returns a http:Request with the json attached to its body
     P{{body}} Json Object which should be attached to the body of the request
 }
-function createRequest (json body) returns http:Request {
-    http:Request request =new();
+function createRequest(json body) returns http:Request {
+    http:Request request = new();
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(body);
     return request;
@@ -97,7 +97,7 @@ documentation {Returns a json object that should be attached to the http:Request
     P{{valueType}} The name of the user attribute
     P{{newValue}} The new value of the attribute
 }
-function createUpdateBody (string valueType, string newValue) returns json|error {
+function createUpdateBody(string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
     error Error = {};
 

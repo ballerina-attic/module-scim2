@@ -56,30 +56,37 @@
 @final int HTTP_NO_CONTENT = 204;
 
 
+documentation {Json object to set as payload when patch add a group.}
 public json SCIM_GROUP_PATCH_ADD_BODY = {
-                                            "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
-                                            "Operations":[{
-                                                              "op":"add",
-                                                              "value":{
-                                                                          "members":[{
-                                                                                         "display":"",
-                                                                                         "$ref":"",
-                                                                                         "value":""
-                                                                                     }]
-                                                                      }
-                                                          }]
-                                        };
+    "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+    "Operations":[{
+        "op":"add",
+        "value":{
+            "members":[{
+                "display":"",
+                "$ref":"",
+                "value":""
+            }]
+        }
+    }]
+};
+
+
+documentation {Json object to set as payload when patch remove group.}
 public json SCIM_GROUP_PATCH_REMOVE_BODY = {
-                                               "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
-                                               "Operations":[{
-                                                                 "op":"remove",
-                                                                 "path":""
-                                                             }]
-                                           };
+    "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+    "Operations":[{
+        "op":"remove",
+        "path":""
+    }]
+};
+
+
+documentation {Json object to set as payload when patch add user.}
 public json SCIM_PATCH_ADD_BODY = {
-                                      "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
-                                      "Operations":[{
-                                                        "op":"add",
-                                                        "value":{}
-                                                    }]
-                                  };
+    "schemas":["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+    "Operations":[{
+        "op":"add",
+        "value":{}
+    }]
+};

@@ -38,19 +38,19 @@ public type Client object {
     documentation {Initialize the SCiM2 endpoint
         P{{scim2Config}} SCIM2 configuration object
     }
-    public function init (Scim2Configuration scim2Config);
+    public function init(Scim2Configuration scim2Config);
 
     documentation {Returns the connector that client code uses
         R{{}} - SCIM2 Client
     }
-    public function getCallerActions () returns ScimConnector;
+    public function getCallerActions() returns ScimConnector;
 };
 
-public function Client::init (Scim2Configuration scim2Config) {
+public function Client::init(Scim2Configuration scim2Config) {
     self.scim2Connector.baseUrl = scim2Config.baseUrl;
     self.scim2Connector.httpClient.init(scim2Config.clientConfig);
 }
 
-public function Client::getCallerActions () returns ScimConnector {
+public function Client::getCallerActions() returns ScimConnector {
     return self.scim2Connector;
 }
