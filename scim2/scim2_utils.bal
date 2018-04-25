@@ -40,7 +40,7 @@ function resolveUser(string userName, http:Response response) returns User|error
                 user = convertReceivedPayloadToUser(payload);
                 return user;
             }
-            mime:EntityError e => {
+            error e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
                 return Error;
             }
@@ -73,7 +73,7 @@ function resolveGroup(string groupName, http:Response response) returns Group|er
                 receivedGroup = convertReceivedPayloadToGroup(payload);
                 return receivedGroup;
             }
-            mime:EntityError e => {
+            error e => {
                 Error = {message:failedMessage + e.message, cause:e.cause};
                 return Error;
             }

@@ -141,9 +141,8 @@ public function ScimConnector::getListOfUsers() returns (User[]|error) {
 
     var res = httpEP->get(SCIM_USER_END_POINT, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message,
-                cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -167,7 +166,7 @@ public function ScimConnector::getListOfUsers() returns (User[]|error) {
                             return userList;
                         }
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -189,8 +188,8 @@ public function ScimConnector::getListOfGroups() returns (Group[]|error) {
 
     var res = httpEP->get(SCIM_GROUP_END_POINT, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -214,7 +213,7 @@ public function ScimConnector::getListOfGroups() returns (Group[]|error) {
                             return groupList;
                         }
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -238,8 +237,8 @@ public function ScimConnector::getMe() returns (User|error) {
 
     var res = httpEP->get(SCIM_ME_ENDPOINT, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -250,7 +249,7 @@ public function ScimConnector::getMe() returns (User|error) {
                         user = convertJsonToUser(payload);
                         return user;
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -271,9 +270,8 @@ public function ScimConnector::getGroupByName(string groupName) returns (Group|e
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
     var res = httpEP->get(s, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get Group " + groupName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -290,9 +288,8 @@ public function ScimConnector::getUserByUsername(string userName) returns (User|
 
     var res = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get User " + userName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -316,8 +313,8 @@ public function ScimConnector::createGroup(Group crtGroup) returns (string|error
     request.setJsonPayload(jsonPayload);
     var res = httpEP->post(SCIM_GROUP_END_POINT, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -335,7 +332,7 @@ public function ScimConnector::createGroup(Group crtGroup) returns (string|error
                         Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -398,8 +395,8 @@ public function ScimConnector::createUser(User user) returns (string|error) {
     request.setJsonPayload(jsonPayload);
     var res = httpEP->post(SCIM_USER_END_POINT, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -417,7 +414,7 @@ public function ScimConnector::createUser(User user) returns (string|error) {
                         Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -441,9 +438,8 @@ public function ScimConnector::addUserToGroup(string userName, string groupName)
     var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
         request = requestUser);
     match resUser {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get User " + userName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -465,9 +461,8 @@ public function ScimConnector::addUserToGroup(string userName, string groupName)
     var resGroup = httpEP->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
         request = requestGroup);
     match resGroup {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get Group " + groupName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -497,8 +492,8 @@ public function ScimConnector::addUserToGroup(string userName, string groupName)
     request.setJsonPayload(body);
     var res = httpEP->patch(url, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -516,7 +511,7 @@ public function ScimConnector::addUserToGroup(string userName, string groupName)
                         Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -540,9 +535,8 @@ public function ScimConnector::removeUserFromGroup(string userName, string group
     var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
             userName, request = requestUser);
     match resUser {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get User " + userName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -565,9 +559,8 @@ public function ScimConnector::removeUserFromGroup(string userName, string group
     var resGroup = httpEP->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
             groupName, request = groupRequest);
     match resGroup {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get Group " + groupName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -593,8 +586,8 @@ public function ScimConnector::removeUserFromGroup(string userName, string group
     request.setJsonPayload(body);
     var res = httpEP->patch(url, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:failedMessage + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -612,7 +605,7 @@ public function ScimConnector::removeUserFromGroup(string userName, string group
                         Error = {message:failedMessage + (payload.detail.toString())};
                         return Error;
                     }
-                    mime:EntityError e => {
+                    error e => {
                         Error = {message:failedMessage + e.message, cause:e.cause};
                         return Error;
                     }
@@ -630,9 +623,8 @@ public function ScimConnector::isUserInGroup(string userName, string groupName) 
 
     var res = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get User " + userName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -670,9 +662,8 @@ public function ScimConnector::deleteUserByUsername(string userName) returns (st
     var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
         request = userRequest);
     match resUser {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get User " + userName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get User " + userName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -683,8 +674,8 @@ public function ScimConnector::deleteUserByUsername(string userName) returns (st
                     string userId = user.id;
                     var res = httpEP->delete(SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + userId, request = request);
                     match res {
-                        http:HttpConnectorError connectorError => {
-                            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+                        error err => {
+                            Error = {message:failedMessage + err.message, cause:err.cause};
                             return Error;
                         }
                         http:Response resp => {
@@ -719,9 +710,8 @@ public function ScimConnector::deleteGroupByName(string groupName) returns (stri
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
     var resGroup = httpEP->get(s, request = groupRequest);
     match resGroup {
-        http:HttpConnectorError connectorError => {
-            Error = {message:"Failed to get Group " + groupName + "." +
-                connectorError.message, cause:connectorError.cause};
+        error err => {
+            Error = {message:"Failed to get Group " + groupName + "." + err.message, cause:err.cause};
             return Error;
         }
         http:Response response => {
@@ -732,8 +722,8 @@ public function ScimConnector::deleteGroupByName(string groupName) returns (stri
                     string groupId = gro.id;
                     var res = httpEP->delete(SCIM_GROUP_END_POINT + SCIM_FILE_SEPERATOR + groupId, request = request);
                     match res {
-                        http:HttpConnectorError connectorError => {
-                            Error = {message:failedMessage + connectorError.message, cause:connectorError.cause};
+                        error err => {
+                            Error = {message:failedMessage + err.message, cause:err.cause};
                             return Error;
                         }
                         http:Response resp => {
@@ -773,8 +763,8 @@ public function ScimConnector::updateSimpleUserValue(string id, string valueType
             string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
             var res = httpEP->patch(url, request = request);
             match res {
-                http:HttpConnectorError connectorError => {
-                    Error = {message:connectorError.message};
+                error err => {
+                    Error = {message:err.message};
                     return Error;
                 }
                 http:Response response => {
@@ -824,8 +814,8 @@ public function ScimConnector::updateEmails(string id, Email[] emails) returns (
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
     var res = httpEP->patch(url, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:connectorError.message};
+        error err => {
+            Error = {message:err.message};
             return Error;
         }
         http:Response response => {
@@ -869,8 +859,8 @@ public function ScimConnector::updateAddresses(string id, Address[] addresses) r
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
     var res = httpEP->patch(url, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:connectorError.message};
+        error err => {
+            Error = {message:err.message};
             return Error;
         }
         http:Response response => {
@@ -893,8 +883,8 @@ public function ScimConnector::updateUser(User user) returns (string|error) {
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + user.id;
     var res = httpEP->put(url, request = request);
     match res {
-        http:HttpConnectorError connectorError => {
-            Error = {message:connectorError.message};
+        error err => {
+            Error = {message:err.message};
             return Error;
         }
         http:Response response => {
