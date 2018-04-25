@@ -1,61 +1,86 @@
-# SCIM2 Connector
- 
- Connects to SCIM2 API from Ballerina.
- 
- SCIM2 Connector provides an optimized way to use SCIM2 REST API from your Ballerina programs.
- It provides user management by allowing to create, delete, read, update users and groups, and manage 
- user's groups. It handles OAuth 2.0 and provides auto completion and type conversions.
- 
- ## Compatibility
- | Ballerina Language Version| SCIM API Version                                          |
- | :------------------------:| :--------------------------------------------------------:|
- | 0.970.0-beta10            | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+Connects to SCIM2 API from Ballerina.
 
- ## Getting Started
-  1. Refer https://ballerina.io/learn/getting-started/ to download Ballerina and install tools.
-  2. To use SCIM2 endpoint, you need to provide the following:
-      - Client Id
-      - Client Secret
-      - Access Token
-      - Refresh Token
-      - Refresh Url
-     
-     *Please note that, providing ClientId, Client Secret, Refresh Token are optional if you are only providing a valid 
-      Access Token vise versa.*
-      
-   3. Create a new Ballerina project by executing the following command.
-   
-        `<PROJECT_ROOT_DIRECTORY>$ ballerina init`
-   	
- 4. Import the scim2 package to your Ballerina program as follows.
-    
-    ```ballerina
-    import ballerina/io;
-    import wso2/scim2;
-    
-    endpoint scim2:Client scimEP {
-        baseUrl:"https://localhost:9443",
-        clientConfig:{
-            auth:{
-                scheme:"oauth",
-                accessToken:"<access_token>",
-                clientId:"<client_id>",
-                clientSecret:"<client_secret>",
-                refreshToken:"<refresh_token>",
-                refreshUrl:"<refresh_url>"
-            },
-            targets:[{url:"https://localhost:9443"}]
-        }
-    };
+# Package Overview
+ 
+This package provides a Ballerina API for the SCIM2 REST API. It provides user management capabilities by allowing you to create, delete, read, and update users and groups and manage a user's groups. It handles OAuth 2.0 and provides auto completion and prebuilt types for SCIM2 objects that comply with the [SCIM2 standard](http://www.simplecloud.info/).
 
-    function main(string... args) {
-        string message;
-        string userName = "iniesta";
-        var response = scimEP -> getUserByUsername(userName);
-        match response {
-            User usr => message = usr.userName;
-            error er => message = er.message;
-        }
-        io:println(message);
+**User Operations**
+
+The `wso2/scim2` package contains operations that manage users. It can create, list, update, and delete users.
+
+**Group Operations**
+
+The `wso2/scim2` package contains operations to manage groups. It can create, list, update, and delete groups.
+
+## Compatibility
+
+|                                 |       Version                  |
+|  :---------------------------:  |  :---------------------------: |
+|  Ballerina Language Version     |   0.970.0-beta15               |
+|  SCIM API Version               |   [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+
+## Sample
+First, import the `wso2/scim2` package into the Ballerina project.
+
+```ballerina
+import wso2/scim2;
+```
+
+Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. The SCIM2 connector can be minimally instantiated using the access token or using the client ID, client secret, and refresh token in the HTTP client config or BasicAuth configuration.
+
+```ballerina
+endpoint Client scimEP {
+   clientConfig:{
+       auth:{
+           scheme:"oauth",
+           accessToken:accessToken,
+           clientId:clientId,
+           clientSecret:clientSecret,
+           refreshToken:refreshToken,
+           refreshUrl:refreshUrl
+       },
+       url:url,
+       secureSocket:{
+           trustStore:{
+               path:keystore,
+               password:password
+           }
+       }
+   }
+};
+```
+
+The `getUserByUsername` function retrieves a user and returns a `User` struct with the user’s attributes.
+
+```ballerina
+var response = scimEP->getUserByUsername(userName);
+match response {
+    User usr => io:println(usr);
+    error er => io:println(er);
+}
+```
+
+
+
+The `createUser` function creates the user. `User` is a structure that contains all the data mentioned in the SCIM2 specification. The response is either a `string message` (if successful) or an `error`.
+
+```ballerina
+User user = {};
+user.userName = "userName";
+user.password = "password";
+var response = scimEP->createUser(user);
+match response {
+    string msg => io:println(msg);
+    error er => io:println(er);
+}
+```
+
+The `getGroupByName` function reads a group and returns the `Group` struct (if successful) or an `error`.
+```ballerina
+    string groupName = "groupName";
+    var response = scimEP->getGroupByName(groupName);
+    match response {
+        Group grp => io:println(grp);
+        error er => io:println(er);
     }
-    ```
+```
