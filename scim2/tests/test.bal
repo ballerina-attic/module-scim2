@@ -13,7 +13,6 @@ string keystore = config:getAsString("KEYSTORE");
 string password = config:getAsString("KEYSTORE_PASSWORD");
 
 endpoint Client scimEP {
-    baseUrl:url,
     clientConfig:{
         auth:{
             scheme:"oauth",

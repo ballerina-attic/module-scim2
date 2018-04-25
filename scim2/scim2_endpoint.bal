@@ -20,7 +20,6 @@ documentation {SCIM2 Client Endpoint configuration object
     F{{clientConfig}} HTTP client endpoint configuration object
 }
 public type Scim2Configuration {
-    string baseUrl;
     http:ClientEndpointConfig clientConfig;
 };
 
@@ -47,7 +46,7 @@ public type Client object {
 };
 
 public function Client::init(Scim2Configuration scim2Config) {
-    self.scim2Connector.baseUrl = scim2Config.baseUrl;
+    self.scim2Connector.baseUrl = scim2Config.clientConfig.url;
     self.scim2Connector.httpClient.init(scim2Config.clientConfig);
 }
 
