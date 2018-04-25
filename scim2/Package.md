@@ -62,7 +62,7 @@ match response {
 
 
 
-The `createUser` function creates the user. `User` is a structure that contains all the data mentioned in the SCIM2 specification. The response is either a `string message` (if successful) or an `error`.
+The `createUser` function creates the user. `User` is a structure that contains all the data mentioned in the SCIM2 specification. The response is either a `string` message (if successful) or an `error`.
 
 ```ballerina
 User user = {};
