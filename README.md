@@ -37,17 +37,23 @@
     
     endpoint scim2:Client scimEP {
         baseUrl:"https://localhost:9443",
-        clientConfig:{
-            auth:{
-                scheme:"oauth",
-                accessToken:"<access_token>",
-                clientId:"<client_id>",
-                clientSecret:"<client_secret>",
-                refreshToken:"<refresh_token>",
-                refreshUrl:"<refresh_url>"
-            },
-            targets:[{url:"https://localhost:9443"}]
-        }
+	    clientConfig:{
+		auth:{
+		    scheme:"oauth",
+		    accessToken:accessToken,
+		    clientId:clientId,
+		    clientSecret:clientSecret,
+		    refreshToken:refreshToken,
+		    refreshUrl:refreshUrl
+		},
+		url:url,
+		secureSocket:{
+		    trustStore:{
+		        path:keystore,
+		        password:password
+		    }
+		}
+	    }
     };
     
     string message;
