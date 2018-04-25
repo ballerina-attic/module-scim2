@@ -34,17 +34,22 @@
     import wso2/scim2;
     
     endpoint scim2:Client scimEP {
-        baseUrl:"https://localhost:9443",
-        clientConfig:{
+	    clientConfig:{
             auth:{
                 scheme:"oauth",
-                accessToken:"<access_token>",
-                clientId:"<client_id>",
-                clientSecret:"<client_secret>",
-                refreshToken:"<refresh_token>",
-                refreshUrl:"<refresh_url>"
+                accessToken:accessToken,
+                clientId:clientId,
+                clientSecret:clientSecret,
+                refreshToken:refreshToken,
+                refreshUrl:refreshUrl
             },
-            targets:[{url:"https://localhost:9443"}]
+            url:url,
+            secureSocket:{
+                trustStore:{
+                    path:keystore,
+                    password:password
+                }
+            }
         }
     };
 
