@@ -3,8 +3,8 @@ Connects to SCIM2 API from Ballerina.
 # Package Overview
  
 The SCIM2 connector provides user management capabilities by allowing you to create, delete, read, and update users and 
-groups and manage a user's groups. It handles OAuth 2.0 and provides prebuilt types for SCIM2 objects that comply with the 
-standards.
+groups and manage a user's groups. It handles OAuth 2.0 and provides prebuilt types for SCIM2 objects that comply with 
+the SCIM2 standards.
 
 **User Operations**
 
