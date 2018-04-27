@@ -37,3 +37,5 @@ oauth2/
 
 #ignore conf
 ballerina.conf
+target/
+.DS_Store
