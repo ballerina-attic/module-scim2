@@ -12,7 +12,7 @@ The following sections provide you with information on how to use the Ballerina 
  ## Compatibility
  | Ballerina Language Version | SCIM API Version                                          |
  | :-------------------------:| :--------------------------------------------------------:|
- | 0.970.0-rc1                | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+ | 0.970.0                    | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 The source code of the SCIM2 endpoint can be found at [package-scim2](https://github.com/wso2-ballerina/package-scim2)
 
@@ -25,8 +25,7 @@ https://docs.wso2.com/display/IS540/Installation+Guide/.
 2. Follow the steps given in https://docs.wso2.com/display/ISCONNECTORS/Configuring+SCIM+2.0+Provisioning+Connector
 to enable the SCIM2 connector with WSO2 Identity Server. 
 3. Identify the URL for SCIM2. (By default it should be `https://localhost:9443/scim2/`)
-4. Create the truststore.p12 file using the client-truststore.jks file which is located at
-`/home/tharindu/Documents/IS_HOME/repository/resources/security`. Follow 
+4. Create the truststore.p12 file using the client-truststore.jks file which is located at `IS_HOME/repository/resources/security`. Follow
  https://www.tbs-certificates.co.uk/FAQ/en/627.html
  document to create the truststore.p12 file.
 5. [Obtain OAuth2 Tokens](#obtain-oauth2-tokens)
