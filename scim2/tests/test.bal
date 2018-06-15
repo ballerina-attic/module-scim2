@@ -15,7 +15,7 @@ string password = config:getAsString("KEYSTORE_PASSWORD");
 endpoint Client scimEP {
     clientConfig:{
         auth:{
-            scheme:"oauth",
+            scheme:http:OAUTH2,
             accessToken:accessToken,
             clientId:clientId,
             clientSecret:clientSecret,
