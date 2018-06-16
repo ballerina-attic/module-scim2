@@ -3,30 +3,30 @@ import ballerina/io;
 import ballerina/config;
 import ballerina/log;
 
-string url = config:getAsString("ENDPOINT");
+string testUrl = config:getAsString("ENDPOINT");
 string accessToken = config:getAsString("ACCESS_TOKEN");
 string clientId = config:getAsString("CLIENT_ID");
 string clientSecret = config:getAsString("CLIENT_SECRET");
 string refreshToken = config:getAsString("REFRESH_TOKEN");
 string refreshUrl = config:getAsString("REFRESH_URL");
 string keystore = config:getAsString("KEYSTORE");
-string password = config:getAsString("KEYSTORE_PASSWORD");
+string keystorePassword = config:getAsString("KEYSTORE_PASSWORD");
 
 endpoint Client scimEP {
-    clientConfig:{
-        auth:{
-            scheme:http:OAUTH2,
-            accessToken:accessToken,
-            clientId:clientId,
-            clientSecret:clientSecret,
-            refreshToken:refreshToken,
-            refreshUrl:refreshUrl
+    clientConfig: {
+        auth: {
+            scheme: http:OAUTH2,
+            accessToken: accessToken,
+            clientId: clientId,
+            clientSecret: clientSecret,
+            refreshToken: refreshToken,
+            refreshUrl: refreshUrl
         },
-        url:url,
-        secureSocket:{
-            trustStore:{
-                path:keystore,
-                password:password
+        url: testUrl,
+        secureSocket: {
+            trustStore: {
+                path: keystore,
+                password: keystorePassword
             }
         }
     }
@@ -102,7 +102,7 @@ function testCreateUserSuccess() {
 }
 
 @test:Config {
-    dependsOn:["testCreateUserSuccess"]
+    dependsOn: ["testCreateUserSuccess"]
 }
 function testCreateUserFail() {
     string message;
@@ -127,7 +127,9 @@ function testGetUserByUserNameSuccess() {
     string userName = "iniesta";
     var response = scimEP->getUserByUsername(userName);
     match response {
-        User usr => {message = usr.userName;}
+        User usr => {
+            message = usr.userName;
+        }
         error er => test:assertFail(msg = er.message);
     }
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
@@ -139,7 +141,9 @@ function testGetUserByUserNameFail() {
     string userName = "dogDayAfternoon";
     var response = scimEP->getUserByUsername(userName);
     match response {
-        User usr => {message = usr.userName;}
+        User usr => {
+            message = usr.userName;
+        }
         error er => message = er.message;
     }
     test:assertEquals(message, "Resolving user:" + userName + " failed. No User with user name " + userName,
@@ -175,7 +179,7 @@ function testCreateGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup"]
+    dependsOn: ["testCreateGroup"]
 }
 function testCreateGroupFail() {
     string message;
@@ -195,7 +199,7 @@ function testCreateGroupFail() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup"]
+    dependsOn: ["testCreateGroup"]
 }
 function testGetGroupByName() {
     string message;
@@ -209,7 +213,7 @@ function testGetGroupByName() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup"]
+    dependsOn: ["testCreateGroup"]
 }
 function testGetGroupByNameFail() {
     string message;
@@ -224,7 +228,7 @@ function testGetGroupByNameFail() {
 }
 
 @test:Config {
-    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
+    dependsOn: ["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
 }
 function testAddUserToGroup() {
     string message;
@@ -239,7 +243,7 @@ function testAddUserToGroup() {
 }
 
 @test:Config {
-    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
+    dependsOn: ["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
 }
 function testAddUserToGroupFailByUser() {
     string message;
@@ -257,7 +261,7 @@ function testAddUserToGroupFailByUser() {
 }
 
 @test:Config {
-    dependsOn:["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
+    dependsOn: ["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
 }
 function testAddUserToGroupFailByGroup() {
     string message;
@@ -275,7 +279,7 @@ function testAddUserToGroupFailByGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
 }
 function testRemoveUserFromGroup() {
     string message;
@@ -290,7 +294,7 @@ function testRemoveUserFromGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
 }
 function testRemoveUserFromGroupFailByUser() {
     string message;
@@ -307,7 +311,7 @@ function testRemoveUserFromGroupFailByUser() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
 }
 function testRemoveUserFromGroupFailByGroup() {
     string message;
@@ -324,7 +328,7 @@ function testRemoveUserFromGroupFailByGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroup() {
     boolean message;
@@ -339,7 +343,7 @@ function testIsUserInGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroupFalse() {
     boolean message;
@@ -354,7 +358,7 @@ function testIsUserInGroupFalse() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroupFailByUser() {
     string message;
@@ -373,7 +377,7 @@ function testIsUserInGroupFailByUser() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroupFalseNoGroup() {
     string message;
@@ -389,7 +393,7 @@ function testIsUserInGroupFalseNoGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
     "testIsUserInGroup", "testCreateUserFail", "testAddUserToGroupFailByGroup"]
 }
 function testDeleteUser() {
@@ -404,7 +408,7 @@ function testDeleteUser() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup", "testRemoveUserFromGroup",
     "testIsUserInGroup", "testCreateUserFail", "testAddUserToGroupFailByGroup"]
 }
 function testDeleteUserFail() {
@@ -420,7 +424,7 @@ function testDeleteUserFail() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
     "testRemoveUserFromGroup", "testIsUserInGroup", "testCreateGroupFail"]
 }
 function testDeleteGroup() {
@@ -435,7 +439,7 @@ function testDeleteGroup() {
 }
 
 @test:Config {
-    dependsOn:["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
+    dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup",
     "testRemoveUserFromGroup", "testIsUserInGroup", "testCreateGroupFail"]
 }
 function testDeleteGroupFail() {
@@ -451,7 +455,7 @@ function testDeleteGroupFail() {
 }
 
 @test:Config {
-    dependsOn:["testDeleteUser"]
+    dependsOn: ["testDeleteUser"]
 }
 function testGetListOfUsers() {
     int length = 0;
@@ -464,7 +468,7 @@ function testGetListOfUsers() {
 }
 
 @test:Config {
-    dependsOn:["testDeleteGroup"]
+    dependsOn: ["testDeleteGroup"]
 }
 function testGetListOfGroups() {
     int length = 0;
