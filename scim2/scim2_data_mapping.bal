@@ -16,7 +16,7 @@
 // under the License.
 //
 
-function convertJsonToGroup (json sourceJsonObject) returns Group {
+function convertJsonToGroup(json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct.displayName = sourceJsonObject.displayName.toString();
     targetGroupStruct.id = sourceJsonObject.id.toString();
@@ -26,23 +26,23 @@ function convertJsonToGroup (json sourceJsonObject) returns Group {
 }
 
 
-function convertJsonToMeta (json sourceJsonObject) returns Meta {
+function convertJsonToMeta(json sourceJsonObject) returns Meta {
     Meta targetMetaStruct = {};
     targetMetaStruct.created = sourceJsonObject.created != null ? sourceJsonObject.created.toString() : "";
     targetMetaStruct.location = sourceJsonObject.location != null ? sourceJsonObject.location.toString() : "";
     targetMetaStruct.lastModified = sourceJsonObject.lastModified != null ? sourceJsonObject.lastModified.toString()
-                                    : "";
+                                                                          : "";
     return targetMetaStruct;
 }
 
-function convertJsonToMember (json sourceJsonObject) returns Member {
+function convertJsonToMember(json sourceJsonObject) returns Member {
     Member targetMemberStruct = {};
     targetMemberStruct.display = sourceJsonObject.display.toString();
     targetMemberStruct.value = sourceJsonObject.value.toString();
     return targetMemberStruct;
 }
 
-function toMembers (json s) returns Member[] {
+function toMembers(json s) returns Member[] {
     json[] jMembers = check <json[]>s.members;
     Member[] memlist;
     foreach i, node in jMembers {
@@ -52,7 +52,7 @@ function toMembers (json s) returns Member[] {
     return memlist;
 }
 
-function convertGroupToJson (Group sourceGroupStruct) returns json {
+function convertGroupToJson(Group sourceGroupStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.displayName = sourceGroupStruct.displayName;
     targetJsonObject.id = sourceGroupStruct.id;
@@ -61,7 +61,7 @@ function convertGroupToJson (Group sourceGroupStruct) returns json {
     return targetJsonObject;
 }
 
-function toListMem (Group g) returns json[] {
+function toListMem(Group g) returns json[] {
     Member[] mem = g.members;
     json[] jlist;
     foreach i, node in mem {
@@ -71,25 +71,25 @@ function toListMem (Group g) returns json[] {
     return jlist;
 }
 
-function convertMembertoJson (Member sourceMemberStruct) returns json {
+function convertMembertoJson(Member sourceMemberStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.display = sourceMemberStruct.display;
     targetJsonObject.value = sourceMemberStruct.value;
     return targetJsonObject;
 }
 
-function convertReceivedPayloadToGroup (json sourceJsonObject) returns Group {
+function convertReceivedPayloadToGroup(json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
-    json[] resources = check <json[]> sourceJsonObject.Resources;
+    json[] resources = check <json[]>sourceJsonObject.Resources;
     targetGroupStruct = sourceJsonObject.Resources != null ? convertJsonToGroup(resources[0])
-                        : {};
+                                                           : {};
     return targetGroupStruct;
 }
 
-function convertJsonToAddress (json sourceJsonObject) returns Address {
+function convertJsonToAddress(json sourceJsonObject) returns Address {
     Address targetAddressStruct = {};
     targetAddressStruct.streetAddress = sourceJsonObject.streetAddress != null ?
-                                        sourceJsonObject.streetAddress.toString() : "";
+    sourceJsonObject.streetAddress.toString()                                  : "";
     targetAddressStruct.locality = sourceJsonObject.locality != null ? sourceJsonObject.locality.toString() : "";
     targetAddressStruct.postalCode = sourceJsonObject.postalCode != null ? sourceJsonObject.postalCode.toString() : "";
     targetAddressStruct.country = sourceJsonObject.country != null ? sourceJsonObject.country.toString() : "";
@@ -100,7 +100,7 @@ function convertJsonToAddress (json sourceJsonObject) returns Address {
     return targetAddressStruct;
 }
 
-function convertAddressToJson (Address sourceAddressStruct) returns json {
+function convertAddressToJson(Address sourceAddressStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.streetAddress = sourceAddressStruct.streetAddress != null ? sourceAddressStruct.streetAddress : "";
     targetJsonObject.formatted = sourceAddressStruct.formatted != null ? sourceAddressStruct.formatted : "";
@@ -113,20 +113,20 @@ function convertAddressToJson (Address sourceAddressStruct) returns json {
     return targetJsonObject;
 }
 
-function convertJsonToName (json sourceJsonObject) returns Name {
+function convertJsonToName(json sourceJsonObject) returns Name {
     Name targetNameStruct = {};
     targetNameStruct.givenName = sourceJsonObject.givenName != null ? sourceJsonObject.givenName.toString() : "";
     targetNameStruct.familyName = sourceJsonObject.familyName.toString();
     targetNameStruct.formatted = sourceJsonObject.formatted != null ? sourceJsonObject.formatted.toString() : "";
     targetNameStruct.honorificPrefix = sourceJsonObject.honorificPrefix != null ?
-                                       sourceJsonObject.honorificPrefix.toString() : "";
+    sourceJsonObject.honorificPrefix.toString()                                 : "";
     targetNameStruct.honorificSuffix = sourceJsonObject.honorificSuffix != null ?
-                                       sourceJsonObject.honorificSuffix.toString() : "";
+    sourceJsonObject.honorificSuffix.toString()                                 : "";
     targetNameStruct.middleName = sourceJsonObject.middleName != null ? sourceJsonObject.middleName.toString() : "";
     return targetNameStruct;
 }
 
-function convertNameToJson (Name sourceNameStruct) returns json {
+function convertNameToJson(Name sourceNameStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.givenName = sourceNameStruct.givenName != null ? sourceNameStruct.givenName : "";
     targetJsonObject.familyName = sourceNameStruct.familyName != null ? sourceNameStruct.familyName : "";
@@ -137,7 +137,7 @@ function convertNameToJson (Name sourceNameStruct) returns json {
     return targetJsonObject;
 }
 
-function convertJsonToEmail (json sourceJsonObject) returns Email {
+function convertJsonToEmail(json sourceJsonObject) returns Email {
     Email targetEmailStruct = {};
     targetEmailStruct.^"type" = sourceJsonObject.^"type" != null ? sourceJsonObject.^"type".toString() : "";
     targetEmailStruct.value = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : " ";
@@ -145,7 +145,7 @@ function convertJsonToEmail (json sourceJsonObject) returns Email {
     return targetEmailStruct;
 }
 
-function convertEmailToJson (Email sourceEmailStruct) returns json {
+function convertEmailToJson(Email sourceEmailStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.^"type" = sourceEmailStruct.^"type";
     targetJsonObject.value = sourceEmailStruct.value != null ? sourceEmailStruct.value : "";
@@ -153,92 +153,92 @@ function convertEmailToJson (Email sourceEmailStruct) returns json {
     return targetJsonObject;
 }
 
-function convertPhonePhotoImsToJson (PhonePhotoIms sourcePhonePhotoIms) returns json {
+function convertPhonePhotoImsToJson(PhonePhotoIms sourcePhonePhotoIms) returns json {
     json targetJsonObject = {};
     targetJsonObject.value = sourcePhonePhotoIms.value != null ? sourcePhonePhotoIms.value : "";
     targetJsonObject.^"type" = sourcePhonePhotoIms.^"type" != null ? sourcePhonePhotoIms.^"type" : "";
     return targetJsonObject;
 }
 
-function convertJsonToPhoneNumbers (json sourceJsonObject) returns PhonePhotoIms {
+function convertJsonToPhoneNumbers(json sourceJsonObject) returns PhonePhotoIms {
     PhonePhotoIms targetPhonePhotoIms = {};
     targetPhonePhotoIms.value = sourceJsonObject.value.toString();
     targetPhonePhotoIms.^"type" = sourceJsonObject.^"type".toString();
     return targetPhonePhotoIms;
 }
 
-function convertJsonToCertificate (json sourceJsonObject) returns X509Certificate {
+function convertJsonToCertificate(json sourceJsonObject) returns X509Certificate {
     X509Certificate targetCertificate = {};
     targetCertificate.value = sourceJsonObject.value.toString();
     return targetCertificate;
 }
 
-function convertJsonToEnterpriseExtension (json sourceJsonObject) returns EnterpriseUserExtension {
+function convertJsonToEnterpriseExtension(json sourceJsonObject) returns EnterpriseUserExtension {
     EnterpriseUserExtension targetEnterpriseUser = {};
     targetEnterpriseUser.costCenter = sourceJsonObject.costCenter != null ?
-                                      sourceJsonObject.costCenter.toString() : "";
+    sourceJsonObject.costCenter.toString()                                : "";
     targetEnterpriseUser.department = sourceJsonObject.department != null ?
-                                      sourceJsonObject.department.toString() : "";
+    sourceJsonObject.department.toString()                                : "";
     targetEnterpriseUser.division = sourceJsonObject.division != null ? sourceJsonObject.division.toString() : "";
     targetEnterpriseUser.employeeNumber = sourceJsonObject.employeeNumber != null ?
-                                          sourceJsonObject.employeeNumber.toString() : "";
+    sourceJsonObject.employeeNumber.toString()                                    : "";
     targetEnterpriseUser.organization = sourceJsonObject.organization != null ?
-                                        sourceJsonObject.organization.toString() : "";
+    sourceJsonObject.organization.toString()                                  : "";
     targetEnterpriseUser.manager = sourceJsonObject.manager != null ?
-                                   convertJsonToManager(sourceJsonObject.manager) : {};
+    convertJsonToManager(sourceJsonObject.manager)                  : {};
     return targetEnterpriseUser;
 }
 
-function convertJsonToManager (json sourceJsonObject) returns Manager {
+function convertJsonToManager(json sourceJsonObject) returns Manager {
     Manager targetManagerStruct = {};
     targetManagerStruct.displayName = sourceJsonObject.displayName != null ?
-                                      sourceJsonObject.displayName.toString() : "";
+    sourceJsonObject.displayName.toString()                                : "";
     targetManagerStruct.managerId = sourceJsonObject.managerId != null ? sourceJsonObject.managerId.toString() : "";
     return targetManagerStruct;
 }
 
-function convertCertificateToJson (X509Certificate sourceCertificate) returns json {
+function convertCertificateToJson(X509Certificate sourceCertificate) returns json {
     json targetJsonObject = {};
     targetJsonObject.value = sourceCertificate.value != null ? sourceCertificate.value : "";
     return targetJsonObject;
 }
 
-function convertEnterpriseExtensionToJson (EnterpriseUserExtension sourceEnterpriseUser) returns json {
+function convertEnterpriseExtensionToJson(EnterpriseUserExtension sourceEnterpriseUser) returns json {
     json targetJsonObject = {};
     targetJsonObject.employeeNumber = sourceEnterpriseUser.employeeNumber != null ?
-                                      sourceEnterpriseUser.employeeNumber : "";
+    sourceEnterpriseUser.employeeNumber                                           : "";
     targetJsonObject.costCenter = sourceEnterpriseUser.costCenter != null ? sourceEnterpriseUser.costCenter : "";
     targetJsonObject.organization = sourceEnterpriseUser.organization != null ? sourceEnterpriseUser.organization : "";
     targetJsonObject.division = sourceEnterpriseUser.division != null ? sourceEnterpriseUser.division : "";
     targetJsonObject.department = sourceEnterpriseUser.department != null ? sourceEnterpriseUser.department : "";
     targetJsonObject.manager = sourceEnterpriseUser.manager != null ?
-                               convertManagerToJson(sourceEnterpriseUser.manager) : {};
+    convertManagerToJson(sourceEnterpriseUser.manager)              : {};
     return targetJsonObject;
 }
 
-function convertManagerToJson (Manager sourceManagerStruct) returns json {
+function convertManagerToJson(Manager sourceManagerStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.managerId = sourceManagerStruct.managerId != null ? sourceManagerStruct.managerId : "";
     targetJsonObject.displayName = sourceManagerStruct.displayName != null ? sourceManagerStruct.displayName : "";
     return targetJsonObject;
 }
 
-function convertGroupToJsonUserRelated (Group sourceGroupStruct) returns json {
+function convertGroupToJsonUserRelated(Group sourceGroupStruct) returns json {
     json targetJsonObject = {};
     targetJsonObject.display = sourceGroupStruct.displayName != null ? sourceGroupStruct.displayName : "";
     targetJsonObject.value = sourceGroupStruct.id != null ? sourceGroupStruct.id : "";
     return targetJsonObject;
 }
 
-function convertReceivedPayloadToUser (json sourceJsonObject) returns User {
+function convertReceivedPayloadToUser(json sourceJsonObject) returns User {
     User targetUserStruct = {};
     json[] resources = check <json[]>sourceJsonObject.Resources;
     targetUserStruct = sourceJsonObject.Resources != null ?
-                       convertJsonToUser(resources[0]) : {};
+    convertJsonToUser(resources[0])                       : {};
     return targetUserStruct;
 }
 
-function convertJsonToGroupRelatedToUser (json sourceJsonObject) returns Group {
+function convertJsonToGroupRelatedToUser(json sourceJsonObject) returns Group {
     Group targetGroupStruct = {};
     targetGroupStruct.displayName = sourceJsonObject.display != null ? sourceJsonObject.display.toString() : "";
     targetGroupStruct.id = sourceJsonObject.value != null ? sourceJsonObject.value.toString() : "";
@@ -248,7 +248,7 @@ function convertJsonToGroupRelatedToUser (json sourceJsonObject) returns Group {
 }
 
 
-function convertJsonToUser (json sourceJsonObject) returns User {
+function convertJsonToUser(json sourceJsonObject) returns User {
     User targetUserStruct = {};
     targetUserStruct.id = sourceJsonObject.id.toString();
     targetUserStruct.userName = sourceJsonObject.userName.toString();
@@ -262,11 +262,11 @@ function convertJsonToUser (json sourceJsonObject) returns User {
     targetUserStruct.timezone = sourceJsonObject.timezone != null ? sourceJsonObject.timezone.toString() : "";
     targetUserStruct.profileUrl = sourceJsonObject.profileUrl != null ? sourceJsonObject.profileUrl.toString() : "";
     targetUserStruct.preferredLanguage = sourceJsonObject.preferredLanguage != null ?
-                                         sourceJsonObject.preferredLanguage.toString() : "";
+    sourceJsonObject.preferredLanguage.toString()                                   : "";
     targetUserStruct.locale = sourceJsonObject.locale != null ? sourceJsonObject.locale.toString() : "";
     targetUserStruct.meta = convertJsonToMeta(sourceJsonObject.meta);
     targetUserStruct.x509Certificates = sourceJsonObject.x509Certificates != null ?
-                                        toCertificates(sourceJsonObject) : [];
+    toCertificates(sourceJsonObject)                                              : [];
     targetUserStruct.schemas = sourceJsonObject.schemas != null ? toSchemas(sourceJsonObject) : [];
     targetUserStruct.addresses = sourceJsonObject.addresses != null ? toAddress(sourceJsonObject) : [];
     targetUserStruct.phoneNumbers = sourceJsonObject.phoneNumbers != null ? toPhoneNumbers(sourceJsonObject) : [];
@@ -275,11 +275,11 @@ function convertJsonToUser (json sourceJsonObject) returns User {
     targetUserStruct.emails = sourceJsonObject.emails != null ? toEmails(sourceJsonObject) : [];
     targetUserStruct.groups = sourceJsonObject.groups != null ? toGroups(sourceJsonObject) : [];
     targetUserStruct.EnterpriseUser = sourceJsonObject.EnterpriseUser != null ?
-                                      convertJsonToEnterpriseExtension(sourceJsonObject.EnterpriseUser) : {};
+    convertJsonToEnterpriseExtension(sourceJsonObject.EnterpriseUser)         : {};
     return targetUserStruct;
 }
 
-function toCertificates (json s) returns X509Certificate[] {
+function toCertificates(json s) returns X509Certificate[] {
     json[] jXcert = check <json[]>s.x509Certificates;
     X509Certificate[] xCList;
     foreach i, node in jXcert {
@@ -289,12 +289,12 @@ function toCertificates (json s) returns X509Certificate[] {
     return xCList;
 }
 
-function toSchemas (json s) returns json[] {
+function toSchemas(json s) returns json[] {
     json[] jSchemas = check <json[]>s.schemas;
     return jSchemas;
 }
 
-function toAddress (json s) returns Address[] {
+function toAddress(json s) returns Address[] {
     json[] jAddress = check <json[]>s.addresses;
     Address[] aAddress;
     foreach i, node in jAddress {
@@ -304,7 +304,7 @@ function toAddress (json s) returns Address[] {
     return aAddress;
 }
 
-function toPhoneNumbers (json s) returns PhonePhotoIms[] {
+function toPhoneNumbers(json s) returns PhonePhotoIms[] {
     json[] jPhone = check <json[]>s.phoneNumbers;
     PhonePhotoIms[] pPhone;
     foreach i, node in jPhone {
@@ -314,7 +314,7 @@ function toPhoneNumbers (json s) returns PhonePhotoIms[] {
     return pPhone;
 }
 
-function toPhotos (json s) returns PhonePhotoIms[] {
+function toPhotos(json s) returns PhonePhotoIms[] {
     json[] jPhoto = check <json[]>s.photos;
     PhonePhotoIms[] pPhoto;
     foreach i, node in jPhoto {
@@ -324,7 +324,7 @@ function toPhotos (json s) returns PhonePhotoIms[] {
     return pPhoto;
 }
 
-function toIms (json s) returns PhonePhotoIms[] {
+function toIms(json s) returns PhonePhotoIms[] {
     json[] jIms = check <json[]>s.ims;
     PhonePhotoIms[] pIms;
     foreach i, node in jIms {
@@ -334,7 +334,7 @@ function toIms (json s) returns PhonePhotoIms[] {
     return pIms;
 }
 
-function toEmails (json s) returns Email[] {
+function toEmails(json s) returns Email[] {
     json[] jEmail = check <json[]>s.emails;
     Email[] eEmail;
     foreach i, node in jEmail {
@@ -344,7 +344,7 @@ function toEmails (json s) returns Email[] {
     return eEmail;
 }
 
-function toGroups (json s) returns Group[] {
+function toGroups(json s) returns Group[] {
     json[] jGroup = check <json[]>s.groups;
     Group[] gGroup;
     foreach i, node in jGroup {
@@ -354,7 +354,7 @@ function toGroups (json s) returns Group[] {
     return gGroup;
 }
 
-function toJsonCertificates (User u) returns json[] {
+function toJsonCertificates(User u) returns json[] {
     X509Certificate[] xClist = u.x509Certificates;
     json[] jClist;
     foreach i, node in xClist {
@@ -364,7 +364,7 @@ function toJsonCertificates (User u) returns json[] {
     return jClist;
 }
 
-function toJsonGroups (User u) returns json[] {
+function toJsonGroups(User u) returns json[] {
     Group[] gGroup = u.groups;
     json[] jGroup;
     foreach i, node in gGroup {
@@ -374,7 +374,7 @@ function toJsonGroups (User u) returns json[] {
     return jGroup;
 }
 
-function toJsonAddress (User u) returns json[] {
+function toJsonAddress(User u) returns json[] {
     Address[] aAddress = u.addresses;
     json[] jAddress;
     foreach i, node in aAddress {
@@ -384,7 +384,7 @@ function toJsonAddress (User u) returns json[] {
     return jAddress;
 }
 
-function toJsonEmails (User u) returns json[] {
+function toJsonEmails(User u) returns json[] {
     Email[] eEmail = u.emails;
     json[] jEmail;
     foreach i, node in eEmail {
@@ -394,7 +394,7 @@ function toJsonEmails (User u) returns json[] {
     return jEmail;
 }
 
-function toJsonPhoneNumbers (User u) returns json[] {
+function toJsonPhoneNumbers(User u) returns json[] {
     PhonePhotoIms[] pPhone = u.phoneNumbers;
     json[] jPhone;
     foreach i, node in pPhone {
@@ -404,7 +404,7 @@ function toJsonPhoneNumbers (User u) returns json[] {
     return jPhone;
 }
 
-function toJsonPhotos (User u) returns json[] {
+function toJsonPhotos(User u) returns json[] {
     PhonePhotoIms[] pPhoto = u.photos;
     json[] jPhoto;
     foreach i, node in pPhoto {
@@ -414,7 +414,7 @@ function toJsonPhotos (User u) returns json[] {
     return jPhoto;
 }
 
-function toJsonIms (User u) returns json[] {
+function toJsonIms(User u) returns json[] {
     PhonePhotoIms[] iIms = u.ims;
     json[] jIms;
     foreach i, node in iIms {
@@ -424,7 +424,7 @@ function toJsonIms (User u) returns json[] {
     return jIms;
 }
 
-function convertUserToJson (User sourceUserStruct, string updateOrCreate) returns json {
+function convertUserToJson(User sourceUserStruct, string updateOrCreate) returns json {
     json targetJson = {};
     targetJson.userName = sourceUserStruct.userName != null ? sourceUserStruct.userName : "";
     targetJson.id = sourceUserStruct.id != null ? sourceUserStruct.id : "";
@@ -463,9 +463,9 @@ function convertUserToJson (User sourceUserStruct, string updateOrCreate) return
     targetJson.photos = listPhotos;
 
     targetJson.^"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User" = sourceUserStruct.EnterpriseUser !=
-                                                                               null ?
-                                                                               convertEnterpriseExtensionToJson
-                                                                               (sourceUserStruct.EnterpriseUser) : {};
+    null                              ?
+    convertEnterpriseExtensionToJson
+    (sourceUserStruct.EnterpriseUser) : {};
 
     if (updateOrCreate.equalsIgnoreCase("create")) {
         targetJson.password = sourceUserStruct.password != null ? sourceUserStruct.password : "";
