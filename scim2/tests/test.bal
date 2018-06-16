@@ -3,7 +3,7 @@ import ballerina/io;
 import ballerina/config;
 import ballerina/log;
 
-string test_url = config:getAsString("ENDPOINT");
+string testUrl = config:getAsString("ENDPOINT");
 string accessToken = config:getAsString("ACCESS_TOKEN");
 string clientId = config:getAsString("CLIENT_ID");
 string clientSecret = config:getAsString("CLIENT_SECRET");
@@ -22,7 +22,7 @@ endpoint Client scimEP {
             refreshToken: refreshToken,
             refreshUrl: refreshUrl
         },
-        url: test_url,
+        url: testUrl,
         secureSocket: {
             trustStore: {
                 path: keystore,
