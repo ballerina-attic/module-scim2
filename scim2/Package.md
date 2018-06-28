@@ -55,7 +55,7 @@ The `getUserByUsername` function retrieves a user and returns a `User` struct wi
 ```ballerina
 var response = scimEP->getUserByUsername(userName);
 match response {
-    scim2:User usr => io:println(usr);
+    User usr => io:println(usr);
     error er => io:println(er);
 }
 ```
@@ -63,7 +63,7 @@ match response {
 The `createUser` function creates the user. `User` is a structure that contains all the data mentioned in the SCIM2 specification. The response is either a `string` message (if successful) or an `error`.
 
 ```ballerina
-scim2:User user = {};
+User user = {};
 user.userName = "userName";
 user.password = "password";
 var response = scimEP->createUser(user);

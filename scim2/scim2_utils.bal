@@ -34,19 +34,19 @@ function resolveUser(string userName, http:Response response) returns User|error
         match received {
             json payload => {
                 if (payload.Resources == null) {
-                    Error = {message:failedMessage + "No User with user name " + userName};
+                    Error = { message: failedMessage + "No User with user name " + userName };
                     return Error;
                 }
                 user = convertReceivedPayloadToUser(payload);
                 return user;
             }
             error e => {
-                Error = {message:failedMessage + e.message, cause:e.cause};
+                Error = { message: failedMessage + e.message, cause: e.cause };
                 return Error;
             }
         }
     }
-    Error = {message:failedMessage + response.reasonPhrase};
+    Error = { message: failedMessage + response.reasonPhrase };
     return Error;
 }
 
@@ -67,19 +67,19 @@ function resolveGroup(string groupName, http:Response response) returns Group|er
         match received {
             json payload => {
                 if (payload.Resources == null) {
-                    Error = {message:failedMessage + "No Group named " + groupName};
+                    Error = { message: failedMessage + "No Group named " + groupName };
                     return Error;
                 }
                 receivedGroup = convertReceivedPayloadToGroup(payload);
                 return receivedGroup;
             }
             error e => {
-                Error = {message:failedMessage + e.message, cause:e.cause};
+                Error = { message: failedMessage + e.message, cause: e.cause };
                 return Error;
             }
         }
     }
-    Error = {message:failedMessage + response.reasonPhrase};
+    Error = { message: failedMessage + response.reasonPhrase };
     return Error;
 }
 
@@ -102,40 +102,50 @@ function createUpdateBody(string valueType, string newValue) returns json|error 
     error Error = {};
 
     if (valueType.equalsIgnoreCase(SCIM_NICKNAME)) {
-        body.Operations[0].value = {SCIM_NICKNAME:newValue};
+        body.Operations[0].value = { SCIM_NICKNAME: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_PREFERRED_LANGUAGE)) {
-        body.Operations[0].value = {SCIM_PREFERRED_LANGUAGE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_PREFERRED_LANGUAGE)) {
+        body.Operations[0].value = { SCIM_PREFERRED_LANGUAGE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_TITLE)) {
-        body.Operations[0].value = {SCIM_TITLE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_TITLE)) {
+        body.Operations[0].value = { SCIM_TITLE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_PASSWORD)) {
-        body.Operations[0].value = {SCIM_PASSWORD:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_PASSWORD)) {
+        body.Operations[0].value = { SCIM_PASSWORD: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_PROFILE_URL)) {
-        body.Operations[0].value = {SCIM_PROFILE_URL:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_PROFILE_URL)) {
+        body.Operations[0].value = { SCIM_PROFILE_URL: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_LOCALE)) {
-        body.Operations[0].value = {SCIM_LOCALE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_LOCALE)) {
+        body.Operations[0].value = { SCIM_LOCALE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_TIMEZONE)) {
-        body.Operations[0].value = {SCIM_TIMEZONE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_TIMEZONE)) {
+        body.Operations[0].value = { SCIM_TIMEZONE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_ACTIVE)) {
-        body.Operations[0].value = {SCIM_ACTIVE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_ACTIVE)) {
+        body.Operations[0].value = { SCIM_ACTIVE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_USERTYPE)) {
-        body.Operations[0].value = {SCIM_USERTYPE:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_USERTYPE)) {
+        body.Operations[0].value = { SCIM_USERTYPE: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_DISPLAYNAME)) {
-        body.Operations[0].value = {SCIM_DISPLAYNAME:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_DISPLAYNAME)) {
+        body.Operations[0].value = { SCIM_DISPLAYNAME: newValue };
         return body;
-    } if (valueType.equalsIgnoreCase(SCIM_EXTERNALID)) {
-        body.Operations[0].value = {SCIM_EXTERNALID:newValue};
+    }
+    if (valueType.equalsIgnoreCase(SCIM_EXTERNALID)) {
+        body.Operations[0].value = { SCIM_EXTERNALID: newValue };
         return body;
     } else {
-        Error = {message:"No matching value as " + valueType};
+        Error = { message: "No matching value as " + valueType };
         return Error;
     }
 
