@@ -2,7 +2,7 @@ Connects to SCIM2 API from Ballerina.
 
 # Package Overview
  
-The SCIM2 package provides user management capabilities by allowing you to create, delete, read, and update users and groups and manage a user's groups through the SCIM2 REST API. It handles OAuth 2.0 authentication and provides prebuilt types for SCIM2 objects that comply with the SCIM2 standards.
+This package provides user management capabilities by allowing you to create, delete, read, and update users and groups and manage a user's groups. It handles OAuth 2.0 and provides prebuilt types for SCIM2 objects that comply with the [SCIM2 standard](http://www.simplecloud.info/).
 
 **User Operations**
 
@@ -14,10 +14,10 @@ The `wso2/scim2` package contains operations to manage groups. It can create, li
 
 ## Compatibility
 
-|                                 |       Version                  |
-|  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language             |   0.975.0                     |
-|  SCIM API                       |   [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+|                             |       Version                                             |
+|:---------------------------:|:---------------------------------------------------------:|
+|  Ballerina Language         | 0.975.0                                                   |
+|  SCIM API                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ## Sample
 First, import the `wso2/scim2` package into the Ballerina project.
@@ -29,24 +29,24 @@ import wso2/scim2;
 Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. The SCIM2 connector can be minimally instantiated using the access token or using the client ID, client secret, and refresh token in the HTTP client config or BasicAuth configuration.
 
 ```ballerina
-endpoint Client scimEP {
-   clientConfig:{
-       auth:{
-           scheme:"oauth",
-           accessToken:accessToken,
-           clientId:clientId,
-           clientSecret:clientSecret,
-           refreshToken:refreshToken,
-           refreshUrl:refreshUrl
-       },
-       url:url,
-       secureSocket:{
-           trustStore:{
-               path:keystore,
-               password:password
-           }
-       }
-   }
+endpoint scim2:Client scimEP {
+    clientConfig:{
+        auth:{
+            scheme:http:OAUTH2,
+            accessToken:accessToken,
+            clientId:clientId,
+            clientSecret:clientSecret,
+            refreshToken:refreshToken,
+            refreshUrl:refreshUrl
+        },
+        url:url,
+        secureSocket:{
+            trustStore:{
+                path:keystore,
+                password:password
+            }
+        }
+    }
 };
 ```
 
@@ -75,10 +75,10 @@ match response {
 
 The `getGroupByName` function reads a group and returns the `Group` struct (if successful) or an `error`.
 ```ballerina
-    string groupName = "groupName";
-    var response = scimEP->getGroupByName(groupName);
-    match response {
-        Group grp => io:println(grp);
-        error er => io:println(er);
-    }
+string groupName = "groupName";
+var response = scimEP->getGroupByName(groupName);
+match response {
+    scim2:Group grp => io:println(grp);
+    error er => io:println(er);
+}
 ```
