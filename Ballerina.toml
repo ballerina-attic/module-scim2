@@ -1,8 +1,7 @@
 [project]
 org-name = "wso2"
-version = "0.9.8"
+version = "0.9.9"
 authors = ["wso2"]
 keywords = ["scim2", "endpoint"]
-homepage = "https://ballerinalang.org/"
 repository = "https://github.com/wso2-ballerina/package-scim2"
 license = "Apache-2.0"
