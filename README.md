@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wso2-ballerina/package-scim2.svg?branch=master)](https://travis-ci.org/wso2-ballerina/package-scim2)
+
 # SCIM2 Connector
  
 Connects to SCIM2 API from Ballerina.
