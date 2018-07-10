@@ -19,7 +19,7 @@ import ballerina/http;
 documentation {SCIM2 Client Endpoint configuration object
     F{{clientConfig}} HTTP client endpoint configuration object
 }
-public type Scim2Configuration {
+public type Scim2Configuration record {
     http:ClientEndpointConfig clientConfig;
 };
 
@@ -29,10 +29,8 @@ documentation {SCIM2 Client
     F{{scim2Connector}} SCIM2 connector object
 }
 public type Client object {
-    public {
-        Scim2Configuration scim2Config = {};
-        ScimConnector scim2Connector = new;
-    }
+    public Scim2Configuration scim2Config = {};
+    public ScimConnector scim2Connector = new;
 
     documentation {Initialize the SCiM2 endpoint
         P{{config}} SCIM2 configuration object
@@ -45,11 +43,11 @@ public type Client object {
     public function getCallerActions() returns ScimConnector;
 };
 
-public function Client::init(Scim2Configuration config) {
+function Client::init(Scim2Configuration config) {
     self.scim2Connector.baseUrl = config.clientConfig.url;
     self.scim2Connector.httpClient.init(config.clientConfig);
 }
 
-public function Client::getCallerActions() returns ScimConnector {
+function Client::getCallerActions() returns ScimConnector {
     return self.scim2Connector;
 }

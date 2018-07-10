@@ -23,10 +23,8 @@ documentation {Object for SCIM2 endpoint.
     F{{httpClient}} HTTP client endpoint
 }
 public type ScimConnector object {
-    public {
-        string baseUrl;
-        http:Client httpClient;
-    }
+    public string baseUrl;
+    public http:Client httpClient;
 
     documentation {Returns a list of user records if found or error if any error occured
         R{{}} - If success, returns list of User objects, else returns error object
@@ -131,7 +129,7 @@ public type ScimConnector object {
     public function updateUser(User user) returns (string|error);
 };
 
-public function ScimConnector::getListOfUsers() returns (User[]|error) {
+function ScimConnector::getListOfUsers() returns (User[]|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -179,7 +177,7 @@ public function ScimConnector::getListOfUsers() returns (User[]|error) {
     }
 }
 
-public function ScimConnector::getListOfGroups() returns (Group[]|error) {
+function ScimConnector::getListOfGroups() returns (Group[]|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -226,7 +224,7 @@ public function ScimConnector::getListOfGroups() returns (Group[]|error) {
     }
 }
 
-public function ScimConnector::getMe() returns (User|error) {
+function ScimConnector::getMe() returns (User|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -262,7 +260,7 @@ public function ScimConnector::getMe() returns (User|error) {
     }
 }
 
-public function ScimConnector::getGroupByName(string groupName) returns (Group|error) {
+function ScimConnector::getGroupByName(string groupName) returns (Group|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -281,7 +279,7 @@ public function ScimConnector::getGroupByName(string groupName) returns (Group|e
     }
 }
 
-public function ScimConnector::getUserByUsername(string userName) returns (User|error) {
+function ScimConnector::getUserByUsername(string userName) returns (User|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -299,7 +297,7 @@ public function ScimConnector::getUserByUsername(string userName) returns (User|
     }
 }
 
-public function ScimConnector::createGroup(Group crtGroup) returns (string|error) {
+function ScimConnector::createGroup(Group crtGroup) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -342,7 +340,7 @@ public function ScimConnector::createGroup(Group crtGroup) returns (string|error
     }
 }
 
-public function ScimConnector::createUser(User user) returns (string|error) {
+function ScimConnector::createUser(User user) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -424,7 +422,7 @@ public function ScimConnector::createUser(User user) returns (string|error) {
     }
 }
 
-public function ScimConnector::addUserToGroup(string userName, string groupName) returns (string|error) {
+function ScimConnector::addUserToGroup(string userName, string groupName) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -521,7 +519,7 @@ public function ScimConnector::addUserToGroup(string userName, string groupName)
     }
 }
 
-public function ScimConnector::removeUserFromGroup(string userName, string groupName) returns (string|error) {
+function ScimConnector::removeUserFromGroup(string userName, string groupName) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -615,7 +613,7 @@ public function ScimConnector::removeUserFromGroup(string userName, string group
     }
 }
 
-public function ScimConnector::isUserInGroup(string userName, string groupName) returns (boolean|error) {
+function ScimConnector::isUserInGroup(string userName, string groupName) returns (boolean|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -648,7 +646,7 @@ public function ScimConnector::isUserInGroup(string userName, string groupName) 
     }
 }
 
-public function ScimConnector::deleteUserByUsername(string userName) returns (string|error) {
+function ScimConnector::deleteUserByUsername(string userName) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
 
@@ -696,7 +694,7 @@ public function ScimConnector::deleteUserByUsername(string userName) returns (st
     }
 }
 
-public function ScimConnector::deleteGroupByName(string groupName) returns (string|error) {
+function ScimConnector::deleteGroupByName(string groupName) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     http:Request request = new();
     error Error = {};
@@ -744,7 +742,7 @@ public function ScimConnector::deleteGroupByName(string groupName) returns (stri
     }
 }
 
-public function ScimConnector::updateSimpleUserValue(string id, string valueType, string newValue)
+function ScimConnector::updateSimpleUserValue(string id, string valueType, string newValue)
                                    returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     error Error = {};
@@ -783,7 +781,7 @@ public function ScimConnector::updateSimpleUserValue(string id, string valueType
     }
 }
 
-public function ScimConnector::updateEmails(string id, Email[] emails) returns (string|error) {
+function ScimConnector::updateEmails(string id, Email[] emails) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     error Error = {};
 
@@ -828,7 +826,7 @@ public function ScimConnector::updateEmails(string id, Email[] emails) returns (
     }
 }
 
-public function ScimConnector::updateAddresses(string id, Address[] addresses) returns (string|error) {
+function ScimConnector::updateAddresses(string id, Address[] addresses) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     error Error = {};
 
@@ -873,7 +871,7 @@ public function ScimConnector::updateAddresses(string id, Address[] addresses) r
     }
 }
 
-public function ScimConnector::updateUser(User user) returns (string|error) {
+function ScimConnector::updateUser(User user) returns (string|error) {
     endpoint http:Client httpEP = self.httpClient;
     error Error = {};
     http:Request request = new();

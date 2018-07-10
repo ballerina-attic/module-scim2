@@ -23,7 +23,7 @@ documentation {Represents a Group in SCIM2
     F{{members}} - The list of members that the group has
     F{{meta}} - Meta data
 }
-public type Group {
+public type Group record {
     string displayName;
     string id;
     Member[] members;
@@ -34,7 +34,7 @@ documentation {Represents a Member in SCIM2-Group
     F{{display}} - Display Name of the user
     F{{value}} - ID of the group
 }
-public type Member {
+public type Member record {
     string display;
     string value;
 };
@@ -65,7 +65,7 @@ documentation {Represents a User in SCIM2
     F{{photos}} - Photos of the user
     F{{EnterpriseUser}} - Enterprise User extention fiels of the user
 }
-public type User {
+public type User record {
     string userName;
     string id;
     string password;
@@ -102,7 +102,7 @@ documentation {Represents a address in a SCIM2-user
     F{{region}} - Region
     F{{^"type"}} - Type of the address
 }
-public type Address {
+public type Address record {
     string streetAddress;
     string locality;
     string postalCode;
@@ -121,7 +121,7 @@ documentation {Represents a Name in a SCIM2-User
     F{{honorificPrefix}} - Title that conveys esteem or respect for position
     F{{honorificSuffix}} - Word or expression with connotations conveying esteem or respect when used, after a name
 }
-public type Name {
+public type Name record {
     string formatted;
     string givenName;
     string familyName;
@@ -135,7 +135,7 @@ documentation {Represents meta data
     F{{location}} - Location of the data
     F{{lastModified}} - Date of last modified
 }
-public type Meta {
+public type Meta record {
     string created;
     string location;
     string lastModified;
@@ -145,7 +145,7 @@ documentation {Represents one of phone numbers, photos or IMS in SCIM2-User
     F{{value}} - Content
     F{{^"type"}} - Type
 }
-public type PhonePhotoIms {
+public type PhonePhotoIms record {
     string value;
     string ^"type";
 };
@@ -155,7 +155,7 @@ documentation {Represents a email in a SCIM2-User
     F{{^"type"}} Type of the email
     F{{primary}} Whether it's primary or not
 }
-public type Email {
+public type Email record {
     string value;
     string ^"type";
     string primary;
@@ -164,7 +164,7 @@ public type Email {
 documentation {Represents a x509Certificate in SCIM2-User
     F{{value}} - X509Certificate
 }
-public type X509Certificate {
+public type X509Certificate record {
     string value;
 };
 
@@ -176,7 +176,7 @@ documentation {Represents fields related to Enterprise User Extention for a SCIM
     F{{department}} - Department of the employee
     F{{manager}} - Manager
 }
-public type EnterpriseUserExtension {
+public type EnterpriseUserExtension record {
     string employeeNumber;
     string costCenter;
     string organization;
@@ -189,7 +189,7 @@ documentation {Represents Manager fields of Enterprise User Extention
     F{{managerId}} - ID of the manager
     F{{displayName}} - Display name of the manager
 }
-public type Manager {
+public type Manager record {
     string managerId;
     string displayName;
 };
