@@ -12,7 +12,7 @@ The following sections provide you with information on how to use the Ballerina 
  ## Compatibility
  | Ballerina Language Version | SCIM API Version                                          |
  | :-------------------------:| :--------------------------------------------------------:|
- | 0.980.0                    | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+ | 0.981.0                    | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 The source code of the SCIM2 endpoint can be found at [package-scim2](https://github.com/wso2-ballerina/package-scim2)
 
