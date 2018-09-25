@@ -17,7 +17,7 @@
 //
 import ballerina/http;
 
-# Returns a user record if the input http:Response contains a user
+# Returns a user record if the input http:Response contains a user.
 # + userName - User name of the user
 # + response - http:Response with the received response from the SCIM2 API
 # + return - If success returns User object, else returns error
@@ -50,7 +50,7 @@ function resolveUser(string userName, http:Response response) returns User|error
     return Error;
 }
 
-# Returns a group record if the input http:Response contains a group
+# Returns a group record if the input http:Response contains a group.
 # + groupName - Name of the group
 # + response - http:Response with the received response from the SCIM2 API
 # + return - If success returns Group object, else returns error
@@ -83,8 +83,8 @@ function resolveGroup(string groupName, http:Response response) returns Group|er
     return Error;
 }
 
-# Returns a http:Request with the json attached to its body
-# + body - Json Object which should be attached to the body of the request
+# Returns a http:Request with the json attached to its body.
+# + body - JSON Object which should be attached to the body of the request
 # + return - returns http Request
 function createRequest(json body) returns http:Request {
     http:Request request = new();
@@ -93,10 +93,10 @@ function createRequest(json body) returns http:Request {
     return request;
 }
 
-# Returns a json object that should be attached to the http:Request to update a user
+# Returns a `json` object that should be attached to the http:Request to update a user.
 # + valueType - The name of the user attribute
 # + newValue - The new value of the attribute
-# + return - If success returns json object, else returns error
+# + return - If success returns `json` object, else returns error
 function createUpdateBody(string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
     error Error = {};

@@ -17,7 +17,7 @@
 
 //All the Records that are used
 
-# Represents a Group in SCIM2
+# Represents a Group in SCIM2.
 # + displayName - Display Name of the Group
 # + id - The ID of the group
 # + members - The list of members that the group has
@@ -29,7 +29,7 @@ public type Group record {
     Meta meta;
 };
 
-# Represents a Member in SCIM2-Group
+# Represents a Member in SCIM2-Group.
 # + display - Display Name of the user
 # + value - ID of the group
 public type Member record {
@@ -37,7 +37,7 @@ public type Member record {
     string value;
 };
 
-# Represents a User in SCIM2
+# Represents a User in SCIM2.
 # + userName - Username of the user
 # + id - The ID of the user
 # + password - Password of the user
@@ -89,7 +89,7 @@ public type User record {
     EnterpriseUserExtension EnterpriseUser;
 };
 
-# Represents a address in a SCIM2-user
+# Represents a address in a SCIM2-user.
 # + streetAddress - Street address
 # + locality - Locality
 # + postalCode - Postal code of the region
@@ -109,7 +109,7 @@ public type Address record {
     string ^"type";
 };
 
-# Represents a Name in a SCIM2-User
+# Represents a Name in a SCIM2-User.
 # + formatted - Full name
 # + givenName - First name
 # + familyName - Surname
@@ -125,7 +125,7 @@ public type Name record {
     string honorificSuffix;
 };
 
-# Represents meta data
+# Represents meta data.
 # + created - Date created
 # + location - Location of the data
 # + lastModified - Date of last modified
@@ -135,7 +135,7 @@ public type Meta record {
     string lastModified;
 };
 
-# Represents one of phone numbers, photos or IMS in SCIM2-User
+# Represents one of phone numbers, photos or IMS in SCIM2-User.
 # + value - Content
 # + type - Type
 public type PhonePhotoIms record {
@@ -143,7 +143,7 @@ public type PhonePhotoIms record {
     string ^"type";
 };
 
-# Represents a email in a SCIM2-User
+# Represents a email in a SCIM2-User.
 # + value - Email address
 # + type - Type of the email
 # + primary - Whether it's primary or not
@@ -153,13 +153,13 @@ public type Email record {
     string primary;
 };
 
-# Represents a x509Certificate in SCIM2-User
+# Represents a x509Certificate in SCIM2-User.
 # + value - X509Certificate
 public type X509Certificate record {
     string value;
 };
 
-# Represents fields related to Enterprise User Extention for a SCIM2-User
+# Represents fields related to Enterprise User Extention for a SCIM2-User.
 # + employeeNumber - Number of the employee
 # + costCenter - Employee cost center
 # + organization - Organization of the employe
@@ -175,7 +175,7 @@ public type EnterpriseUserExtension record {
     Manager manager;
 };
 
-# Represents Manager fields of Enterprise User Extention
+# Represents Manager fields of Enterprise User Extention.
 # + managerId - ID of the manager
 # + displayName - Display name of the manager
 public type Manager record {

@@ -16,24 +16,24 @@
 
 import ballerina/http;
 
-# SCIM2 Client Endpoint configuration object
+# SCIM2 Client Endpoint configuration object.
 # + clientConfig - HTTP client endpoint configuration object
 public type Scim2Configuration record {
     http:ClientEndpointConfig clientConfig;
 };
 
-# SCIM2 Client
+# SCIM2 Client.
 # + scim2Config - SCIM2 client endpoint configuration object
-# + scim2Connector - SCIM2 connector object
+# + scim2Connector - SCIM2 Connector object
 public type Client object {
     public Scim2Configuration scim2Config = {};
     public ScimConnector scim2Connector = new;
 
-    # Initialize the SCiM2 endpoint
+    # Initialize the SCiM2 endpoint.
     # + config - SCIM2 configuration object
     public function init(Scim2Configuration config);
 
-    # Returns the connector that client code uses
+    # Returns the connector that client code uses.
     # + return - SCIM2 Client
     public function getCallerActions() returns ScimConnector;
 };
