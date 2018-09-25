@@ -18,114 +18,96 @@
 import ballerina/http;
 import ballerina/mime;
 
-documentation {Object for SCIM2 endpoint.
-    F{{baseUrl}} base url of the REST API
-    F{{httpClient}} HTTP client endpoint
-}
+# Object for SCIM2 endpoint.
+# + baseUrl - base url of the REST API
+# + httpClient - HTTP client endpoint
 public type ScimConnector object {
     public string baseUrl;
     public http:Client httpClient;
 
-    documentation {Returns a list of user records if found or error if any error occured
-        R{{}} - If success, returns list of User objects, else returns error object
-    }
+    # Returns a list of user records if found or error if any error occured
+    # + return - If success, returns list of User objects, else returns error object
     public function getListOfUsers() returns (User[]|error);
 
-    documentation {Returns a list of group records if found or error if any error occured
-        R{{}} - If success, returns list of Group objects, else returns error object
-    }
+    # Returns a list of group records if found or error if any error occured
+    # + return - If success, returns list of Group objects, else returns error object
     public function getListOfGroups() returns (Group[]|error);
 
-    documentation {Returns the user that is currently authenticated
-        R{{}} - If success, returns User object, else returns error object
-    }
+    # Returns the user that is currently authenticated
+    # + return - If success, returns User object, else returns error object
     public function getMe() returns (User|error);
 
-    documentation {Returns a group record with the specified group name if found
-        P{{groupName}} Name of the group
-        R{{}} - If success, returns Group object, else returns error object
-    }
+    # Returns a group record with the specified group name if found
+    # + groupName - Name of the group
+    # + return - If success, returns Group object, else returns error object
     public function getGroupByName(string groupName) returns (Group|error);
 
-    documentation {Returns a user record with the specified username if found
-        P{{userName}} User name of the user
-        R{{}} - If success, returns User object, else returns error object
-    }
+    # Returns a user record with the specified username if found
+    # + userName - User name of the user
+    # + return - If success, returns User object, else returns error object
     public function getUserByUsername(string userName) returns (User|error);
 
-    documentation {Create a group in the user store
-        P{{crtGroup}} Group record with the group details
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Create a group in the user store
+    # + crtGroup - Group record with the group details
+    # + return - If success, returns string message with status, else returns error object
     public function createGroup(Group crtGroup) returns (string|error);
 
-    documentation {Create a user in the user store
-        P{{user}} User record with the user details
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Create a user in the user store
+    # + user - User record with the user details
+    # + return - If success, returns string message with status, else returns error object
     public function createUser(User user) returns (string|error);
 
-    documentation {Add a user specified by username to the group specified by group name
-        P{{userName}} User name of the user
-        P{{groupName}} Name of the group
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Add a user specified by username to the group specified by group name
+    # + userName - User name of the user
+    # + groupName - Name of the group
+    # + return - If success, returns string message with status, else returns error object
     public function addUserToGroup(string userName, string groupName) returns (string|error);
 
-    documentation {Remove a user specified by username from the group specified by group name
-        P{{userName}} User name of the user
-        P{{groupName}} Name of the group
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Remove a user specified by username from the group specified by group name
+    # + userName - User name of the user
+    # + groupName - Name of the group
+    # + return - If success, returns string message with status, else returns error object
     public function removeUserFromGroup(string userName, string groupName) returns (string|error);
 
-    documentation {Returns whether the user specified by username belongs to the group specified by groupname
-        P{{userName}} User name of the user
-        P{{groupName}} Name of the group
-        R{{}} - If success, returns boolean value, else returns error object
-    }
+    # Returns whether the user specified by username belongs to the group specified by groupname
+    # + userName - User name of the user
+    # + groupName - Name of the group
+    # + return - If success, returns boolean value, else returns error object
     public function isUserInGroup(string userName, string groupName) returns (boolean|error);
 
-    documentation {Delete a user from user store
-        P{{userName}} User name of the user
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Delete a user from user store
+    # + userName - User name of the user
+    # + return - If success, returns string message with status, else returns error object
     public function deleteUserByUsername(string userName) returns (string|error);
 
-    documentation {Delete a group from user store
-        P{{groupName}} User name of the user
-        R{{}} - String message with status
-    }
+    # Delete a group from user store
+    # + groupName - User name of the user
+    # + return - String message with status
     public function deleteGroupByName(string groupName) returns (string|error);
 
-    documentation {Update a simple attribute of user
-        P{{id}} ID of the user
-        P{{valueType}} The attribute name to be updated
-        P{{newValue}} The new value of the attribute
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Update a simple attribute of user
+    # + id - ID of the user
+    # + valueType - The attribute name to be updated
+    # + newValue - The new value of the attribute
+    # + return - If success, returns string message with status, else returns error object
     public function updateSimpleUserValue(string id, string valueType, string newValue) returns
                                                                                                 (string|error);
 
-    documentation {Update emails addresses of a user
-        P{{id}} ID of the user
-        P{{emails}} List of new emails of the user
-        R{{}} - String message with status
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Update emails addresses of a user
+    # + id - ID of the user
+    # + emails - List of new emails of the user
+    # + return - If success, returns string message with status, else returns error object
     public function updateEmails(string id, Email[] emails) returns (string|error);
 
-    documentation {Update addresses of a user
-        P{{id}} ID of the user
-        P{{addresses}} List of new addresses of the user
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Update addresses of a user
+    # + id - ID of the user
+    # + addresses - List of new addresses of the user
+    # + return - If success, returns string message with status, else returns error object
     public function updateAddresses(string id, Address[] addresses) returns (string|error);
 
-    documentation {Update a user
-        P{{user}} User record with new user values
-        R{{}} - If success, returns string message with status, else returns error object
-    }
+    # Update a user
+    # + user - User record with new user values
+    # + return - If success, returns string message with status, else returns error object
     public function updateUser(User user) returns (string|error);
 };
 
