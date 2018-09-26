@@ -56,7 +56,7 @@
 @final int HTTP_NO_CONTENT = 204;
 
 
-documentation {Json object to set as payload when patch add a group.}
+# Json object to set as payload when patch add a group.
 public json SCIM_GROUP_PATCH_ADD_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
@@ -72,7 +72,7 @@ public json SCIM_GROUP_PATCH_ADD_BODY = {
 };
 
 
-documentation {Json object to set as payload when patch remove group.}
+# Json object to set as payload when patch remove group.
 public json SCIM_GROUP_PATCH_REMOVE_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
@@ -82,7 +82,7 @@ public json SCIM_GROUP_PATCH_REMOVE_BODY = {
 };
 
 
-documentation {Json object to set as payload when patch add user.}
+# Json object to set as payload when patch add user.
 public json SCIM_PATCH_ADD_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
