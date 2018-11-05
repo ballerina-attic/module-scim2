@@ -1,26 +1,26 @@
 Connects to SCIM2 API from Ballerina.
 
-# Package Overview
+# Module Overview
  
-This package provides user management capabilities by allowing you to create, delete, read, and update users and groups and manage a user's groups. It handles OAuth 2.0 and provides prebuilt types for SCIM2 objects that comply with the [SCIM2 standard](http://www.simplecloud.info/).
+This module provides user management capabilities by allowing you to create, delete, read, and update users and groups and manage a user's groups. It handles OAuth 2.0 and provides prebuilt types for SCIM2 objects that comply with the [SCIM2 standard](http://www.simplecloud.info/).
 
 **User Operations**
 
-The `wso2/scim2` package contains operations that manage users. It can create, list, update, and delete users.
+The `wso2/scim2` module contains operations that manage users. It can create, list, update, and delete users.
 
 **Group Operations**
 
-The `wso2/scim2` package contains operations to manage groups. It can create, list, update, and delete groups.
+The `wso2/scim2` module contains operations to manage groups. It can create, list, update, and delete groups.
 
 ## Compatibility
 
 |                             |       Version                                             |
 |:---------------------------:|:---------------------------------------------------------:|
-|  Ballerina Language         | 0.982.0                                                   |
+|  Ballerina Language         | 0.983.0                                                   |
 |  SCIM API                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ## Sample
-First, import the `wso2/scim2` package into the Ballerina project.
+First, import the `wso2/scim2` module into the Ballerina project.
 
 ```ballerina
 import wso2/scim2;

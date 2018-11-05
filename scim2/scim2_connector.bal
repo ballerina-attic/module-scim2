@@ -332,8 +332,10 @@ function ScimConnector::createUser(User user) returns (string|error) {
 
     if (user.emails != null) {
         foreach email in user.emails {
-            if (!email["type"].equalsIgnoreCase(SCIM_WORK) && !email["type"].equalsIgnoreCase(SCIM_HOME)
-            && !email["type"].equalsIgnoreCase(SCIM_OTHER)) {
+            boolean isEmailTypeWork = email["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
+            boolean isEmailTypeHome = email["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
+            boolean isEmailTypeOther = email["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
+            if (!isEmailTypeWork && !isEmailTypeHome && !isEmailTypeOther) {
                 Error = { message: failedMessage + "Email should either be home or work" };
                 return Error;
             }
@@ -341,8 +343,10 @@ function ScimConnector::createUser(User user) returns (string|error) {
     }
     if (user.addresses != null) {
         foreach address in user.addresses {
-            if (!address["type"].equalsIgnoreCase(SCIM_WORK) && !address["type"].equalsIgnoreCase(SCIM_HOME)
-            && !address["type"].equalsIgnoreCase(SCIM_OTHER)) {
+            boolean isAddressTypeWork = address["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
+            boolean isAddressTypeHome = address["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
+            boolean isAddressTypeOther = address["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
+            if (!isAddressTypeWork && !isAddressTypeHome && !isAddressTypeOther) {
                 Error = { message: failedMessage + "Address type should either be work or home" };
                 return Error;
             }
@@ -350,11 +354,14 @@ function ScimConnector::createUser(User user) returns (string|error) {
     }
     if (user.phoneNumbers != null) {
         foreach phone in user.phoneNumbers {
-            if (!phone["type"].equalsIgnoreCase(SCIM_WORK) && !phone["type"].equalsIgnoreCase(SCIM_HOME)
-            && !phone["type"].equalsIgnoreCase(SCIM_MOBILE)
-            && !phone["type"].equalsIgnoreCase(SCIM_FAX)
-            && !phone["type"].equalsIgnoreCase(SCIM_PAGER)
-            && !phone["type"].equalsIgnoreCase(SCIM_OTHER)) {
+            boolean isPhoneTypeWork = phone["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
+            boolean isPhoneTypeHome = phone["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
+            boolean isPhoneTypeMobile = phone["type"].equalsIgnoreCase(SCIM_MOBILE) ?: false;
+            boolean isPhoneTypeFax = phone["type"].equalsIgnoreCase(SCIM_FAX) ?: false;
+            boolean isPhoneTypePager = phone["type"].equalsIgnoreCase(SCIM_PAGER) ?: false;
+            boolean isPhoneTypeOther = phone["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
+            if (!isPhoneTypeWork && !isPhoneTypeHome && !isPhoneTypeMobile && !isPhoneTypeFax && !isPhoneTypePager
+                && !isPhoneTypeOther) {
                 Error = { message: failedMessage + "Phone number type should be work,mobile,fax,pager,home or other" };
                 return Error;
             }
@@ -362,7 +369,9 @@ function ScimConnector::createUser(User user) returns (string|error) {
     }
     if (user.photos != null) {
         foreach photo in user.photos {
-            if (!photo["type"].equalsIgnoreCase(SCIM_PHOTO) && !photo["type"].equalsIgnoreCase(SCIM_THUMBNAIL)) {
+            boolean isPhotoTypePhoto = photo["type"].equalsIgnoreCase(SCIM_PHOTO) ?: false;
+            boolean isPhotoTypeThumbnail = photo["type"].equalsIgnoreCase(SCIM_THUMBNAIL) ?: false;
+            if (!isPhotoTypePhoto && !isPhotoTypeThumbnail) {
                 Error = { message: failedMessage + "Photo type should either be photo or thumbnail" };
                 return Error;
             }
@@ -469,8 +478,8 @@ function ScimConnector::addUserToGroup(string userName, string groupName) return
     body.Operations[0].value.members[0].value = value;
 
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
-    request.setJsonPayload(body);
-    var res = httpEP->patch(url, request);
+    request.setJsonPayload(untaint body);
+    var res = httpEP->patch(untaint url, request);
     match res {
         error err => {
             Error = { message: failedMessage + err.message, cause: err.cause };
@@ -564,7 +573,7 @@ function ScimConnector::removeUserFromGroup(string userName, string groupName) r
 
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(body);
-    var res = httpEP->patch(url, request);
+    var res = httpEP->patch(untaint url, request);
     match res {
         error err => {
             Error = { message: failedMessage + err.message, cause: err.cause };
@@ -652,7 +661,7 @@ function ScimConnector::deleteUserByUsername(string userName) returns (string|er
                 User usr => {
                     user = usr;
                     string userId = user.id;
-                    var res = httpEP->delete(SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + userId, request);
+                    var res = httpEP->delete(SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + untaint userId, request);
                     match res {
                         error err => {
                             Error = { message: failedMessage + err.message, cause: err.cause };
@@ -700,7 +709,7 @@ function ScimConnector::deleteGroupByName(string groupName) returns (string|erro
                 Group grp => {
                     gro = grp;
                     string groupId = gro.id;
-                    var res = httpEP->delete(SCIM_GROUP_END_POINT + SCIM_FILE_SEPERATOR + groupId, request);
+                    var res = httpEP->delete(SCIM_GROUP_END_POINT + SCIM_FILE_SEPERATOR + untaint groupId, request);
                     match res {
                         error err => {
                             Error = { message: failedMessage + err.message, cause: err.cause };
@@ -789,7 +798,7 @@ function ScimConnector::updateEmails(string id, Email[] emails) returns (string|
     json body = SCIM_PATCH_ADD_BODY;
     body.Operations[0].value = { "emails": emailList };
 
-    request = createRequest(body);
+    request = createRequest(untaint body);
 
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
     var res = httpEP->patch(url, request);
@@ -834,7 +843,7 @@ function ScimConnector::updateAddresses(string id, Address[] addresses) returns 
     json body = SCIM_PATCH_ADD_BODY;
     body.Operations[0].value = { "addresses": addressList };
 
-    request = createRequest(body);
+    request = createRequest(untaint body);
 
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
     var res = httpEP->patch(url, request);
