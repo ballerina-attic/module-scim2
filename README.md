@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wso2-ballerina/package-scim2.svg?branch=master)](https://travis-ci.org/wso2-ballerina/package-scim2)
+[![Build Status](https://travis-ci.org/wso2-ballerina/module-scim2.svg?branch=master)](https://travis-ci.org/wso2-ballerina/module-scim2)
 
 # SCIM2 Connector
  
@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 0.982.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 0.983.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
@@ -31,7 +31,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 
        `<PROJECT_ROOT_DIRECTORY>$ ballerina init`
 
- 4. Import the scim2 package to your Ballerina program as follows.
+ 4. Import the scim2 module to your Ballerina program as follows.
 
 ```ballerina
 import ballerina/io;

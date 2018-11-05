@@ -12,9 +12,9 @@ The following sections provide you with information on how to use the Ballerina 
  ## Compatibility
  | Ballerina Language Version | SCIM API Version                                          |
  | :-------------------------:| :--------------------------------------------------------:|
- | 0.982.0                    | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+ | 0.983.0                    | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
-The source code of the SCIM2 endpoint can be found at [package-scim2](https://github.com/wso2-ballerina/package-scim2)
+The source code of the SCIM2 endpoint can be found at [module-scim2](https://github.com/wso2-ballerina/module-scim2)
 
 #### Prerequisites for tests
 To test this connector with WSO2 Identity Server you need to have the following resources.
