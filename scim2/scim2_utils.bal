@@ -40,9 +40,8 @@ function resolveUser(string userName, http:Response response) returns User|error
                 user = convertReceivedPayloadToUser(payload);
                 return user;
             }
-            error e => {
-                Error = { message: failedMessage + e.message, cause: e.cause };
-                return Error;
+            error err => {
+                return err;
             }
         }
     }
@@ -73,9 +72,8 @@ function resolveGroup(string groupName, http:Response response) returns Group|er
                 receivedGroup = convertReceivedPayloadToGroup(payload);
                 return receivedGroup;
             }
-            error e => {
-                Error = { message: failedMessage + e.message, cause: e.cause };
-                return Error;
+            error err => {
+                return err;
             }
         }
     }
