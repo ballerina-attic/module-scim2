@@ -17,246 +17,247 @@
 //
 import ballerina/http;
 import ballerina/mime;
+import ballerina/io;
 
 # Object for SCIM2 endpoint.
-# + baseUrl - Base URL of the REST API
-# + httpClient - HTTP client endpoint
-public type ScimConnector object {
+#
+# + baseUrl - The base URL of the SCIM2 API
+# + scimClient - HTTP client endpoint
+public type ScimConnector client object {
+
+    public http:Client scimClient;
     public string baseUrl;
-    public http:Client httpClient;
+
+    public remote function __init(string url, Scim2Configuration scim2Config) {
+        self.scimClient = new(url, config = scim2Config.clientConfig);
+        self.baseUrl = scim2Config.baseUrl;
+    }
 
     # Returns a list of user records if found or error if any error occured.
     # + return - If success, returns list of User objects, else returns error
-    public function getListOfUsers() returns (User[]|error);
+    remote function getListOfUsers() returns (User[]|error);
 
     # Returns a list of group records if found or error if any error occured.
     # + return - If success, returns list of Group objects, else returns error
-    public function getListOfGroups() returns (Group[]|error);
+    remote function getListOfGroups() returns (Group[]|error);
 
     # Returns the user that is currently authenticated.
     # + return - If success, returns User object, else returns error
-    public function getMe() returns (User|error);
+    remote function getMe() returns (User|error);
 
     # Returns a group record with the specified group name if found.
     # + groupName - Name of the group
     # + return - If success, returns Group object, else returns error
-    public function getGroupByName(string groupName) returns (Group|error);
+    remote function getGroupByName(string groupName) returns (Group|error);
 
     # Returns a user record with the specified username if found.
     # + userName - User name of the user
     # + return - If success, returns User object, else returns error
-    public function getUserByUsername(string userName) returns (User|error);
+    remote function getUserByUsername(string userName) returns (User|error);
 
     # Create a group in the user store.
     # + crtGroup - Group record with the group details
     # + return - If success, returns string message with status, else returns error
-    public function createGroup(Group crtGroup) returns (string|error);
+    remote function createGroup(Group crtGroup) returns (string|error);
 
     # Create a user in the user store.
     # + user - User record with the user details
     # + return - If success, returns string message with status, else returns error
-    public function createUser(User user) returns (string|error);
+    remote function createUser(User user) returns (string|error);
 
     # Add a user specified by username to the group specified by group name.
     # + userName - User name of the user
     # + groupName - Name of the group
     # + return - If success, returns string message with status, else returns error
-    public function addUserToGroup(string userName, string groupName) returns (string|error);
+    remote function addUserToGroup(string userName, string groupName) returns (string|error);
 
     # Remove a user specified by username from the group specified by group name.
     # + userName - User name of the user
     # + groupName - Name of the group
     # + return - If success, returns string message with status, else returns error
-    public function removeUserFromGroup(string userName, string groupName) returns (string|error);
+    remote function removeUserFromGroup(string userName, string groupName) returns (string|error);
 
     # Returns whether the user specified by username belongs to the group specified by groupname.
     # + userName - User name of the user
     # + groupName - Name of the group
     # + return - If success, returns boolean value, else returns error
-    public function isUserInGroup(string userName, string groupName) returns (boolean|error);
+    remote function isUserInGroup(string userName, string groupName) returns (boolean|error);
 
     # Delete a user from user store.
     # + userName - User name of the user
     # + return - If success, returns string message with status, else returns error
-    public function deleteUserByUsername(string userName) returns (string|error);
+    remote function deleteUserByUsername(string userName) returns (string|error);
 
     # Delete a group from user store.
     # + groupName - User name of the user
     # + return - String message with status
-    public function deleteGroupByName(string groupName) returns (string|error);
+    remote function deleteGroupByName(string groupName) returns (string|error);
 
     # Update a simple attribute of user.
     # + id - ID of the user
     # + valueType - The attribute name to be updated
     # + newValue - The new value of the attribute
     # + return - If success, returns string message with status, else returns error
-    public function updateSimpleUserValue(string id, string valueType, string newValue) returns
+    remote function updateSimpleUserValue(string id, string valueType, string newValue) returns
                                                                                                 (string|error);
 
     # Update emails addresses of a user.
     # + id - ID of the user
     # + emails - List of new emails of the user
     # + return - If success, returns string message with status, else returns error
-    public function updateEmails(string id, Email[] emails) returns (string|error);
+    remote function updateEmails(string id, Email[] emails) returns (string|error);
 
     # Update addresses of a user.
     # + id - ID of the user
     # + addresses - List of new addresses of the user
     # + return - If success, returns string message with status, else returns error
-    public function updateAddresses(string id, Address[] addresses) returns (string|error);
+    remote function updateAddresses(string id, Address[] addresses) returns (string|error);
 
     # Update a user.
     # + user - User record with new user values
     # + return - If success, returns string message with status, else returns error
-    public function updateUser(User user) returns (string|error);
+    remote function updateUser(User user) returns (string|error);
 };
 
-function ScimConnector::getListOfUsers() returns (User[]|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.getListOfUsers() returns (User[]|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Listing users failed. ";
 
-    var res = httpEP->get(SCIM_USER_END_POINT, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
-                        User[] userList = [];
-                        if (noOfResults.equalsIgnoreCase("0")) {
-                            return userList;
-                        } else {
-                            payload = payload[SCIM_RESOURCES];
-                            int k = 0;
-                            foreach element in payload {
-                                User user = {};
-                                user = convertJsonToUser(element);
-                                userList[k] = user;
-                                k = k + 1;
-                            }
-                            return userList;
-                        }
+    var response = self.scimClient->get(SCIM_USER_END_POINT, message = request);
+    if (response is http:Response) {
+        if (response.statusCode == HTTP_OK) {
+            var received = response.getJsonPayload();
+            if (received is json)  {
+                var noOfResults = received[SCIM_TOTAL_RESULTS].toString();
+                User[] userList = [];
+                if (noOfResults.equalsIgnoreCase("0")) {
+                    return userList;
+                } else {
+                    received = received[SCIM_RESOURCES];
+                    int k = 0;
+                    foreach element in received {
+                        User user = {};
+                        user = convertJsonToUser(element);
+                        userList[k] = user;
+                        k = k + 1;
                     }
-                    error err => return err;
+                    return userList;
                 }
             } else {
-                Error = { message: failedMessage + response.reasonPhrase };
-                return Error;
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the JSON payload
+                of the response." });
+                return err;
             }
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API." });
+        return err;
     }
 }
 
-function ScimConnector::getListOfGroups() returns (Group[]|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.getListOfGroups() returns (Group[]|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage = "Listing groups failed. ";
 
-    var res = httpEP->get(SCIM_GROUP_END_POINT, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        var noOfResults = payload[SCIM_TOTAL_RESULTS].toString();
-                        Group[] groupList = [];
-                        if (noOfResults.equalsIgnoreCase("0")) {
-                            return groupList;
-                        } else {
-                            payload = payload[SCIM_RESOURCES];
-                            int k = 0;
-                            foreach element in payload {
-                                Group group1 = {};
-                                group1 = convertJsonToGroup(element);
-                                groupList[k] = group1;
-                                k = k + 1;
-                            }
-                            return groupList;
-                        }
+    var response = self.scimClient->get(SCIM_GROUP_END_POINT, message = request);
+    if (response is http:Response) {
+        if (response.statusCode == HTTP_OK) {
+            var received = response.getJsonPayload();
+            if (received is json)  {
+                var noOfResults = received[SCIM_TOTAL_RESULTS].toString();
+                Group[] groupList = [];
+                if (noOfResults.equalsIgnoreCase("0")) {
+                    return groupList;
+                } else {
+                    received = received[SCIM_RESOURCES];
+                    int k =0;
+                    foreach element in received {
+                        Group group1 = {};
+                        group1 = convertJsonToGroup(element);
+                        groupList[k] = group1;
+                        k = k +1;
                     }
-                    error err => return err;
+                    return groupList;
                 }
             } else {
-                Error = { message: failedMessage + response.reasonPhrase };
-                return Error;
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the JSON payload
+                of the response." });
+                return err;
             }
+        } else {
+            error err = error(SCIM2_ERROR_CODE , { message: failedMessage + response.reasonPhrase });
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::getMe() returns (User|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.getMe() returns (User|error) {
     http:Request request = new();
-    error Error = {};
 
     User user = {};
 
     string failedMessage = "Getting currently authenticated user failed. ";
 
-    var res = httpEP->get(SCIM_ME_ENDPOINT, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        user = convertJsonToUser(payload);
-                        return user;
-                    }
-                    error err => return err;
-                }
+    var response = self.scimClient->get(SCIM_ME_ENDPOINT, message = request);
+    if (response is http:Response) {
+        if (response.statusCode == HTTP_OK) {
+            var received = response.getJsonPayload();
+            if (received is json)  {
+                user = convertJsonToUser(received);
+                return user;
             } else {
-                Error = { message: failedMessage + response.reasonPhrase };
-                return Error;
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the JSON payload
+                of the response." });
+                return err;
             }
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::getGroupByName(string groupName) returns (Group|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.getGroupByName(string groupName) returns (Group|error) {
     http:Request request = new();
 
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-    var res = httpEP->get(s, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            var receivedGroup = resolveGroup(groupName, response);
-            return receivedGroup;
-        }
+    var response = self.scimClient->get(s, message = request);
+    if (response is http:Response) {
+        var receivedGroup = resolveGroup(groupName, response);
+        return receivedGroup;
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::getUserByUsername(string userName) returns (User|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.getUserByUsername(string userName) returns (User|error) {
     http:Request request = new();
 
-    var res = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            var receivedUser = resolveUser(userName, response);
-            return receivedUser;
-        }
+    var response = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, message = request);
+    if (response is http:Response) {
+        var receivedUser = resolveUser(userName, response);
+        return receivedUser;
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::createGroup(Group crtGroup) returns (string|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.createGroup(Group crtGroup) returns (string|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Creating group:" + crtGroup.displayName + " failed. ";
@@ -265,62 +266,59 @@ function ScimConnector::createGroup(Group crtGroup) returns (string|error) {
 
     json jsonPayload = convertGroupToJson(crtGroup);
     request.setJsonPayload(jsonPayload);
-    var res = httpEP->post(SCIM_GROUP_END_POINT, request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            int statusCode = response.statusCode;
-            if (statusCode == HTTP_CREATED) {
-                return "Group Created";
-            }
-            else if (statusCode == HTTP_UNAUTHORIZED) {
-                Error = { message: failedMessage + response.reasonPhrase };
+    var response = self.scimClient->post(SCIM_GROUP_END_POINT, request);
+    if (response is http:Response) {
+        int statusCode = response.statusCode;
+        if (statusCode == HTTP_CREATED) {
+        return "Group Created";
+        } else if (statusCode == HTTP_UNAUTHORIZED) {
+            error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+            return Error;
+        } else {
+            var payload = response.getJsonPayload();
+            if (payload is json) {
+                error Error = error(SCIM2_ERROR_CODE , { message: failedMessage + (payload.detail.toString())});
                 return Error;
             } else {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        Error = { message: failedMessage + (payload.detail.toString()) };
-                        return Error;
-                    }
-                    error err => return err;
-                }
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the payload of the response." });
+                return err;
             }
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::createUser(User user) returns (string|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.createUser(User user) returns (string|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Creating user:" + user.userName + " failed. ";
 
-    if (user.emails != null) {
+    if (user.emails.length() > 0) {
         foreach email in user.emails {
             boolean isEmailTypeWork = email["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
             boolean isEmailTypeHome = email["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
             boolean isEmailTypeOther = email["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
             if (!isEmailTypeWork && !isEmailTypeHome && !isEmailTypeOther) {
-                Error = { message: failedMessage + "Email should either be home or work" };
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "Email should either be home or work" });
                 return Error;
             }
         }
     }
-    if (user.addresses != null) {
+    if (user.addresses.length() > 0) {
         foreach address in user.addresses {
             boolean isAddressTypeWork = address["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
             boolean isAddressTypeHome = address["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
             boolean isAddressTypeOther = address["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
             if (!isAddressTypeWork && !isAddressTypeHome && !isAddressTypeOther) {
-                Error = { message: failedMessage + "Address type should either be work or home" };
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "Address type should either be work or home" });
                 return Error;
             }
         }
     }
-    if (user.phoneNumbers != null) {
+    if (user.phoneNumbers.length() > 0) {
         foreach phone in user.phoneNumbers {
             boolean isPhoneTypeWork = phone["type"].equalsIgnoreCase(SCIM_WORK) ?: false;
             boolean isPhoneTypeHome = phone["type"].equalsIgnoreCase(SCIM_HOME) ?: false;
@@ -330,17 +328,17 @@ function ScimConnector::createUser(User user) returns (string|error) {
             boolean isPhoneTypeOther = phone["type"].equalsIgnoreCase(SCIM_OTHER) ?: false;
             if (!isPhoneTypeWork && !isPhoneTypeHome && !isPhoneTypeMobile && !isPhoneTypeFax && !isPhoneTypePager
                 && !isPhoneTypeOther) {
-                Error = { message: failedMessage + "Phone number type should be work,mobile,fax,pager,home or other" };
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "Phone number type should be work,mobile,fax,pager,home or other."});
                 return Error;
             }
         }
     }
-    if (user.photos != null) {
+    if (user.photos.length() > 0) {
         foreach photo in user.photos {
             boolean isPhotoTypePhoto = photo["type"].equalsIgnoreCase(SCIM_PHOTO) ?: false;
             boolean isPhotoTypeThumbnail = photo["type"].equalsIgnoreCase(SCIM_THUMBNAIL) ?: false;
             if (!isPhotoTypePhoto && !isPhotoTypeThumbnail) {
-                Error = { message: failedMessage + "Photo type should either be photo or thumbnail" };
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "Photo type should either be photo or thumbnail."});
                 return Error;
             }
         }
@@ -350,35 +348,34 @@ function ScimConnector::createUser(User user) returns (string|error) {
 
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(jsonPayload);
-    var res = httpEP->post(SCIM_USER_END_POINT, request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            int statusCode = response.statusCode;
-            if (statusCode == HTTP_CREATED) {
-                return "User Created";
-            }
-            else if (statusCode == HTTP_UNAUTHORIZED) {
-                Error = { message: failedMessage + response.reasonPhrase };
+    var response = self.scimClient->post(SCIM_USER_END_POINT, request);
+    if (response is http:Response) {
+        int statusCode = response.statusCode;
+        if (statusCode == HTTP_CREATED) {
+            return "User Created";
+        }
+        else if (statusCode == HTTP_UNAUTHORIZED) {
+            error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+            return Error;
+        } else {
+            var payload = response.getJsonPayload();
+            if (payload is json) {
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + (payload.detail.toString())});
                 return Error;
             } else {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        Error = { message: failedMessage + (payload.detail.toString()) };
-                        return Error;
-                    }
-                    error err => return err;
-                }
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the payload
+                of the response." });
+                return err;
             }
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::addUserToGroup(string userName, string groupName) returns (string|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.addUserToGroup(string userName, string groupName) returns (string|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Adding user:" + userName + " to group:" + groupName + " failed.";
@@ -386,34 +383,40 @@ function ScimConnector::addUserToGroup(string userName, string groupName) return
     //check if user valid
     http:Request requestUser = new();
     User user = {};
-    var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
+    var response = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
         message = requestUser);
-    match resUser {
-        error err => return err;
-        http:Response response => {
-            var receivedUser = resolveUser(userName, response);
-            match receivedUser {
-                User usr => {
-                    user = usr;
-                }
-                error err => return err;
-            }
+    if (response is http:Response) {
+        var receivedUser = resolveUser(userName, response);
+        if (receivedUser is User) {
+            user = receivedUser;
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message :
+                "Error occured while getting the user record which associate with the given userName :" + userName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
+
+
     //check if group valid
     http:Request requestGroup = new();
     Group gro = {};
-    var resGroup = httpEP->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
+    var resGroup = self.scimClient->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName,
         message = requestGroup);
-    match resGroup {
-        error err => return err;
-        http:Response response => {
-            var receivedGroup = resolveGroup(groupName, response);
-            match receivedGroup {
-                Group grp => gro = grp;
-                error err => return err;
-            }
+    if (resGroup is http:Response) {
+        var receivedGroup = resolveGroup(groupName, resGroup);
+        if (receivedGroup is Group) {
+            gro = receivedGroup;
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message :
+            "Error occured while adding the user record under the given groupname :" + groupName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
     //create request body
     string value = user.id;
@@ -427,35 +430,33 @@ function ScimConnector::addUserToGroup(string userName, string groupName) return
 
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(untaint body);
-    var res = httpEP->patch(untaint url, request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            int statusCode = response.statusCode;
-            if (statusCode == HTTP_OK) {
-                return "User Added";
-            }
-            else if (statusCode == HTTP_UNAUTHORIZED) {
-                Error = { message: failedMessage + response.reasonPhrase };
+    var res = self.scimClient->patch(untaint url, request);
+    if (res is http:Response) {
+        int statusCode = res.statusCode;
+        if (statusCode == HTTP_OK) {
+            return "User Added";
+        } else if (statusCode == HTTP_UNAUTHORIZED) {
+            error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + res.reasonPhrase });
+            return Error;
+        } else {
+            var received = res.getJsonPayload();
+            if (received is json) {
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + (received.detail.toString())});
                 return Error;
             } else {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        Error = { message: failedMessage + (payload.detail.toString()) };
-                        return Error;
-                    }
-                    error err => return err;
-                }
+                error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the payload
+                of the response." });
+                return err;
             }
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::removeUserFromGroup(string userName, string groupName) returns (string|error) {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.removeUserFromGroup(string userName, string groupName) returns (string|error) {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Removing user:" + userName + " from group:" + groupName + " failed.";
@@ -463,35 +464,38 @@ function ScimConnector::removeUserFromGroup(string userName, string groupName) r
     //check if user valid
     http:Request requestUser = new();
     User user = {};
-    var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
+    var response = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME +
             userName, message = requestUser);
-    match resUser {
-        error err => return err;
-        http:Response response => {
-            var receivedUser = resolveUser(userName, response);
-            match receivedUser {
-                User usr => {
-                    user = usr;
-                }
-                error err => return err;
-            }
+    if (response is http:Response) {
+        var receivedUser = resolveUser(userName, response);
+        if (receivedUser is User) {
+            user = receivedUser;
+        } else {
+            error err =  error(SCIM2_ERROR_CODE, { message : "Unable to get the given userName :" +
+            userName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 
     //check if group valid
     Group gro = {};
     http:Request groupRequest = new();
-    var resGroup = httpEP->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
+    var resGroup = self.scimClient->get(SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME +
             groupName, message = groupRequest);
-    match resGroup {
-        error err => return err;
-        http:Response response => {
-            var receivedGroup = resolveGroup(groupName, response);
-            match receivedGroup {
-                Group grp => gro = grp;
-                error err => return err;
-            }
+    if (resGroup is http:Response) {
+        var receivedGroup = resolveGroup(groupName, resGroup);
+        if (receivedGroup is Group) {
+            gro = receivedGroup;
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message : "Unable to get the given groupname : " + groupName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
     //create request body
     json body = SCIM_GROUP_PATCH_REMOVE_BODY;
@@ -501,59 +505,57 @@ function ScimConnector::removeUserFromGroup(string userName, string groupName) r
 
     request.addHeader(mime:CONTENT_TYPE, mime:APPLICATION_JSON);
     request.setJsonPayload(body);
-    var res = httpEP->patch(untaint url, request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            int statusCode = response.statusCode;
-            if (statusCode == HTTP_OK) {
-                return "User Removed";
-            }
-            else if (statusCode == HTTP_UNAUTHORIZED) {
-                Error = { message: failedMessage + response.reasonPhrase };
+    var res = self.scimClient->patch(untaint url, request);
+    if (res is http:Response) {
+        int statusCode = res.statusCode;
+        if (statusCode == HTTP_OK) {
+            return "User Removed";
+        } else if (statusCode == HTTP_UNAUTHORIZED) {
+            error Error = error(SCIM2_ERROR_CODE, { message: "failedMessage" + res.reasonPhrase });
+            return Error;
+        } else {
+            var received = res.getJsonPayload();
+            if (received is json) {
+                error Error = error(SCIM2_ERROR_CODE, { message: "failedMessage" + (received.detail.toString())});
                 return Error;
             } else {
-                var received = response.getJsonPayload();
-                match received {
-                    json payload => {
-                        Error = { message: failedMessage + (payload.detail.toString()) };
-                        return Error;
-                    }
-                    error e => return e;
-                }
+                error e = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the payload
+                of the response." });
+                return e;
             }
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::isUserInGroup(string userName, string groupName) returns boolean|error {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.isUserInGroup(string userName, string groupName) returns boolean|error {
     http:Request request = new();
     User user = {};
 
-    var res = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, message = request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            var receivedUser = resolveUser(userName, response);
-            match receivedUser {
-                User usr => {
-                    user = usr;
-                    foreach gro in user.groups {
-                        if (gro.displayName.equalsIgnoreCase(groupName)) {
-                            return true;
-                        }
-                    }
-                    return false;
+    var res = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, message = request);
+    if (res is http:Response) {
+        var receivedUser = resolveUser(userName, res);
+        if (receivedUser is User) {
+            user = receivedUser;
+            foreach gro in user.groups {
+                if (gro.displayName.equalsIgnoreCase(groupName)) {
+                    return true;
                 }
-                error err => return err;
             }
+            return false;
+        } else {
+            error err =  error(SCIM2_ERROR_CODE, { message : "Unable to get the given userName :" + userName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::deleteUserByUsername(string userName) returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.deleteUserByUsername(string userName) returns string|error {
     http:Request request = new();
 
     string failedMessage;
@@ -562,39 +564,38 @@ function ScimConnector::deleteUserByUsername(string userName) returns string|err
     //get user
     http:Request userRequest = new();
     User user = {};
-    error Error = {};
-    var resUser = httpEP->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
+    var resUser = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName,
         message = userRequest);
-    match resUser {
-        error err => return err;
-        http:Response response => {
-            var receivedUser = resolveUser(userName, response);
-            match receivedUser {
-                User usr => {
-                    user = usr;
-                    string userId = user.id;
-                    var res = httpEP->delete(SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + untaint userId, request);
-                    match res {
-                        error err => return err;
-                        http:Response resp => {
-                            if (resp.statusCode == HTTP_NO_CONTENT) {
-                                return "deleted";
-                            }
-                            Error = { message: failedMessage + response.reasonPhrase };
-                            return Error;
-                        }
-                    }
+    if (resUser is http:Response) {
+        var receivedUser = resolveUser(userName, resUser);
+        if (receivedUser is User) {
+            user = receivedUser;
+            string userId = user.id;
+            var res = self.scimClient->delete(SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + untaint userId, request);
+            if (res is http:Response) {
+                if (res.statusCode == HTTP_NO_CONTENT) {
+                    return "deleted";
+                } else {
+                    error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + res.reasonPhrase });
+                    return Error;
                 }
-                error err => return err;
+            } else {
+                error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+                return err;
             }
+        } else {
+            error err =  error(SCIM2_ERROR_CODE, { message : "Unable to get the given userName : " +
+            userName});
+            return err;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::deleteGroupByName(string groupName) returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
+remote function ScimConnector.deleteGroupByName(string groupName) returns string|error {
     http:Request request = new();
-    error Error = {};
 
     string failedMessage;
     failedMessage = "Deleting group:" + groupName + " failed. ";
@@ -603,72 +604,71 @@ function ScimConnector::deleteGroupByName(string groupName) returns string|error
     http:Request groupRequest = new();
     Group gro = {};
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
-    var resGroup = httpEP->get(s, message = groupRequest);
-    match resGroup {
-        error err => return err;
-        http:Response response => {
-            var receivedGroup = resolveGroup(groupName, response);
-            match receivedGroup {
-                Group grp => {
-                    gro = grp;
-                    string groupId = gro.id;
-                    var res = httpEP->delete(SCIM_GROUP_END_POINT + SCIM_FILE_SEPERATOR + untaint groupId, request);
-                    match res {
-                        error err => return err;
-                        http:Response resp => {
-                            if (resp.statusCode == HTTP_NO_CONTENT) {
-                                return "deleted";
-                            }
-                            Error = { message: failedMessage + response.reasonPhrase };
-                            return Error;
-                        }
-                    }
+    var resGroup = self.scimClient->get(s, message = groupRequest);
+    if (resGroup is http:Response) {
+        var receivedGroup = resolveGroup(groupName, resGroup);
+        if (receivedGroup is Group) {
+            gro = receivedGroup;
+            string groupId = gro.id;
+            var res = self.scimClient->delete(SCIM_GROUP_END_POINT + SCIM_FILE_SEPERATOR + untaint groupId, request);
+            if (res is http:Response) {
+                if (res.statusCode == HTTP_NO_CONTENT) {
+                    return "deleted";
+                } else {
+                    error Error = error(SCIM2_ERROR_CODE, { message: failedMessage });
+                    return Error;
                 }
-                error err => return err;
+            } else {
+                error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+                return err;
             }
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message : "Unable to get the given groupname :" +
+            groupName});
+            return err;
         }
+
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }
 
-function ScimConnector::updateSimpleUserValue(string id, string valueType, string newValue)
-                                   returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
-    error Error = {};
+remote function ScimConnector.updateSimpleUserValue(string id, string valueType, string newValue) returns string|error {
 
     if (id.equalsIgnoreCase("") || newValue == "") {
-        Error = { message: "User and new " + valueType + " should be valid" };
+        error Error = error(SCIM2_ERROR_CODE, { message: "User and new " + valueType + " should be valid" });
         return Error;
     }
 
     http:Request request = new();
     var bodyOrError = createUpdateBody(valueType, newValue);
-    match bodyOrError {
-        json body => {
-            request = createRequest(body);
-
-            string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
-            var res = httpEP->patch(url, request);
-            match res {
-                error err => return err;
-                http:Response response => {
-                    if (response.statusCode == HTTP_OK) {
-                        return valueType + " updated";
-                    }
-                    Error = { message: response.reasonPhrase };
-                    return Error;
-                }
+    if (bodyOrError is json) {
+        request = createRequest(bodyOrError);
+        string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
+        var res = self.scimClient->patch( untaint url, request);
+        if (res is http:Response) {
+            if (res.statusCode == HTTP_OK) {
+                return valueType + " updated";
+            } else {
+                error Error = error( SCIM2_ERROR_CODE, { message: res.reasonPhrase });
+                return Error;
             }
+        } else {
+            error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+            return err;
         }
-        error err => return err;
+    } else {
+        error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the payload
+                of the response." });
+        return err;
     }
 }
 
-function ScimConnector::updateEmails(string id, Email[] emails) returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
-    error Error = {};
+remote function ScimConnector.updateEmails(string id, Email[] emails) returns string|error {
 
     if (id.equalsIgnoreCase("")) {
-        Error = { message: "User should be valid" };
+        error Error = error(SCIM2_ERROR_CODE, { message: "User should be valid" });
         return Error;
     }
 
@@ -676,10 +676,10 @@ function ScimConnector::updateEmails(string id, Email[] emails) returns string|e
 
     json[] emailList = [];
     json email;
-    int i;
+    int i = 0;
     foreach emailAddress in emails {
         if (!emailAddress.^"type".equalsIgnoreCase(SCIM_WORK) && !emailAddress.^"type".equalsIgnoreCase(SCIM_HOME)) {
-            Error = { message: "Email type should be defiend as either home or work" };
+            error Error = error(SCIM2_ERROR_CODE, { message: "Email type should be defiend as either home or work" });
             return Error;
         }
         email = convertEmailToJson(emailAddress);
@@ -692,28 +692,24 @@ function ScimConnector::updateEmails(string id, Email[] emails) returns string|e
     request = createRequest(untaint body);
 
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
-    var res = httpEP->patch(url, request);
-    match res {
-        error err => {
-            Error = { message: err.message };
+    var res = self.scimClient->patch(url, request);
+    if (res is http:Response) {
+        if (res.statusCode == HTTP_OK) {
+            return "Email updated";
+        } else {
+            error Error = error(SCIM2_ERROR_CODE, { message: res.reasonPhrase });
             return Error;
         }
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                return "Email updated";
-            }
-            Error = { message: response.reasonPhrase };
-            return Error;
-        }
+    } else {
+        error Error = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return Error;
     }
 }
 
-function ScimConnector::updateAddresses(string id, Address[] addresses) returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
-    error Error = {};
+remote function ScimConnector.updateAddresses(string id, Address[] addresses) returns string|error {
 
     if (id.equalsIgnoreCase("")) {
-        Error = { message: "User should be valid" };
+        error Error = error(SCIM2_ERROR_CODE, { message: "User should be valid" });
         return Error;
     }
 
@@ -721,10 +717,10 @@ function ScimConnector::updateAddresses(string id, Address[] addresses) returns 
 
     json[] addressList = [];
     json element;
-    int i;
+    int i = 0;
     foreach address in addresses {
         if (!address.^"type".equalsIgnoreCase(SCIM_WORK) && !address.^"type".equalsIgnoreCase(SCIM_HOME)) {
-            Error = { message: "Address type is required and it should either be work or home" };
+            error Error = error(SCIM2_ERROR_CODE, { message: "Address type is required and it should either be work or home" });
             return Error;
         }
         element = convertAddressToJson(address);
@@ -737,39 +733,36 @@ function ScimConnector::updateAddresses(string id, Address[] addresses) returns 
     request = createRequest(untaint body);
 
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + id;
-    var res = httpEP->patch(url, request);
-    match res {
-        error err => {
-            Error = { message: err.message };
+    var res = self.scimClient->patch(url, request);
+    if (res is http:Response) {
+        if (res.statusCode == HTTP_OK) {
+            return "Address updated";
+        } else {
+            error Error = error(SCIM2_ERROR_CODE, { message: res.reasonPhrase });
             return Error;
         }
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                return "Address updated";
-            }
-            Error = { message: response.reasonPhrase };
-            return Error;
-        }
+    } else {
+        error Error = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return Error;
     }
 }
 
-function ScimConnector::updateUser(User user) returns string|error {
-    endpoint http:Client httpEP = self.httpClient;
-    error Error = {};
+remote function ScimConnector.updateUser(User user) returns string|error {
     http:Request request = new();
 
     json body = convertUserToJson(user, "update");
     request = createRequest(body);
     string url = SCIM_USER_END_POINT + SCIM_FILE_SEPERATOR + user.id;
-    var res = httpEP->put(url, request);
-    match res {
-        error err => return err;
-        http:Response response => {
-            if (response.statusCode == HTTP_OK) {
-                return "User updated";
-            }
-            Error = { message: response.reasonPhrase };
+    var res = self.scimClient->put(url, request);
+    if (res is http:Response) {
+        if (res.statusCode == HTTP_OK) {
+            return "User updated";
+        } else {
+            error Error = error(SCIM2_ERROR_CODE, { message: res.reasonPhrase });
             return Error;
         }
+    } else {
+        error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
+        return err;
     }
 }

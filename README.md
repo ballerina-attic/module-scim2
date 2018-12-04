@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 0.983.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 0.985.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
