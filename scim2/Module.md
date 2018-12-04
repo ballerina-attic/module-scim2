@@ -29,7 +29,7 @@ import wso2/scim2;
 Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. The SCIM2 connector can be minimally instantiated using the access token or using the client ID, client secret, and refresh token in the HTTP client config or BasicAuth configuration.
 
 ```ballerina
-endpoint scim2:Client scimEP {
+scim2:Scim2Configuration scim2Config = {
     clientConfig:{
         auth:{
             scheme:http:OAUTH2,
@@ -48,15 +48,19 @@ endpoint scim2:Client scimEP {
         }
     }
 };
+
+scim2:Client scimEP = new(scim2Config);
+
 ```
 
 The `getUserByUsername` function retrieves a user and returns a `User` struct with the user’s attributes.
 
 ```ballerina
 var response = scimEP->getUserByUsername(userName);
-match response {
-    User usr => io:println(usr);
-    error er => io:println(er);
+if (response is User) {
+    io:println(response);
+} else {
+    io:println(response);
 }
 ```
 
@@ -67,9 +71,10 @@ User user = {};
 user.userName = "userName";
 user.password = "password";
 var response = scimEP->createUser(user);
-match response {
-    string msg => io:println(msg);
-    error er => io:println(er);
+if (response is string) {
+   io:println(response);
+} else {
+   io:println(response);
 }
 ```
 
@@ -77,8 +82,9 @@ The `getGroupByName` function reads a group and returns the `Group` struct (if s
 ```ballerina
 string groupName = "groupName";
 var response = scimEP->getGroupByName(groupName);
-match response {
-    scim2:Group grp => io:println(grp);
-    error er => io:println(er);
+if (response is scim2:Group) {
+    io:println(response);
+} else {
+    io:println(response);
 }
 ```
