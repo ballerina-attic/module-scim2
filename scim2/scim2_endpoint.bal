@@ -598,9 +598,9 @@ remote function Client.deleteUserByUsername(string userName) returns string|erro
                 if (res.statusCode == HTTP_NO_CONTENT) {
                     return "deleted";
                 } else {
-                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + res.reasonPhrase });
-                    return Error;
-                }
+                    error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + res.reasonPhrase });
+                        return Error;
+                    }
             } else {
                 error err = error(SCIM2_ERROR_CODE, { message: "Error occurred while invoking the SCIM2 API" });
                 return err;
