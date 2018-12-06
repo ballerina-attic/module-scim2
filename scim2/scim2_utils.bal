@@ -30,17 +30,18 @@ function resolveUser(string userName, http:Response response) returns User|error
     int statusCode = response.statusCode;
     if (statusCode == HTTP_OK) {
         var received = response.getJsonPayload();
-        if(received is json) {
+        if (received is json) {
             if (received.Resources == null) {
-                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "No User with user name " + userName });
+                error Error = error(SCIM2_ERROR_CODE
+                , { message: failedMessage + "No User with user name " + userName });
                 return Error;
             } else {
                 user = convertReceivedPayloadToUser(received);
                 return user;
             }
         } else {
-            error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the JSON payload
-                                        of the response." });
+            error err = error(SCIM2_ERROR_CODE
+            , { message: "Error occurred while accessing the JSON payload of the response." });
             return err;
         }
     } else {
@@ -71,8 +72,8 @@ function resolveGroup(string groupName, http:Response response) returns Group|er
                 return receivedGroup;
             }
         } else {
-            error err = error(SCIM2_ERROR_CODE , { message: "Error occurred while accessing the JSON payload
-                            of the response." });
+            error err = error(SCIM2_ERROR_CODE 
+            , { message: "Error occurred while accessing the JSON payload of the response." });
             return err;
         }
     } else {

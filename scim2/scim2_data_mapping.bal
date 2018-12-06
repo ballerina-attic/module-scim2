@@ -45,9 +45,11 @@ function convertJsonToMember(json sourceJsonObject) returns Member {
 function toMembers(json s) returns Member[] {
     json[] jMembers = <json[]>s.members;
     Member[] memlist = [];
-    foreach i, node in jMembers {
+    int i =0;
+    foreach var node in jMembers {
         var mem = convertJsonToMember(node);
         memlist[i] = mem;
+        i = i +1;
     }
     return memlist;
 }
@@ -64,9 +66,11 @@ function convertGroupToJson(Group sourceGroupStruct) returns json {
 function toListMem(Group g) returns json[] {
     Member[] mem = g.members;
     json[] jlist = [];
-    foreach i, node in mem {
+    int i =0;
+    foreach var node in mem {
         var jn = convertMembertoJson(node);
         jlist[i] = jn;
+        i = i + 1;
     }
     return jlist;
 }
@@ -280,9 +284,11 @@ function convertJsonToUser(json sourceJsonObject) returns User {
 function toCertificates(json s) returns X509Certificate[] {
     json[] jXcert = <json[]>s.x509Certificates;
     X509Certificate[] xCList = [];
-    foreach i, node in jXcert {
+    int i =0;
+    foreach var node in jXcert {
         var x = convertJsonToCertificate(node);
         xCList[i] = x;
+        i = i + 1;
     }
     return xCList;
 }
@@ -295,9 +301,11 @@ function toSchemas(json s) returns json[] {
 function toAddress(json s) returns Address[] {
     json[] jAddress = <json[]>s.addresses;
     Address[] aAddress = [];
-    foreach i, node in jAddress {
+    int i =0;
+    foreach var node in jAddress {
         var x = convertJsonToAddress(node);
         aAddress[i] = x;
+        i = i + 1;
     }
     return aAddress;
 }
@@ -305,9 +313,11 @@ function toAddress(json s) returns Address[] {
 function toPhoneNumbers(json s) returns PhonePhotoIms[] {
     json[] jPhone = <json[]>s.phoneNumbers;
     PhonePhotoIms[] pPhone = [];
-    foreach i, node in jPhone {
+    int i =0;
+    foreach var node in jPhone {
         var x = convertJsonToPhoneNumbers(node);
         pPhone[i] = x;
+        i = i + 1;
     }
     return pPhone;
 }
@@ -315,9 +325,11 @@ function toPhoneNumbers(json s) returns PhonePhotoIms[] {
 function toPhotos(json s) returns PhonePhotoIms[] {
     json[] jPhoto = <json[]>s.photos;
     PhonePhotoIms[] pPhoto = [];
-    foreach i, node in jPhoto {
+    int i =0;
+    foreach var node in jPhoto {
         var x = convertJsonToPhoneNumbers(node);
         pPhoto[i] = x;
+        i = i + 1;
     }
     return pPhoto;
 }
@@ -325,9 +337,11 @@ function toPhotos(json s) returns PhonePhotoIms[] {
 function toIms(json s) returns PhonePhotoIms[] {
     json[] jIms = <json[]>s.ims;
     PhonePhotoIms[] pIms = [];
-    foreach i, node in jIms {
+    int i =0;
+    foreach var node in jIms {
         var x = convertJsonToPhoneNumbers(node);
         pIms[i] = x;
+        i = i + 1;
     }
     return pIms;
 }
@@ -335,9 +349,11 @@ function toIms(json s) returns PhonePhotoIms[] {
 function toEmails(json s) returns Email[] {
     json[] jEmail = <json[]>s.emails;
     Email[] eEmail = [];
-    foreach i, node in jEmail {
+    int i =0;
+    foreach var node in jEmail {
         var x = convertJsonToEmail(node);
         eEmail[i] = x;
+        i = i + 1;
     }
     return eEmail;
 }
@@ -345,9 +361,11 @@ function toEmails(json s) returns Email[] {
 function toGroups(json s) returns Group[] {
     json[] jGroup = <json[]>s.groups;
     Group[] gGroup = [];
-    foreach i, node in jGroup {
+    int i =0;
+    foreach var node in jGroup {
         var x = convertJsonToGroupRelatedToUser(node);
         gGroup[i] = x;
+        i = i +1 ;
     }
     return gGroup;
 }
@@ -355,9 +373,11 @@ function toGroups(json s) returns Group[] {
 function toJsonCertificates(User u) returns json[] {
     X509Certificate[] xClist = u.x509Certificates;
     json[] jClist = [];
-    foreach i, node in xClist {
+    int i =0;
+    foreach var node in xClist {
         json x = convertCertificateToJson(node);
         jClist[i] = x;
+        i = i +1;
     }
     return jClist;
 }
@@ -365,9 +385,11 @@ function toJsonCertificates(User u) returns json[] {
 function toJsonGroups(User u) returns json[] {
     Group[] gGroup = u.groups;
     json[] jGroup = [];
-    foreach i, node in gGroup {
+    int i =0;
+    foreach var node in gGroup {
         json x = convertGroupToJsonUserRelated(node);
         jGroup[i] = x;
+        i = i + 1;
     }
     return jGroup;
 }
@@ -375,9 +397,11 @@ function toJsonGroups(User u) returns json[] {
 function toJsonAddress(User u) returns json[] {
     Address[] aAddress = u.addresses;
     json[] jAddress = [];
-    foreach i, node in aAddress {
+    int i =0;
+    foreach var node in aAddress {
         json x = convertAddressToJson(node);
         jAddress[i] = x;
+        i = i + 1;
     }
     return jAddress;
 }
@@ -385,9 +409,11 @@ function toJsonAddress(User u) returns json[] {
 function toJsonEmails(User u) returns json[] {
     Email[] eEmail = u.emails;
     json[] jEmail = [];
-    foreach i, node in eEmail {
+    int i =0;
+    foreach var node in eEmail {
         json x = convertEmailToJson(node);
         jEmail[i] = x;
+        i = i + 1;
     }
     return jEmail;
 }
@@ -395,9 +421,11 @@ function toJsonEmails(User u) returns json[] {
 function toJsonPhoneNumbers(User u) returns json[] {
     PhonePhotoIms[] pPhone = u.phoneNumbers;
     json[] jPhone = [];
-    foreach i, node in pPhone {
+    int i =0;
+    foreach var node in pPhone {
         json x = convertPhonePhotoImsToJson(node);
         jPhone[i] = x;
+        i = i + 1;
     }
     return jPhone;
 }
@@ -405,9 +433,11 @@ function toJsonPhoneNumbers(User u) returns json[] {
 function toJsonPhotos(User u) returns json[] {
     PhonePhotoIms[] pPhoto = u.photos;
     json[] jPhoto = [];
-    foreach i, node in pPhoto {
+    int i =0;
+    foreach var node in pPhoto {
         json x = convertPhonePhotoImsToJson(node);
         jPhoto[i] = x;
+        i = i + 1;
     }
     return jPhoto;
 }
@@ -415,9 +445,11 @@ function toJsonPhotos(User u) returns json[] {
 function toJsonIms(User u) returns json[] {
     PhonePhotoIms[] iIms = u.ims;
     json[] jIms = [];
-    foreach i, node in iIms {
+    int i =0;
+    foreach var node in iIms {
         json x = convertPhonePhotoImsToJson(node);
         jIms[i] = x;
+        i = i + 1;
     }
     return jIms;
 }
