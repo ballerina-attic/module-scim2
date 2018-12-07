@@ -23,18 +23,18 @@
 # + members - The list of members that the group has
 # + meta - Meta data
 public type Group record {
-    string displayName;
-    string id;
-    Member[] members;
-    Meta meta;
+    string displayName = "";
+    string id = "";
+    Member[] members = [];
+    Meta meta = {};
 };
 
 # Represents a Member in SCIM2-Group.
 # + display - Display Name of the user
 # + value - ID of the group
 public type Member record {
-    string display;
-    string value;
+    string display = "";
+    string value = "";
 };
 
 # Represents a User in SCIM2.
@@ -63,30 +63,30 @@ public type Member record {
 # + photos - Photos of the user
 # + EnterpriseUser - Enterprise User extention fiels of the user
 public type User record {
-    string userName;
-    string id;
-    string password;
-    string externalId;
-    string displayName;
-    string nickName;
-    string profileUrl;
-    string userType;
-    string title;
-    string preferredLanguage;
-    string timezone;
-    string active;
-    string locale;
-    json[] schemas;
-    Name name;
-    Meta meta;
-    X509Certificate[] x509Certificates;
-    Group[] groups;
-    Address[] addresses;
-    Email[] emails;
-    PhonePhotoIms[] phoneNumbers;
-    PhonePhotoIms[] ims;
-    PhonePhotoIms[] photos;
-    EnterpriseUserExtension EnterpriseUser;
+    string userName = "";
+    string id ="";
+    string password = "";
+    string externalId = "";
+    string displayName = "";
+    string nickName = "";
+    string profileUrl = "";
+    string userType = "";
+    string title = "";
+    string preferredLanguage = "";
+    string timezone = "";
+    string active = "";
+    string locale = "";
+    json[] schemas = [];
+    Name name = {};
+    Meta meta = {};
+    X509Certificate[] x509Certificates = [];
+    Group[] groups = [];
+    Address[] addresses = [];
+    Email[] emails = [];
+    PhonePhotoIms[] phoneNumbers = [];
+    PhonePhotoIms[] ims = [];
+    PhonePhotoIms[] photos = [];
+    EnterpriseUserExtension EnterpriseUser = {};
 };
 
 # Represents a address in a SCIM2-user.
@@ -99,14 +99,14 @@ public type User record {
 # + region - Region
 # + type - Type of the address
 public type Address record {
-    string streetAddress;
-    string locality;
-    string postalCode;
-    string country;
-    string formatted;
-    string primary;
-    string region;
-    string ^"type";
+    string streetAddress = "";
+    string locality = "";
+    string postalCode = "";
+    string country = "";
+    string formatted = "";
+    string primary = "";
+    string region = "";
+    string ^"type" = "";
 };
 
 # Represents a Name in a SCIM2-User.
@@ -117,12 +117,12 @@ public type Address record {
 # + honorificPrefix - Title that conveys esteem or respect for position
 # + honorificSuffix - Word or expression with connotations conveying esteem or respect when used, after a name
 public type Name record {
-    string formatted;
-    string givenName;
-    string familyName;
-    string middleName;
-    string honorificPrefix;
-    string honorificSuffix;
+    string formatted = "";
+    string givenName = "";
+    string familyName = "";
+    string middleName = "";
+    string honorificPrefix = "";
+    string honorificSuffix = "";
 };
 
 # Represents meta data.
@@ -130,17 +130,17 @@ public type Name record {
 # + location - Location of the data
 # + lastModified - Date of last modified
 public type Meta record {
-    string created;
-    string location;
-    string lastModified;
+    string created = "";
+    string location = "";
+    string lastModified = "";
 };
 
 # Represents one of phone numbers, photos or IMS in SCIM2-User.
 # + value - Content
 # + type - Type
 public type PhonePhotoIms record {
-    string value;
-    string ^"type";
+    string value = "";
+    string ^"type" = "";
 };
 
 # Represents a email in a SCIM2-User.
@@ -148,15 +148,15 @@ public type PhonePhotoIms record {
 # + type - Type of the email
 # + primary - Whether it's primary or not
 public type Email record {
-    string value;
-    string ^"type";
-    string primary;
+    string value = "";
+    string ^"type" = "";
+    string primary = "";
 };
 
 # Represents a x509Certificate in SCIM2-User.
 # + value - X509Certificate
 public type X509Certificate record {
-    string value;
+    string value = "";
 };
 
 # Represents fields related to Enterprise User Extention for a SCIM2-User.
@@ -167,18 +167,18 @@ public type X509Certificate record {
 # + department - Department of the employee
 # + manager - Manager
 public type EnterpriseUserExtension record {
-    string employeeNumber;
-    string costCenter;
-    string organization;
-    string division;
-    string department;
-    Manager manager;
+    string employeeNumber = "";
+    string costCenter = "";
+    string organization = "";
+    string division = "";
+    string department = "";
+    Manager manager = {};
 };
 
 # Represents Manager fields of Enterprise User Extention.
 # + managerId - ID of the manager
 # + displayName - Display name of the manager
 public type Manager record {
-    string managerId;
-    string displayName;
+    string managerId = "";
+    string displayName = "";
 };

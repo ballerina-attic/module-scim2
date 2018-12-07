@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 0.983.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 0.990.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
@@ -37,7 +37,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 import ballerina/io;
 import wso2/scim2;
 
-endpoint scim2:Client scimEP {
+Scim2Configuration scim2Config = {
     baseUrl:"https://localhost:9443",
     clientConfig:{
         auth:{
@@ -58,12 +58,15 @@ endpoint scim2:Client scimEP {
     }
 };
 
+Client scimEP = new(scim2Config);
+
 string message;
 string userName = "iniesta";
 var response = scimEP->getUserByUsername(userName);
-match response {
-    scim2:User usr => message = usr.userName;
-    error er => message = er.message;
+if (response is scim2:User) {
+    message = response.userName;
+} else {
+    message = <string>response.detail().message;
 }
 io:println(message);
 ```

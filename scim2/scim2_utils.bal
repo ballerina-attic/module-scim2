@@ -23,30 +23,31 @@ import ballerina/http;
 # + return - If success returns User object, else returns error
 function resolveUser(string userName, http:Response response) returns User|error {
     User user = {};
-    error Error = {};
 
-    string failedMessage;
+    string failedMessage = "";
     failedMessage = "Resolving user:" + userName + " failed. ";
 
     int statusCode = response.statusCode;
     if (statusCode == HTTP_OK) {
         var received = response.getJsonPayload();
-        match received {
-            json payload => {
-                if (payload.Resources == null) {
-                    Error = { message: failedMessage + "No User with user name " + userName };
-                    return Error;
-                }
-                user = convertReceivedPayloadToUser(payload);
+        if (received is json) {
+            if (received.Resources == null) {
+                error Error = error(SCIM2_ERROR_CODE
+                , { message: failedMessage + "No User with user name " + userName });
+                return Error;
+            } else {
+                user = convertReceivedPayloadToUser(received);
                 return user;
             }
-            error err => {
-                return err;
-            }
+        } else {
+            error err = error(SCIM2_ERROR_CODE
+            , { message: "Error occurred while accessing the JSON payload of the response." });
+            return err;
         }
+    } else {
+        error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+        return Error;
     }
-    Error = { message: failedMessage + response.reasonPhrase };
-    return Error;
 }
 
 # Returns a group record if the input http:Response contains a group.
@@ -55,30 +56,30 @@ function resolveUser(string userName, http:Response response) returns User|error
 # + return - If success returns Group object, else returns error
 function resolveGroup(string groupName, http:Response response) returns Group|error {
     Group receivedGroup = {};
-    error Error = {};
 
-    string failedMessage;
+    string failedMessage = "";
     failedMessage = "Resolving group:" + groupName + " failed. ";
 
     int statusCode = response.statusCode;
     if (statusCode == HTTP_OK) {
         var received = response.getJsonPayload();
-        match received {
-            json payload => {
-                if (payload.Resources == null) {
-                    Error = { message: failedMessage + "No Group named " + groupName };
-                    return Error;
-                }
-                receivedGroup = convertReceivedPayloadToGroup(payload);
+        if(received is json) {
+            if (received.Resources == null) {
+                error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + "No Group named " + groupName });
+                return Error;
+            } else {
+                receivedGroup = convertReceivedPayloadToGroup(received);
                 return receivedGroup;
             }
-            error err => {
-                return err;
-            }
+        } else {
+            error err = error(SCIM2_ERROR_CODE 
+            , { message: "Error occurred while accessing the JSON payload of the response." });
+            return err;
         }
+    } else {
+        error Error = error(SCIM2_ERROR_CODE, { message: failedMessage + response.reasonPhrase });
+        return Error;
     }
-    Error = { message: failedMessage + response.reasonPhrase };
-    return Error;
 }
 
 # Returns a http:Request with the json attached to its body.
@@ -97,7 +98,6 @@ function createRequest(json body) returns http:Request {
 # + return - If success returns `json` object, else returns error
 function createUpdateBody(string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
-    error Error = {};
 
     if (valueType.equalsIgnoreCase(SCIM_NICKNAME)) {
         body.Operations[0].value = { SCIM_NICKNAME: newValue };
@@ -143,8 +143,7 @@ function createUpdateBody(string valueType, string newValue) returns json|error 
         body.Operations[0].value = { SCIM_EXTERNALID: newValue };
         return body;
     } else {
-        Error = { message: "No matching value as " + valueType };
+        error Error = error(SCIM2_ERROR_CODE, { message: "No matching value as " + valueType });
         return Error;
     }
-
 }
