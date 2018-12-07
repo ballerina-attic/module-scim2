@@ -202,7 +202,7 @@ remote function Client.getListOfGroups() returns (Group[]|error) {
                 }
             } else {
                 error err = error(SCIM2_ERROR_CODE
-                , message: "Error occurred while accessing the JSON payload of the response." });
+                , { message: "Error occurred while accessing the JSON payload of the response." });
                 return err;
             }
         } else {
