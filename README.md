@@ -37,7 +37,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 import ballerina/io;
 import wso2/scim2;
 
-Scim2Configuration scim2Config = {
+scim2:Scim2Configuration scim2Config = {
     baseUrl:"https://localhost:9443",
     clientConfig:{
         auth:{
@@ -58,9 +58,9 @@ Scim2Configuration scim2Config = {
     }
 };
 
-Client scimEP = new(scim2Config);
+scim2:Client scimEP = new(scim2Config);
 
-string message;
+string message = "";
 string userName = "iniesta";
 var response = scimEP->getUserByUsername(userName);
 if (response is scim2:User) {
