@@ -114,7 +114,7 @@ public type Client client object {
     public remote function updateUser(User user) returns (string|error);
 };
 
-# Twitter Connector configurations can be setup here.
+# Scim2 Connector configurations can be setup here.
 # + baseUrl - The base URL of the REST API
 # + accessToken - The
 # + clientId - The
@@ -132,7 +132,7 @@ public type Scim2Configuration record {
     http:ClientEndpointConfig clientConfig = {};
 };
 
-remote function Client.getListOfUsers() returns (User[]|error) {
+public remote function Client.getListOfUsers() returns (User[]|error) {
     http:Request request = new();
 
     string failedMessage;
@@ -173,7 +173,7 @@ remote function Client.getListOfUsers() returns (User[]|error) {
     }
 }
 
-remote function Client.getListOfGroups() returns (Group[]|error) {
+public remote function Client.getListOfGroups() returns (Group[]|error) {
     http:Request request = new();
 
     string failedMessage = "Listing groups failed. ";
@@ -213,7 +213,7 @@ remote function Client.getListOfGroups() returns (Group[]|error) {
     }
 }
 
-remote function Client.getMe() returns (User|error) {
+public remote function Client.getMe() returns (User|error) {
     http:Request request = new();
 
     User user = {};
@@ -242,7 +242,7 @@ remote function Client.getMe() returns (User|error) {
     }
 }
 
-remote function Client.getGroupByName(string groupName) returns (Group|error) {
+public remote function Client.getGroupByName(string groupName) returns (Group|error) {
     http:Request request = new();
 
     string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
@@ -256,7 +256,7 @@ remote function Client.getGroupByName(string groupName) returns (Group|error) {
     }
 }
 
-remote function Client.getUserByUsername(string userName) returns (User|error) {
+public remote function Client.getUserByUsername(string userName) returns (User|error) {
     http:Request request = new();
 
     var response = self.scimClient->get(SCIM_USER_END_POINT + "?" + SCIM_FILTER_USER_BY_USERNAME + userName, message = request);
@@ -269,7 +269,7 @@ remote function Client.getUserByUsername(string userName) returns (User|error) {
     }
 }
 
-remote function Client.createGroup(Group crtGroup) returns (string|error) {
+public remote function Client.createGroup(Group crtGroup) returns (string|error) {
     http:Request request = new();
 
     string failedMessage;
@@ -304,7 +304,7 @@ remote function Client.createGroup(Group crtGroup) returns (string|error) {
     }
 }
 
-remote function Client.createUser(User user) returns (string|error) {
+public remote function Client.createUser(User user) returns (string|error) {
     http:Request request = new();
 
     string failedMessage;
@@ -391,7 +391,7 @@ remote function Client.createUser(User user) returns (string|error) {
     }
 }
 
-remote function Client.addUserToGroup(string userName, string groupName) returns (string|error) {
+public remote function Client.addUserToGroup(string userName, string groupName) returns (string|error) {
     http:Request request = new();
 
     string failedMessage;
@@ -472,7 +472,7 @@ remote function Client.addUserToGroup(string userName, string groupName) returns
     }
 }
 
-remote function Client.removeUserFromGroup(string userName, string groupName) returns (string|error) {
+public remote function Client.removeUserFromGroup(string userName, string groupName) returns (string|error) {
 
     http:Request request = new();
 
@@ -548,7 +548,7 @@ remote function Client.removeUserFromGroup(string userName, string groupName) re
     }
 }
 
-remote function Client.isUserInGroup(string userName, string groupName) returns boolean|error {
+public remote function Client.isUserInGroup(string userName, string groupName) returns boolean|error {
     http:Request request = new();
     User user = {};
 
@@ -574,7 +574,7 @@ remote function Client.isUserInGroup(string userName, string groupName) returns 
     }
 }
 
-remote function Client.deleteUserByUsername(string userName) returns string|error {
+public remote function Client.deleteUserByUsername(string userName) returns string|error {
 
     http:Request request = new();
 
@@ -614,7 +614,7 @@ remote function Client.deleteUserByUsername(string userName) returns string|erro
     }
 }
 
-remote function Client.deleteGroupByName(string groupName) returns string|error {
+public remote function Client.deleteGroupByName(string groupName) returns string|error {
 
     http:Request request = new();
 
@@ -655,7 +655,7 @@ remote function Client.deleteGroupByName(string groupName) returns string|error 
     }
 }
 
-remote function Client.updateSimpleUserValue(string id, string valueType, string newValue) returns string|error {
+public remote function Client.updateSimpleUserValue(string id, string valueType, string newValue) returns string|error {
 
     if (id.equalsIgnoreCase("") || newValue == "") {
         error Error = error(SCIM2_ERROR_CODE, { message: "User and new " + valueType + " should be valid" });
@@ -686,7 +686,7 @@ remote function Client.updateSimpleUserValue(string id, string valueType, string
     }
 }
 
-remote function Client.updateEmails(string id, Email[] emails) returns string|error {
+public remote function Client.updateEmails(string id, Email[] emails) returns string|error {
 
     if (id.equalsIgnoreCase("")) {
         error Error = error(SCIM2_ERROR_CODE, { message: "User should be valid" });
@@ -727,7 +727,7 @@ remote function Client.updateEmails(string id, Email[] emails) returns string|er
     }
 }
 
-remote function Client.updateAddresses(string id, Address[] addresses) returns string|error {
+public remote function Client.updateAddresses(string id, Address[] addresses) returns string|error {
 
     if (id.equalsIgnoreCase("")) {
         error Error = error(SCIM2_ERROR_CODE, { message: "User should be valid" });
@@ -771,7 +771,7 @@ remote function Client.updateAddresses(string id, Address[] addresses) returns s
 
 }
 
-remote function Client.updateUser(User user) returns string|error {
+public remote function Client.updateUser(User user) returns string|error {
     http:Request request = new();
 
     json body = convertUserToJson(user, "update");

@@ -127,7 +127,7 @@ function testCreateUserFail() {
 
 @test:Config
 function testGetUserByUserNameSuccess() {
-    string message;
+    string message = "";
     string userName = "iniesta";
     var response = scimEP->getUserByUsername(userName);
     if (response is User) {
@@ -154,7 +154,7 @@ function testGetUserByUserNameFail() {
 
 @test:Config
 function testCreateGroup() {
-    string message;
+    string message = "";
     User getUser = {};
     string userName = "iniesta";
     var res = scimEP->getUserByUsername(userName);
@@ -207,7 +207,7 @@ function testCreateGroupFail() {
     dependsOn: ["testCreateGroup"]
 }
 function testGetGroupByName() {
-    string message;
+    string message = "";
     string groupName = "Captain";
     var response = scimEP->getGroupByName(groupName);
     if (response is Group) {
@@ -238,7 +238,7 @@ function testGetGroupByNameFail() {
     dependsOn: ["testGetGroupByName", "testCreateGroup", "testCreateUserSuccess"]
 }
 function testAddUserToGroup() {
-    string message;
+    string message = "";
     string userName = "leoMessi";
     string groupName = "Captain";
     var response = scimEP->addUserToGroup(userName, groupName);
@@ -290,7 +290,7 @@ function testAddUserToGroupFailByGroup() {
     dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testGetGroupByName"]
 }
 function testRemoveUserFromGroup() {
-    string message;
+    string message = "";
     string userName = "iniesta";
     string groupName = "Captain";
     var response = scimEP->removeUserFromGroup(userName, groupName);
@@ -338,7 +338,7 @@ function testRemoveUserFromGroupFailByGroup() {
     dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroup() {
-    boolean message;
+    boolean message = false;
     string userName = "leoMessi";
     string groupName = "Captain";
     var response = scimEP->isUserInGroup(userName, groupName);
@@ -354,7 +354,7 @@ function testIsUserInGroup() {
     dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroupFalse() {
-    boolean message;
+    boolean message = false;
     string userName = "iniesta";
     string groupName = "Captain";
     var response = scimEP->isUserInGroup(userName, groupName);
@@ -370,7 +370,7 @@ function testIsUserInGroupFalse() {
     dependsOn: ["testCreateGroup", "testCreateUserSuccess", "testAddUserToGroup"]
 }
 function testIsUserInGroupFailByUser() {
-    string message;
+    string message = "";
     boolean flag;
     string userName = "iniesa";
     string groupName = "Captain";
@@ -406,7 +406,7 @@ function testIsUserInGroupFalseNoGroup() {
     "testIsUserInGroup", "testCreateUserFail", "testAddUserToGroupFailByGroup"]
 }
 function testDeleteUser() {
-    string message;
+    string message = "";
     string userName = "leoMessi";
     var response = scimEP->deleteUserByUsername(userName);
     if (response is string) {
@@ -438,7 +438,7 @@ function testDeleteUserFail() {
     "testRemoveUserFromGroup", "testIsUserInGroup", "testCreateGroupFail"]
 }
 function testDeleteGroup() {
-    string message;
+    string message = "";
     string groupName = "Captain";
     var response = scimEP->deleteGroupByName(groupName);
     if (response is string) {
