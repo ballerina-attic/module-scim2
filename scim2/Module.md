@@ -16,7 +16,7 @@ The `wso2/scim2` module contains operations to manage groups. It can create, lis
 
 |                             |       Version                                             |
 |:---------------------------:|:---------------------------------------------------------:|
-|  Ballerina Language         | 0.990.0                                                   |
+|  Ballerina Language         | 0.990.3                                                   |
 |  SCIM API                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ## Sample
