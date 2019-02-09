@@ -53,7 +53,7 @@ scim2:Client scimEP = new(scim2Config);
 
 ```
 
-The `getUserByUsername` function retrieves a user and returns a `User` object with the user’s attributes.
+The `getUserByUsername` remote function retrieves a user and returns a `User` object with the user’s attributes.
 
 ```ballerina
 var response = scimEP->getUserByUsername(userName);
@@ -64,7 +64,7 @@ if (response is scim2:User) {
 }
 ```
 
-The `createUser` function creates the user. `User` is a object that contains all the data mentioned in the SCIM2 specification. The response is either a `string` message if successful or an `error` if unsuccessful.
+The `createUser` remote function creates the user. `User` is a object that contains all the data mentioned in the SCIM2 specification. The response is either a `string` message if successful or an `error` if unsuccessful.
 
 ```ballerina
 scim2:User user = {};
@@ -78,7 +78,7 @@ if (response is string) {
 }
 ```
 
-The `getGroupByName` function reads a group and it returns the `Group` object if successful or an `error` if unsuccessful.
+The `getGroupByName` remote function reads a group and returns the `Group` object if successful or an `error` if unsuccessful.
 ```ballerina
 string groupName = "groupName";
 var response = scimEP->getGroupByName(groupName);
