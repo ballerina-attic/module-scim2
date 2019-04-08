@@ -22,20 +22,20 @@
 # + id - The ID of the group
 # + members - The list of members that the group has
 # + meta - Meta data
-public type Group record {
+public type Group record {|
     string displayName = "";
     string id = "";
     Member[] members = [];
     Meta meta = {};
-};
+|};
 
 # Represents a Member in SCIM2-Group.
 # + display - Display Name of the user
 # + value - ID of the group
-public type Member record {
+public type Member record {|
     string display = "";
     string value = "";
-};
+|};
 
 # Represents a User in SCIM2.
 # + userName - Username of the user
@@ -62,7 +62,7 @@ public type Member record {
 # + ims - List of IMS of the user
 # + photos - Photos of the user
 # + EnterpriseUser - Enterprise User extention fiels of the user
-public type User record {
+public type User record {|
     string userName = "";
     string id ="";
     string password = "";
@@ -87,7 +87,7 @@ public type User record {
     PhonePhotoIms[] ims = [];
     PhonePhotoIms[] photos = [];
     EnterpriseUserExtension EnterpriseUser = {};
-};
+|};
 
 # Represents a address in a SCIM2-user.
 # + streetAddress - Street address
@@ -98,7 +98,7 @@ public type User record {
 # + primary - Whether the address is the primary one or not
 # + region - Region
 # + type - Type of the address
-public type Address record {
+public type Address record {|
     string streetAddress = "";
     string locality = "";
     string postalCode = "";
@@ -107,7 +107,7 @@ public type Address record {
     string primary = "";
     string region = "";
     string ^"type" = "";
-};
+|};
 
 # Represents a Name in a SCIM2-User.
 # + formatted - Full name
@@ -116,48 +116,48 @@ public type Address record {
 # + middleName - Middle name
 # + honorificPrefix - Title that conveys esteem or respect for position
 # + honorificSuffix - Word or expression with connotations conveying esteem or respect when used, after a name
-public type Name record {
+public type Name record {|
     string formatted = "";
     string givenName = "";
     string familyName = "";
     string middleName = "";
     string honorificPrefix = "";
     string honorificSuffix = "";
-};
+|};
 
 # Represents meta data.
 # + created - Date created
 # + location - Location of the data
 # + lastModified - Date of last modified
-public type Meta record {
+public type Meta record {|
     string created = "";
     string location = "";
     string lastModified = "";
-};
+|};
 
 # Represents one of phone numbers, photos or IMS in SCIM2-User.
 # + value - Content
 # + type - Type
-public type PhonePhotoIms record {
+public type PhonePhotoIms record {|
     string value = "";
     string ^"type" = "";
-};
+|};
 
 # Represents a email in a SCIM2-User.
 # + value - Email address
 # + type - Type of the email
 # + primary - Whether it's primary or not
-public type Email record {
+public type Email record {|
     string value = "";
     string ^"type" = "";
     string primary = "";
-};
+|};
 
 # Represents a x509Certificate in SCIM2-User.
 # + value - X509Certificate
-public type X509Certificate record {
+public type X509Certificate record {|
     string value = "";
-};
+|};
 
 # Represents fields related to Enterprise User Extention for a SCIM2-User.
 # + employeeNumber - Number of the employee
@@ -166,19 +166,19 @@ public type X509Certificate record {
 # + division - Division of the employe
 # + department - Department of the employee
 # + manager - Manager
-public type EnterpriseUserExtension record {
+public type EnterpriseUserExtension record {|
     string employeeNumber = "";
     string costCenter = "";
     string organization = "";
     string division = "";
     string department = "";
     Manager manager = {};
-};
+|};
 
 # Represents Manager fields of Enterprise User Extention.
 # + managerId - ID of the manager
 # + displayName - Display name of the manager
-public type Manager record {
+public type Manager record {|
     string managerId = "";
     string displayName = "";
-};
+|};

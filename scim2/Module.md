@@ -16,7 +16,7 @@ The `wso2/scim2` module contains operations to manage groups. It can create, lis
 
 |                             |       Version                                             |
 |:---------------------------:|:---------------------------------------------------------:|
-|  Ballerina Language         | 0.990.3                                                   |
+|  Ballerina Language         | 0.991.0                                                   |
 |  SCIM API                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ## Sample
@@ -30,20 +30,27 @@ Instantiate the connector by giving authentication details in the HTTP client co
 
 ```ballerina
 scim2:Scim2Configuration scim2Config = {
-    clientConfig:{
-        auth:{
-            scheme:http:OAUTH2,
-            accessToken:accessToken,
-            clientId:clientId,
-            clientSecret:clientSecret,
-            refreshToken:refreshToken,
-            refreshUrl:refreshUrl
+    baseUrl: url,
+    clientConfig: {
+        auth: {
+            scheme: http:OAUTH2,
+            config: {
+                grantType: http:DIRECT_TOKEN,
+                config: {
+                    accessToken:accessToken,
+                    refreshConfig: {
+                        clientId:clientId,
+                        clientSecret:clientSecret,
+                        refreshToken:refreshToken,
+                        refreshUrl:refreshUrl
+                    }
+                }
+            }
         },
-        url:url,
-        secureSocket:{
-            trustStore:{
-                path:keystore,
-                password:password
+        secureSocket: {
+            trustStore: {
+                path: keystore,
+                password: keystorePassword
             }
         }
     }

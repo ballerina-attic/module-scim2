@@ -122,7 +122,7 @@ public type Client client object {
 # + refreshUrl - The
 # + clientSecret - The
 # + clientConfig - Client endpoint configurations provided by the user
-public type Scim2Configuration record {
+public type Scim2Configuration record {|
     string baseUrl = "";
     string accessToken = "";
     string clientId = "";
@@ -130,7 +130,7 @@ public type Scim2Configuration record {
     string refreshToken = "";
     string refreshUrl = "";
     http:ClientEndpointConfig clientConfig = {};
-};
+|};
 
 public remote function Client.getListOfUsers() returns (User[]|error) {
     http:Request request = new();
