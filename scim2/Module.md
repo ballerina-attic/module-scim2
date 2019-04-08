@@ -30,7 +30,7 @@ Instantiate the connector by giving authentication details in the HTTP client co
 
 ```ballerina
 scim2:Scim2Configuration scim2Config = {
-    baseUrl: url,
+    url:url,
     clientConfig: {
         auth: {
             scheme: http:OAUTH2,

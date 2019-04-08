@@ -39,32 +39,30 @@ import ballerina/io;
 import wso2/scim2;
 
 scim2:Scim2Configuration scim2Config = {
-    scim2:Scim2Configuration scim2Config = {
-        baseUrl: url,
-        clientConfig: {
-            auth: {
-                scheme: http:OAUTH2,
+    url:url,
+    clientConfig: {
+        auth: {
+            scheme: http:OAUTH2,
+            config: {
+                grantType: http:DIRECT_TOKEN,
                 config: {
-                    grantType: http:DIRECT_TOKEN,
-                    config: {
-                        accessToken:accessToken,
-                        refreshConfig: {
-                            clientId:clientId,
-                            clientSecret:clientSecret,
-                            refreshToken:refreshToken,
-                            refreshUrl:refreshUrl
-                        }
+                    accessToken:accessToken,
+                    refreshConfig: {
+                        clientId:clientId,
+                        clientSecret:clientSecret,
+                        refreshToken:refreshToken,
+                        refreshUrl:refreshUrl
                     }
                 }
-            },
-            secureSocket: {
-                trustStore: {
-                    path: keystore,
-                    password: keystorePassword
-                }
+            }
+        },
+        secureSocket: {
+            trustStore: {
+                path: keystore,
+                password: keystorePassword
             }
         }
-    };
+    }
 };
 
 scim2:Client scimEP = new(scim2Config);
