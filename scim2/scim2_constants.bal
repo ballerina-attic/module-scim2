@@ -58,7 +58,7 @@ final int HTTP_NO_CONTENT = 204;
 final string SCIM2_ERROR_CODE = "(wso2/scim2)Scim2Error";
 
 # Json object to set as payload when patch add a group.
-public json SCIM_GROUP_PATCH_ADD_BODY = {
+json SCIM_GROUP_PATCH_ADD_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
         "op": "add",
@@ -74,7 +74,7 @@ public json SCIM_GROUP_PATCH_ADD_BODY = {
 
 
 # Json object to set as payload when patch remove group.
-public json SCIM_GROUP_PATCH_REMOVE_BODY = {
+json SCIM_GROUP_PATCH_REMOVE_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
         "op": "remove",
@@ -84,7 +84,7 @@ public json SCIM_GROUP_PATCH_REMOVE_BODY = {
 
 
 # Json object to set as payload when patch add user.
-public json SCIM_PATCH_ADD_BODY = {
+json SCIM_PATCH_ADD_BODY = {
     "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
     "Operations": [{
         "op": "add",

@@ -469,7 +469,7 @@ function convertUserToJson(User sourceUserStruct, string updateOrCreate) returns
     targetJson.active = sourceUserStruct.active != "" ? sourceUserStruct.active : "";
     targetJson.locale = sourceUserStruct.locale != "" ? sourceUserStruct.locale : "";
     targetJson.schemas = sourceUserStruct.schemas.length() > 0 ? sourceUserStruct.schemas : [];
-    targetJson.name = sourceUserStruct.name != null ? convertNameToJson(sourceUserStruct.name) : {};
+    targetJson.name = sourceUserStruct.name != () ? convertNameToJson(sourceUserStruct.name) : {};
     targetJson.meta = {};
     json[] listCertificates = sourceUserStruct.x509Certificates.length() > 0 ? toJsonCertificates(sourceUserStruct) : [];
     targetJson.x509Certificates = listCertificates;
@@ -492,8 +492,7 @@ function convertUserToJson(User sourceUserStruct, string updateOrCreate) returns
     json[] listPhotos = sourceUserStruct.photos.length() > 0 ? toJsonIms(sourceUserStruct) : [];
     targetJson.photos = listPhotos;
 
-    targetJson.^"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User" = sourceUserStruct.EnterpriseUser !=
-    null                              ?
+    targetJson.^"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User" = sourceUserStruct.EnterpriseUser != ()?
     convertEnterpriseExtensionToJson
     (sourceUserStruct.EnterpriseUser) : {};
 

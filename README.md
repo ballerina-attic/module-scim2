@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 0.990.3                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 0.991.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
@@ -39,21 +39,27 @@ import ballerina/io;
 import wso2/scim2;
 
 scim2:Scim2Configuration scim2Config = {
-    baseUrl:"https://localhost:9443",
-    clientConfig:{
-        auth:{
-            scheme:http:OAUTH2,
-            accessToken:accessToken,
-            clientId:clientId,
-            clientSecret:clientSecret,
-            refreshToken:refreshToken,
-            refreshUrl:refreshUrl
+    url:url,
+    clientConfig: {
+        auth: {
+            scheme: http:OAUTH2,
+            config: {
+                grantType: http:DIRECT_TOKEN,
+                config: {
+                    accessToken:accessToken,
+                    refreshConfig: {
+                        clientId:clientId,
+                        clientSecret:clientSecret,
+                        refreshToken:refreshToken,
+                        refreshUrl:refreshUrl
+                    }
+                }
+            }
         },
-        url:url,
-        secureSocket:{
-            trustStore:{
-                path:keystore,
-                password:password
+        secureSocket: {
+            trustStore: {
+                path: keystore,
+                password: keystorePassword
             }
         }
     }

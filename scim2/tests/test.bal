@@ -17,16 +17,23 @@ Scim2Configuration scim2Config = {
     clientConfig: {
         auth: {
             scheme: http:OAUTH2,
-            accessToken: accessToken,
-            clientId: clientId,
-            clientSecret: clientSecret,
-            refreshToken: refreshToken,
-            refreshUrl: refreshUrl
+            config: {
+                grantType: http:DIRECT_TOKEN,
+                config: {
+                    accessToken: config:getAsString("ACCESS_TOKEN"),
+                    refreshConfig: {
+                        clientId: config:getAsString("CLIENT_ID"),
+                        clientSecret: config:getAsString("CLIENT_SECRET"),
+                        refreshUrl: config:getAsString("REFRESH_URL"),
+                        refreshToken: config:getAsString("REFRESH_TOKEN")
+                    }
+                }
+            }
         },
         secureSocket: {
             trustStore: {
-                path: keystore,
-                password: keystorePassword
+                path: config:getAsString("KEYSTORE"),
+                password: config:getAsString("KEYSTORE_PASSWORD")
             }
         }
     }
