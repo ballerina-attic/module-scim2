@@ -96,7 +96,7 @@ function createRequest(json body) returns http:Request {
 # + valueType - The name of the user attribute
 # + newValue - The new value of the attribute
 # + return - If success returns `json` object, else returns error
-function createUpdateBody(string valueType, string newValue) returns json | error {
+function createUpdateBody(string valueType, string newValue) returns json|error {
     json body = SCIM_PATCH_ADD_BODY;
     json[] operationsJson = <json[]>body.Operations;
     map<json> operationsJsonFirstElement = <map<json>>operationsJson[0];
