@@ -123,7 +123,7 @@ function convertAddressToJson(Address sourceAddressStruct) returns json {
     return targetJsonObject;
 }
 
-function convertJsonToName(json | error sourceJsonObject) returns Name {
+function convertJsonToName(json|error sourceJsonObject) returns Name {
     Name targetNameStruct = {};
     if (sourceJsonObject is json) {
         targetNameStruct.givenName = sourceJsonObject.givenName != null ? sourceJsonObject.givenName.toString() : "";
