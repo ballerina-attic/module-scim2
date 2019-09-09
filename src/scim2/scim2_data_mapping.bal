@@ -26,7 +26,7 @@ function convertJsonToGroup(json sourceJsonObject) returns Group {
 }
 
 
-function convertJsonToMeta(json | error sourceJsonObject) returns Meta {
+function convertJsonToMeta(json|error sourceJsonObject) returns Meta {
     Meta targetMetaStruct = {};
     if (sourceJsonObject is json) {
         targetMetaStruct.created = sourceJsonObject.created != null ? sourceJsonObject.created.toString() : "";
