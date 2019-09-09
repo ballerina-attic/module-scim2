@@ -206,7 +206,7 @@ function convertJsonToEnterpriseExtension(json | error sourceJsonObject) returns
     return targetEnterpriseUser;
 }
 
-function convertJsonToManager(json | error sourceJsonObject) returns Manager {
+function convertJsonToManager(json|error sourceJsonObject) returns Manager {
     Manager targetManagerStruct = {};
     if (sourceJsonObject is json) {
         targetManagerStruct.displayName = sourceJsonObject.displayName != null ?
