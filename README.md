@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 1.0.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 1.0.0                     | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
@@ -34,15 +34,16 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
  4. Import the scim2 module to your Ballerina program as follows.
 
 ```ballerina
-import ballerina/http;
-import ballerina/io;
 import wso2/scim2;
+import ballerina/config;
+import ballerina/io;
 
-Scim2Configuration scim2Config = {
-    baseUrl:  config:getAsString("ENDPOINT"),
+// Create a scim2 confuguration
+scim2:Scim2Configuration scim2Config = {
+    baseUrl: "BASE_URL,
     clientConfig: {
 
-        accessToken: config:getAsString("ACCESS_TOKEN"),
+        accessToken: "ACCESS_TOKEN",
         refreshConfig: {
             clientId: config:getAsString("CLIENT_ID"),
             clientSecret: config:getAsString("CLIENT_SECRET"),
@@ -50,24 +51,32 @@ Scim2Configuration scim2Config = {
             refreshUrl: config:getAsString("REFRESH_URL")
         }
     },
-            secureSocketConfig: {
+    secureSocketConfig: {
         trustStore: {
-            path: config:getAsString("KEYSTORE"),
-            password: config:getAsString("KEYSTORE_PASSWORD")
+            path: "KEY_STORE_PATH",
+            password: "KEY_STORE_PATH"
         }
     }
-    
+
 };
 
-Client scimEP = new(scim2Config);
+// Defining a new client
+scim2:Client scimEP = new (scim2Config);
+
 
 public function main() {
-    string userName = "iniesta";
-    var response = scimEP->getUserByUsername(userName);
-    if (response is scim2:User) {
-        io:println("UserName: ", message);
+
+    scim2:User user1 = {};
+    //create user Peter
+    user1.userName = "Peter";
+    user1.password = "peter123";
+    var response = scimEP->createUser(user1);
+
+    if (response is string) {
+        io:println(<string>response.toString());
     } else {
-        io:println("Error: ", <string> response.detail().message);
+        io:println("Error");
     }
 }
+
 ```
