@@ -40,7 +40,7 @@ import ballerina/io;
 
 // Create a scim2 confuguration
 scim2:Scim2Configuration scim2Config = {
-    baseUrl: "BASE_URL,
+    baseUrl: "BASE_URL",
     clientConfig: {
 
         accessToken: "ACCESS_TOKEN",
