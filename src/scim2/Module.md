@@ -29,7 +29,7 @@ import wso2/scim2;
 Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. The SCIM2 connector can be minimally instantiated using the access token or using the client ID, client secret, and refresh token in the HTTP client config or BasicAuth configuration.
 
 ```ballerina
-Scim2Configuration scim2Config = {
+scim2:Scim2Configuration scim2Config = {
     baseUrl:  config:getAsString("ENDPOINT"),
     clientConfig: {
 
@@ -50,7 +50,7 @@ Scim2Configuration scim2Config = {
     
 };
 
-Client scimEP = new(scim2Config);
+scim2:Client scimEP = new(scim2Config);
 
 ```
 

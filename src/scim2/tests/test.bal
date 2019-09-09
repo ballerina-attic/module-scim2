@@ -1,9 +1,9 @@
-import ballerina/test;
 import ballerina/config;
+import ballerina/test;
 
 // Create SCIM2 client configuration by reading from config file.
 Scim2Configuration scim2Config = {
-    baseUrl:  config:getAsString("ENDPOINT"),
+    baseUrl: config:getAsString("ENDPOINT"),
     clientConfig: {
 
         accessToken: config:getAsString("ACCESS_TOKEN"),
@@ -14,16 +14,16 @@ Scim2Configuration scim2Config = {
             refreshUrl: config:getAsString("REFRESH_URL")
         }
     },
-            secureSocketConfig: {
+    secureSocketConfig: {
         trustStore: {
             path: config:getAsString("KEYSTORE"),
             password: config:getAsString("KEYSTORE_PASSWORD")
         }
     }
-    
+
 };
 
-Client scimEP = new(scim2Config);
+Client scimEP = new (scim2Config);
 
 @test:BeforeEach
 function createFewUsersAndGroup() {
@@ -44,9 +44,7 @@ function createFewUsersAndGroup() {
     var response3 = scimEP->createGroup(gro);
 }
 
-@test:Config{
-
-}
+@test:Config {}
 function testCreateUserSuccess() {
     string message;
     //create user=======================================================================================================
@@ -113,14 +111,12 @@ function testCreateUserFail() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
-            "Creating user:" + userName + " failed. User with the name: " + userName
-            + " already exists in the system.",
-        msg = "createUser function failed");
+    "Creating user:" + userName + " failed. User with the name: " + userName
+    + " already exists in the system.",
+    msg = "createUser function failed");
 }
 
-@test:Config{
-
-}
+@test:Config {}
 function testGetUserByUserNameSuccess() {
     string message = "";
     string userName = "iniesta";
@@ -133,9 +129,7 @@ function testGetUserByUserNameSuccess() {
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
 }
 
-@test:Config{
-
-}
+@test:Config {}
 function testGetUserByUserNameFail() {
     string message;
     string userName = "dogDayAfternoon";
@@ -146,12 +140,10 @@ function testGetUserByUserNameFail() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Resolving user:" + userName + " failed. No User with user name " + userName,
-        msg = "getUserByUserName function failed");
+    msg = "getUserByUserName function failed");
 }
 
-@test:Config{
-
-}
+@test:Config {}
 function testCreateGroup() {
     string message = "";
     User getUser = {};
@@ -197,9 +189,9 @@ function testCreateGroupFail() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
-            "Creating group:" + groupName + " failed. Group with name: PRIMARY/" + groupName
-            + " already exists in the system.",
-        msg = "createGroup function failed");
+    "Creating group:" + groupName + " failed. Group with name: PRIMARY/" + groupName
+    + " already exists in the system.",
+    msg = "createGroup function failed");
 }
 
 @test:Config {
@@ -230,7 +222,7 @@ function testGetGroupByNameFail() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Resolving group:" + groupName + " failed. No Group named " + groupName,
-        msg = "getGroupByName function failed");
+    msg = "getGroupByName function failed");
 }
 
 @test:Config {
@@ -263,8 +255,8 @@ function testAddUserToGroupFailByUser() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
-     "Error occured while getting the user record which associate with the given userName :" + userName,
-        msg = "addUserToGroup function Failed");
+    "Error occured while getting the user record which associate with the given userName :" + userName,
+    msg = "addUserToGroup function Failed");
 }
 
 @test:Config {
@@ -281,8 +273,8 @@ function testAddUserToGroupFailByGroup() {
         message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
-        "Error occured while adding the user record under the given groupname :"
-            + groupName , msg = "addUserToGroup function Failed");
+    "Error occured while adding the user record under the given groupname :"
+    + groupName, msg = "addUserToGroup function Failed");
 }
 
 @test:Config {
@@ -460,7 +452,7 @@ function testDeleteGroupFail() {
         test:assertFail(msg = "Message returned when error expected");
     } else {
         test:assertEquals(<string>response.detail()?.message, "Unable to get the given groupname :" +
-        groupName , msg = "deleteUser function failed");
+        groupName, msg = "deleteUser function failed");
     }
 }
 
