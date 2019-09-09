@@ -21,7 +21,7 @@ import ballerina/mime;
 # + userName - User name of the user
 # + response - http:Response with the received response from the SCIM2 API
 # + return - If success returns User object, else returns error
-function resolveUser(string userName, http:Response response) returns @untainted User | error {
+function resolveUser(string userName, http:Response response) returns @untainted User|error {
     User user = {};
 
     string failedMessage = "";
