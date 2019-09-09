@@ -172,7 +172,7 @@ public type Client client object {
     # Returns a group record with the specified group name if found.
     # + groupName - Name of the group
     # + return - If success, returns Group object, else returns error
-    public remote function getGroupByName(string groupName) returns (Group | error) {
+    public remote function getGroupByName(string groupName) returns (Group|error) {
         http:Request request = new ();
 
         string s = SCIM_GROUP_END_POINT + "?" + SCIM_FILTER_GROUP_BY_NAME + groupName;
