@@ -188,7 +188,7 @@ function convertJsonToCertificate(json sourceJsonObject) returns X509Certificate
     return targetCertificate;
 }
 
-function convertJsonToEnterpriseExtension(json | error sourceJsonObject) returns EnterpriseUserExtension {
+function convertJsonToEnterpriseExtension(json|error sourceJsonObject) returns EnterpriseUserExtension {
     EnterpriseUserExtension targetEnterpriseUser = {};
     if (sourceJsonObject is json) {
         targetEnterpriseUser.costCenter = sourceJsonObject.costCenter != null ?
