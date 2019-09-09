@@ -98,7 +98,7 @@ public type Client client object {
 
     # Returns a list of group records if found or error if any error occured.
     # + return - If success, returns list of Group objects, else returns error
-    public remote function getListOfGroups() returns @tainted (Group[] | error) {
+    public remote function getListOfGroups() returns @tainted (Group[]|error) {
         http:Request request = new ();
 
         string failedMessage = "Listing groups failed. ";
