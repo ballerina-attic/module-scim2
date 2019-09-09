@@ -54,7 +54,7 @@ function resolveUser(string userName, http:Response response) returns @untainted
 # + groupName - Name of the group
 # + response - http:Response with the received response from the SCIM2 API
 # + return - If success returns Group object, else returns error
-function resolveGroup(string groupName, http:Response response) returns @untainted Group | error {
+function resolveGroup(string groupName, http:Response response) returns @untainted Group|error {
     Group receivedGroup = {};
 
     string failedMessage = "";
