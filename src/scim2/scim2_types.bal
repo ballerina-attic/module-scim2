@@ -64,7 +64,7 @@ public type Member record {|
 # + EnterpriseUser - Enterprise User extention fiels of the user
 public type User record {|
     string userName = "";
-    string id ="";
+    string id = "";
     string password = "";
     string externalId = "";
     string displayName = "";
@@ -106,7 +106,7 @@ public type Address record {|
     string formatted = "";
     string primary = "";
     string region = "";
-    string ^"type" = "";
+    string 'type = "";
 |};
 
 # Represents a Name in a SCIM2-User.
@@ -140,7 +140,7 @@ public type Meta record {|
 # + type - Type
 public type PhonePhotoIms record {|
     string value = "";
-    string ^"type" = "";
+    string 'type = "";
 |};
 
 # Represents a email in a SCIM2-User.
@@ -149,7 +149,7 @@ public type PhonePhotoIms record {|
 # + primary - Whether it's primary or not
 public type Email record {|
     string value = "";
-    string ^"type" = "";
+    string 'type = "";
     string primary = "";
 |};
 
