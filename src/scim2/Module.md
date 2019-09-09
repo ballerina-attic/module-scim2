@@ -6,17 +6,17 @@ This module provides user management capabilities by allowing you to create, del
 
 **User Operations**
 
-The `wso2/scim2` module contains operations that manage users. It can create, list, update, and delete users.
+The `wso2/scim2` module contains operations that manage users. It can create, list, update and delete users.
 
 **Group Operations**
 
-The `wso2/scim2` module contains operations to manage groups. It can create, list, update, and delete groups.
+The `wso2/scim2` module contains operations to manage groups. It can create, list, update and delete groups.
 
 ## Compatibility
 
 |                             |       Version                                             |
 |:---------------------------:|:---------------------------------------------------------:|
-|  Ballerina Language         | 0.991.0                                                   |
+|  Ballerina Language         | 1.0.0                                                   |
 |  SCIM API                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ## Sample
@@ -29,34 +29,28 @@ import wso2/scim2;
 Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. The SCIM2 connector can be minimally instantiated using the access token or using the client ID, client secret, and refresh token in the HTTP client config or BasicAuth configuration.
 
 ```ballerina
-scim2:Scim2Configuration scim2Config = {
-    url:url,
+Scim2Configuration scim2Config = {
+    baseUrl:  config:getAsString("ENDPOINT"),
     clientConfig: {
-        auth: {
-            scheme: http:OAUTH2,
-            config: {
-                grantType: http:DIRECT_TOKEN,
-                config: {
-                    accessToken:accessToken,
-                    refreshConfig: {
-                        clientId:clientId,
-                        clientSecret:clientSecret,
-                        refreshToken:refreshToken,
-                        refreshUrl:refreshUrl
-                    }
-                }
-            }
-        },
-        secureSocket: {
-            trustStore: {
-                path: keystore,
-                password: keystorePassword
-            }
+
+        accessToken: config:getAsString("ACCESS_TOKEN"),
+        refreshConfig: {
+            clientId: config:getAsString("CLIENT_ID"),
+            clientSecret: config:getAsString("CLIENT_SECRET"),
+            refreshToken: config:getAsString("REFRESH_TOKEN"),
+            refreshUrl: config:getAsString("REFRESH_URL")
+        }
+    },
+            secureSocketConfig: {
+        trustStore: {
+            path: config:getAsString("KEYSTORE"),
+            password: config:getAsString("KEYSTORE_PASSWORD")
         }
     }
+    
 };
 
-scim2:Client scimEP = new(scim2Config);
+Client scimEP = new(scim2Config);
 
 ```
 

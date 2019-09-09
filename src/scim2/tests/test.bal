@@ -1,42 +1,26 @@
 import ballerina/test;
-import ballerina/io;
 import ballerina/config;
-import ballerina/log;
 
-string testUrl = config:getAsString("ENDPOINT");
-string accessToken = config:getAsString("ACCESS_TOKEN");
-string clientId = config:getAsString("CLIENT_ID");
-string clientSecret = config:getAsString("CLIENT_SECRET");
-string refreshToken = config:getAsString("REFRESH_TOKEN");
-string refreshUrl = config:getAsString("REFRESH_URL");
-string keystore = config:getAsString("KEYSTORE");
-string keystorePassword = config:getAsString("KEYSTORE_PASSWORD");
-
+// Create SCIM2 client configuration by reading from config file.
 Scim2Configuration scim2Config = {
-    baseUrl: testUrl,
+    baseUrl:  config:getAsString("ENDPOINT"),
     clientConfig: {
-        auth: {
-            scheme: http:OAUTH2,
-            config: {
-                grantType: http:DIRECT_TOKEN,
-                config: {
-                    accessToken: config:getAsString("ACCESS_TOKEN"),
-                    refreshConfig: {
-                        clientId: config:getAsString("CLIENT_ID"),
-                        clientSecret: config:getAsString("CLIENT_SECRET"),
-                        refreshUrl: config:getAsString("REFRESH_URL"),
-                        refreshToken: config:getAsString("REFRESH_TOKEN")
-                    }
-                }
-            }
-        },
-        secureSocket: {
-            trustStore: {
-                path: config:getAsString("KEYSTORE"),
-                password: config:getAsString("KEYSTORE_PASSWORD")
-            }
+
+        accessToken: config:getAsString("ACCESS_TOKEN"),
+        refreshConfig: {
+            clientId: config:getAsString("CLIENT_ID"),
+            clientSecret: config:getAsString("CLIENT_SECRET"),
+            refreshToken: config:getAsString("REFRESH_TOKEN"),
+            refreshUrl: config:getAsString("REFRESH_URL")
+        }
+    },
+            secureSocketConfig: {
+        trustStore: {
+            path: config:getAsString("KEYSTORE"),
+            password: config:getAsString("KEYSTORE_PASSWORD")
         }
     }
+    
 };
 
 Client scimEP = new(scim2Config);
@@ -60,14 +44,16 @@ function createFewUsersAndGroup() {
     var response3 = scimEP->createGroup(gro);
 }
 
-@test:Config
+@test:Config{
+
+}
 function testCreateUserSuccess() {
     string message;
     //create user=======================================================================================================
     User user = {};
 
     PhonePhotoIms phone = {};
-    phone.^"type" = "work";
+    phone.'type = "work";
     phone.value = "0777777777";
     user.phoneNumbers = [phone];
 
@@ -85,7 +71,7 @@ function testCreateUserSuccess() {
     address.country = "Spain";
     address.formatted = "no/2,Barcelona/Catalunia/Spain";
     address.primary = "true";
-    address.^"type" = "work";
+    address.'type = "work";
 
     user.addresses = [address];
 
@@ -94,11 +80,11 @@ function testCreateUserSuccess() {
 
     Email email1 = {};
     email1.value = "messi@barca.com";
-    email1.^"type" = "work";
+    email1.'type = "work";
 
     Email email2 = {};
     email2.value = "messi@gg.com";
-    email2.^"type" = "home";
+    email2.'type = "home";
 
     user.emails = [email1, email2];
     var responseDelete = scimEP->deleteUserByUsername("leoMessei");
@@ -106,7 +92,7 @@ function testCreateUserSuccess() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "User Created", msg = "createUser function failed");
 }
@@ -124,7 +110,7 @@ function testCreateUserFail() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
             "Creating user:" + userName + " failed. User with the name: " + userName
@@ -132,7 +118,9 @@ function testCreateUserFail() {
         msg = "createUser function failed");
 }
 
-@test:Config
+@test:Config{
+
+}
 function testGetUserByUserNameSuccess() {
     string message = "";
     string userName = "iniesta";
@@ -140,12 +128,14 @@ function testGetUserByUserNameSuccess() {
     if (response is User) {
         message = response.userName;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "iniesta", msg = "getUserByUserName function failed");
 }
 
-@test:Config
+@test:Config{
+
+}
 function testGetUserByUserNameFail() {
     string message;
     string userName = "dogDayAfternoon";
@@ -153,13 +143,15 @@ function testGetUserByUserNameFail() {
     if (response is User) {
         message = response.userName;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Resolving user:" + userName + " failed. No User with user name " + userName,
         msg = "getUserByUserName function failed");
 }
 
-@test:Config
+@test:Config{
+
+}
 function testCreateGroup() {
     string message = "";
     User getUser = {};
@@ -168,7 +160,7 @@ function testCreateGroup() {
     if (res is User) {
         getUser = res;
     } else {
-        test:assertFail(msg = <string>res.detail().message);
+        test:assertFail(msg = <string>res.detail()?.message);
     }
 
     Group gro = {};
@@ -184,7 +176,7 @@ function testCreateGroup() {
     if (response is string) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "Group Created", msg = "createGroup function failed");
 }
@@ -202,7 +194,7 @@ function testCreateGroupFail() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
             "Creating group:" + groupName + " failed. Group with name: PRIMARY/" + groupName
@@ -220,7 +212,7 @@ function testGetGroupByName() {
     if (response is Group) {
         message = response.members[0].display;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "iniesta", msg = "getGroupByName function failed");
 }
@@ -235,7 +227,7 @@ function testGetGroupByNameFail() {
     if (response is Group) {
         message = response.members[0].display;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Resolving group:" + groupName + " failed. No Group named " + groupName,
         msg = "getGroupByName function failed");
@@ -252,7 +244,7 @@ function testAddUserToGroup() {
     if (response is string) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "User Added", msg = "addUserToGroup function Failed");
 }
@@ -268,7 +260,7 @@ function testAddUserToGroupFailByUser() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
      "Error occured while getting the user record which associate with the given userName :" + userName,
@@ -286,7 +278,7 @@ function testAddUserToGroupFailByGroup() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message,
         "Error occured while adding the user record under the given groupname :"
@@ -304,7 +296,7 @@ function testRemoveUserFromGroup() {
     if (response is string) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "User Removed", msg = "removeUserFromGroup function failed");
 }
@@ -320,7 +312,7 @@ function testRemoveUserFromGroupFailByUser() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Unable to get the given userName :" + userName, msg = "removeUserFromGroup function failed");
 }
@@ -336,7 +328,7 @@ function testRemoveUserFromGroupFailByGroup() {
     if (response is string) {
         message = response;
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Unable to get the given groupname : " + groupName, msg = "removeUserFromGroup function failed");
 }
@@ -352,7 +344,7 @@ function testIsUserInGroup() {
     if (response is boolean) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertTrue(message, msg = "isUserInGroup function failed");
 }
@@ -368,7 +360,7 @@ function testIsUserInGroupFalse() {
     if (response is boolean) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertFalse(message, msg = "isUserInGroup function failed");
 }
@@ -386,7 +378,7 @@ function testIsUserInGroupFailByUser() {
     if (response is boolean) {
         test:assertFail(msg = "Flag returned when error expected");
     } else {
-        message = <string>response.detail().message;
+        message = <string>response.detail()?.message;
     }
     test:assertEquals(message, "Unable to get the given userName :" + userName, msg = "isUserInGroup function failed");
 }
@@ -404,7 +396,7 @@ function testIsUserInGroupFalseNoGroup() {
     if (response is boolean) {
         test:assertFalse(response, msg = "isUserInGroup function failed");
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
 }
 
@@ -419,7 +411,7 @@ function testDeleteUser() {
     if (response is string) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "deleted", msg = "deleteUser function failed");
 }
@@ -435,7 +427,7 @@ function testDeleteUserFail() {
     if (response is string) {
         test:assertFail(msg = "Message returned when error expected");
     } else {
-        test:assertEquals(<string>response.detail().message, "Unable to get the given userName : " +
+        test:assertEquals(<string>response.detail()?.message, "Unable to get the given userName : " +
         userName, msg = "deleteUser function failed");
     }
 }
@@ -451,7 +443,7 @@ function testDeleteGroup() {
     if (response is string) {
         message = response;
     } else {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     }
     test:assertEquals(message, "deleted", msg = "deleteGroup function failed");
 }
@@ -467,7 +459,7 @@ function testDeleteGroupFail() {
     if (response is string) {
         test:assertFail(msg = "Message returned when error expected");
     } else {
-        test:assertEquals(<string>response.detail().message, "Unable to get the given groupname :" +
+        test:assertEquals(<string>response.detail()?.message, "Unable to get the given groupname :" +
         groupName , msg = "deleteUser function failed");
     }
 }
@@ -479,7 +471,7 @@ function testGetListOfUsers() {
     int length = 0;
     var response = scimEP->getListOfUsers();
     if (response is error) {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     } else {
         length = response.length();
     }
@@ -493,7 +485,7 @@ function testGetListOfGroups() {
     int length = 0;
     var response = scimEP->getListOfGroups();
     if (response is error) {
-        test:assertFail(msg = <string>response.detail().message);
+        test:assertFail(msg = <string>response.detail()?.message);
     } else {
         length = response.length();
     }

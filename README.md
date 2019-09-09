@@ -11,7 +11,7 @@ user's groups. It handles OAuth 2.0 and provides auto completion and type conver
 ## Compatibility
 | Ballerina Language Version| SCIM API Version                                          |
 | :------------------------:| :--------------------------------------------------------:|
-| 0.991.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
+| 1.0.0                   | [SCIM2.0](https://tools.ietf.org/html/rfc7643#section-8.3)|
 
 ![Ballerina SCIM2 Endpoint Overview](./docs/resources/SCIM2.png)
 
@@ -38,34 +38,28 @@ import ballerina/http;
 import ballerina/io;
 import wso2/scim2;
 
-scim2:Scim2Configuration scim2Config = {
-    url:url,
+Scim2Configuration scim2Config = {
+    baseUrl:  config:getAsString("ENDPOINT"),
     clientConfig: {
-        auth: {
-            scheme: http:OAUTH2,
-            config: {
-                grantType: http:DIRECT_TOKEN,
-                config: {
-                    accessToken:accessToken,
-                    refreshConfig: {
-                        clientId:clientId,
-                        clientSecret:clientSecret,
-                        refreshToken:refreshToken,
-                        refreshUrl:refreshUrl
-                    }
-                }
-            }
-        },
-        secureSocket: {
-            trustStore: {
-                path: keystore,
-                password: keystorePassword
-            }
+
+        accessToken: config:getAsString("ACCESS_TOKEN"),
+        refreshConfig: {
+            clientId: config:getAsString("CLIENT_ID"),
+            clientSecret: config:getAsString("CLIENT_SECRET"),
+            refreshToken: config:getAsString("REFRESH_TOKEN"),
+            refreshUrl: config:getAsString("REFRESH_URL")
+        }
+    },
+            secureSocketConfig: {
+        trustStore: {
+            path: config:getAsString("KEYSTORE"),
+            password: config:getAsString("KEYSTORE_PASSWORD")
         }
     }
+    
 };
 
-scim2:Client scimEP = new(scim2Config);
+Client scimEP = new(scim2Config);
 
 public function main() {
     string userName = "iniesta";
