@@ -221,13 +221,13 @@ public type Client client object {
             if (statusCode == HTTP_CREATED) {
                 return "Group Created";
             } else if (statusCode == HTTP_UNAUTHORIZED) {
-                error Error = error(SCIM2_ERROR_CODE, message = failedMessage + response.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = failedMessage + response.reasonPhrase);
+                return err;
             } else {
                 var payload = response.getJsonPayload();
                 if (payload is json) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage + (payload.detail.toString()));
-                    return Error;
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage + (payload.detail.toString()));
+                    return err;
                 } else {
                     error err = error(SCIM2_ERROR_CODE
                     , message = "Error occurred while accessing the payload of the response.");
@@ -255,9 +255,9 @@ public type Client client object {
                 boolean isEmailTypeHome = stringutils:equalsIgnoreCase(email["type"], SCIM_HOME);
                 boolean isEmailTypeOther = stringutils:equalsIgnoreCase(email["type"], SCIM_OTHER);
                 if (!isEmailTypeWork && !isEmailTypeHome && !isEmailTypeOther) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage
                     + "Email should either be home or work");
-                    return Error;
+                    return err;
                 }
             }
         }
@@ -267,9 +267,9 @@ public type Client client object {
                 boolean isAddressTypeHome = stringutils:equalsIgnoreCase(address["type"], SCIM_HOME);
                 boolean isAddressTypeOther = stringutils:equalsIgnoreCase(address["type"], SCIM_OTHER);
                 if (!isAddressTypeWork && !isAddressTypeHome && !isAddressTypeOther) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage
                     + "Address type should either be work or home");
-                    return Error;
+                    return err;
                 }
             }
         }
@@ -283,9 +283,9 @@ public type Client client object {
                 boolean isPhoneTypeOther = stringutils:equalsIgnoreCase(phone["type"], SCIM_OTHER);
                 if (!isPhoneTypeWork && !isPhoneTypeHome && !isPhoneTypeMobile && !isPhoneTypeFax && !isPhoneTypePager
                 && !isPhoneTypeOther) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage
                     + "Phone number type should be work,mobile,fax,pager,home or other.");
-                    return Error;
+                    return err;
                 }
             }
         }
@@ -294,9 +294,9 @@ public type Client client object {
                 boolean isPhotoTypePhoto = stringutils:equalsIgnoreCase(photo["type"], SCIM_PHOTO);
                 boolean isPhotoTypeThumbnail = stringutils:equalsIgnoreCase(photo["type"], SCIM_THUMBNAIL);
                 if (!isPhotoTypePhoto && !isPhotoTypeThumbnail) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage
                     + "Photo type should either be photo or thumbnail.");
-                    return Error;
+                    return err;
                 }
             }
         }
@@ -313,13 +313,13 @@ public type Client client object {
             if (statusCode == HTTP_CREATED) {
                 return "User Created";
             } else if (statusCode == HTTP_UNAUTHORIZED) {
-                error Error = error(SCIM2_ERROR_CODE, message = failedMessage + response.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = failedMessage + response.reasonPhrase);
+                return err;
             } else {
                 var payload = response.getJsonPayload();
                 if (payload is json) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage + (payload.detail.toString()));
-                    return Error;
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage + (payload.detail.toString()));
+                    return err;
                 } else {
                     error err = error(SCIM2_ERROR_CODE
                     , message = "Error occurred while accessing the payload of the response.");
@@ -404,13 +404,13 @@ public type Client client object {
             if (statusCode == HTTP_OK) {
                 return "User Added";
             } else if (statusCode == HTTP_UNAUTHORIZED) {
-                error Error = error(SCIM2_ERROR_CODE, message = failedMessage + res.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = failedMessage + res.reasonPhrase);
+                return err;
             } else {
                 var received = res.getJsonPayload();
                 if (received is json) {
-                    error Error = error(SCIM2_ERROR_CODE, message = failedMessage + (received.detail.toString()));
-                    return Error;
+                    error err = error(SCIM2_ERROR_CODE, message = failedMessage + (received.detail.toString()));
+                    return err;
                 } else {
                     error err = error(SCIM2_ERROR_CODE
                     , message = "Error occurred while accessing the payload of the response.");
@@ -485,13 +485,13 @@ public type Client client object {
             if (statusCode == HTTP_OK) {
                 return "User Removed";
             } else if (statusCode == HTTP_UNAUTHORIZED) {
-                error Error = error(SCIM2_ERROR_CODE, message = "failedMessage" + res.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = "failedMessage" + res.reasonPhrase);
+                return err;
             } else {
                 var received = res.getJsonPayload();
                 if (received is json) {
-                    error Error = error(SCIM2_ERROR_CODE, message = "failedMessage" + (received.detail.toString()));
-                    return Error;
+                    error err = error(SCIM2_ERROR_CODE, message = "failedMessage" + (received.detail.toString()));
+                    return err;
                 } else {
                     error e = error(SCIM2_ERROR_CODE
                     , message = "Error occurred while accessing the payload of the response.");
@@ -558,8 +558,8 @@ public type Client client object {
                     if (res.statusCode == HTTP_NO_CONTENT) {
                         return "deleted";
                     } else {
-                        error Error = error(SCIM2_ERROR_CODE, message = failedMessage + res.reasonPhrase);
-                        return Error;
+                        error err = error(SCIM2_ERROR_CODE, message = failedMessage + res.reasonPhrase);
+                        return err;
                     }
                 } else {
                     error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
@@ -600,8 +600,8 @@ public type Client client object {
                     if (res.statusCode == HTTP_NO_CONTENT) {
                         return "deleted";
                     } else {
-                        error Error = error(SCIM2_ERROR_CODE, message = failedMessage);
-                        return Error;
+                        error err = error(SCIM2_ERROR_CODE, message = failedMessage);
+                        return err;
                     }
                 } else {
                     error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
@@ -626,8 +626,8 @@ public type Client client object {
     # + return - If success, returns string message with status, else returns error
     public remote function updateSimpleUserValue(string id, string valueType, string newValue) returns (string | error) {
         if (stringutils:equalsIgnoreCase(id, "") || newValue == "") {
-            error Error = error(SCIM2_ERROR_CODE, message = "User and new " + valueType + " should be valid");
-            return Error;
+            error err = error(SCIM2_ERROR_CODE, message = "User and new " + valueType + " should be valid");
+            return err;
         }
 
         http:Request request = new ();
@@ -640,8 +640,8 @@ public type Client client object {
                 if (res.statusCode == HTTP_OK) {
                     return valueType + " updated";
                 } else {
-                    error Error = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
-                    return Error;
+                    error err = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
+                    return err;
                 }
             } else {
                 error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
@@ -660,8 +660,8 @@ public type Client client object {
     # + return - If success, returns string message with status, else returns error
     public remote function updateEmails(string id, Email[] emails) returns (string | error) {
         if (stringutils:equalsIgnoreCase(id, "")) {
-            error Error = error(SCIM2_ERROR_CODE, message = "User should be valid");
-            return Error;
+            error err = error(SCIM2_ERROR_CODE, message = "User should be valid");
+            return err;
         }
 
         http:Request request = new ();
@@ -671,8 +671,8 @@ public type Client client object {
         int i = 0;
         foreach var emailAddress in emails {
             if (!stringutils:equalsIgnoreCase(emailAddress.'type, SCIM_WORK) && !stringutils:equalsIgnoreCase(emailAddress.'type, SCIM_HOME)) {
-                error Error = error(SCIM2_ERROR_CODE, message = "Email type should be defiend as either home or work");
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = "Email type should be defiend as either home or work");
+                return err;
             }
             email = convertEmailToJson(emailAddress);
             emailList[i] = email;
@@ -691,12 +691,12 @@ public type Client client object {
             if (res.statusCode == HTTP_OK) {
                 return "Email updated";
             } else {
-                error Error = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
+                return err;
             }
         } else {
-            error Error = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
-            return Error;
+            error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
+            return err;
         }
     }
 
@@ -706,8 +706,8 @@ public type Client client object {
     # + return - If success, returns string message with status, else returns error
     public remote function updateAddresses(string id, Address[] addresses) returns (string | error) {
         if (stringutils:equalsIgnoreCase(id, "")) {
-            error Error = error(SCIM2_ERROR_CODE, message = "User should be valid");
-            return Error;
+            error err = error(SCIM2_ERROR_CODE, message = "User should be valid");
+            return err;
         }
 
         http:Request request = new ();
@@ -717,9 +717,9 @@ public type Client client object {
         int i = 0;
         foreach var address in addresses {
             if (!stringutils:equalsIgnoreCase(address.'type, SCIM_WORK) && !stringutils:equalsIgnoreCase(address.'type, SCIM_HOME)) {
-                error Error = error(SCIM2_ERROR_CODE
+                error err = error(SCIM2_ERROR_CODE
                 , message = "Address type is required and it should either be work or home");
-                return Error;
+                return err;
             }
             element = convertAddressToJson(address);
             addressList[i] = element;
@@ -738,12 +738,12 @@ public type Client client object {
             if (res.statusCode == HTTP_OK) {
                 return "Address updated";
             } else {
-                error Error = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
+                return err;
             }
         } else {
-            error Error = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
-            return Error;
+            error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
+            return err;
         }
     }
 
@@ -761,8 +761,8 @@ public type Client client object {
             if (res.statusCode == HTTP_OK) {
                 return "User updated";
             } else {
-                error Error = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
-                return Error;
+                error err = error(SCIM2_ERROR_CODE, message = res.reasonPhrase);
+                return err;
             }
         } else {
             error err = error(SCIM2_ERROR_CODE, message = "Error occurred while invoking the SCIM2 API");
